@@ -1,12 +1,12 @@
 import React from "react";
 import MainLayout from "@/components/layout/MainLayout";
 
-const VocabularyDetailPage = () => {
+const VocabularyItemFormPage = () => {
   return (
     <MainLayout>
-      <h1>Vocabulary Detail Page</h1>
+      <h1>Vocabulary Item Form Page</h1>
     </MainLayout>
   );
 };
 
-export default VocabularyDetailPage;
+export default VocabularyItemFormPage;
