@@ -1,7 +1,7 @@
 import React from "react";
 
 const VocabularyItem = () => {
-    return <div></div>;
-}
+  return <li></li>;
+};
 
 export default VocabularyItem;

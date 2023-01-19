@@ -1,6 +1,8 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import React from 'react'
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
+import React from "react";
+import Link from "next/link";
+import { Canvas } from "@react-three/fiber";
 
 export default function Home() {
   return (
@@ -13,7 +15,14 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <p>my-own-vocabulary</p>
+        <Canvas>
+          <mesh>
+            <boxGeometry />
+            <meshNormalMaterial />
+          </mesh>
+        </Canvas>
+        <Link href="/vocabulary/list">Start!</Link>
       </main>
     </>
-  )
+  );
 }
