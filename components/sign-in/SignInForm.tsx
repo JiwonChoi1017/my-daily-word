@@ -2,26 +2,30 @@ import React, { useContext, useRef } from "react";
 import { AuthContext } from "@/auth/AuthProvider";
 import { useRouter } from "next/router";
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
-  const { signUpHandler } = useContext(AuthContext);
+  const { signInHandler } = useContext(AuthContext);
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    // e.preventDefault(): submitイベントの発生元であるフォームが持つデフォルトの動作をキャンセルするメソッド.
+    // フォームが持つデフォルトの動作とは、フォームの内容を指定したURLへ送信するという動作のことをいう.
+    // 現在のURLに対してフォームの送信が行われると、結果的にページがリロードされてしまう.
+    // そのため、e.preventDefault()を呼び出し、デフォルトの動作をキャンセルする。
     e.preventDefault();
     // TODO: バリデーションチェックを入れる
     if (!emailRef.current || !passwordRef.current) {
       return;
     }
 
-    await signUpHandler({
+    await signInHandler({
       email: emailRef.current.value,
       password: passwordRef.current.value,
     });
-    router.push("/sign-in");
+    router.push("/vocabulary/list");
   };
 
   return (
@@ -31,16 +35,8 @@ const SignUpForm = () => {
       }}
     >
       <div>
-        {/* htmlFor: htmlタグの属性forのこと. */}
-        {/* labelに付与することで、同じ内容のid属性を持つ要素を関連付けられる. */}
         <label htmlFor="email">メールアドレス</label>
-        <input
-          ref={emailRef}
-          id="email"
-          name="email"
-          type="email"
-          placeholder="メールアドレスを入力してください。"
-        />
+        <input ref={emailRef} id="email" name="email" type="email" />
       </div>
       <div>
         <label htmlFor="password">パスワード</label>
@@ -49,12 +45,11 @@ const SignUpForm = () => {
           id="password"
           name="password"
           type="password"
-          placeholder="パスワードを入力してください。"
         />
       </div>
-      <button type="submit">登録</button>
+      <button type="submit">ログイン</button>
     </form>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
