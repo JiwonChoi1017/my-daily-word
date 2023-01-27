@@ -1,14 +1,36 @@
+import { AuthContext } from "@/auth/AuthProvider";
+import { authService } from "@/firebase-config";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
 
 const MainNavigation = () => {
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const { signOutHandler } = useContext(AuthContext);
+  const router = useRouter();
+
+  const onSignOutHandler = async () => {
+    await signOutHandler();
+    router.push("/");
+  };
+
+  const signInLink = isSignIn ? (
+    <button onClick={onSignOutHandler}>ログアウト</button>
+  ) : (
+    <Link href="/sign-in">ログイン</Link>
+  );
+
+  useEffect(() => {
+    authService.onAuthStateChanged((user) => {
+      setIsSignIn(!!user);
+    });
+  }, []);
+
   return (
     <header>
       <div>
         <ul>
-          <li>
-            <Link href="/login">Login</Link>
-          </li>
+          <li>{signInLink}</li>
           <li>
             <Link href="/vocabulary/list">List</Link>
           </li>

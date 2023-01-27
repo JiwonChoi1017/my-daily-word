@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext } from "react";
-import { User } from "firebase/auth";
+import { signOut, User } from "firebase/auth";
 import {
   authService,
   createUserWithEmailAndPassword,
@@ -14,6 +14,7 @@ type UserInfo = {
 type UserInfoContext = {
   signInHandler: (userInfo: UserInfo) => void;
   signUpHandler: (userInfo: UserInfo) => void;
+  signOutHandler: () => void;
   currentUser: User | null;
 };
 
@@ -44,6 +45,14 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
     }
   };
 
+  const signOutHandler = async () => {
+    try {
+      await signOut(authService);
+    } catch (e) {
+      //
+    }
+  };
+
   useEffect(() => {
     authService.onAuthStateChanged((currentUser) => {
       setCurrentUser(currentUser);
@@ -55,6 +64,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
       value={{
         signInHandler,
         signUpHandler,
+        signOutHandler,
         currentUser,
       }}
     >
