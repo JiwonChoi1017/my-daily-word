@@ -1,12 +1,11 @@
 import { AuthContext } from "@/auth/AuthProvider";
-import { authService } from "@/firebase-config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
 const MainNavigation = () => {
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
-  const { signOutHandler } = useContext(AuthContext);
+  const { signOutHandler, currentUser } = useContext(AuthContext);
   const router = useRouter();
 
   const onSignOutHandler = async () => {
@@ -21,9 +20,7 @@ const MainNavigation = () => {
   );
 
   useEffect(() => {
-    authService.onAuthStateChanged((user) => {
-      setIsSignIn(!!user);
-    });
+    setIsSignIn(!!currentUser);
   }, []);
 
   return (
