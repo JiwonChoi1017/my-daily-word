@@ -21,7 +21,7 @@ const MainNavigation = () => {
 
   useEffect(() => {
     setIsSignIn(!!currentUser);
-  }, []);
+  }, [currentUser]);
 
   return (
     <header>
@@ -29,7 +29,7 @@ const MainNavigation = () => {
         <ul>
           <li>{signInLink}</li>
           <li>
-            <Link href="/vocabulary/list">List</Link>
+            <Link href="/vocabulary/book">List</Link>
           </li>
           <li>
             <Link href="/vocabulary/quiz/quiz-id">Quiz</Link>

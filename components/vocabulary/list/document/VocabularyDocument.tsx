@@ -8,7 +8,7 @@ const VocabularyDocument: React.FC<{
   description: string;
 }> = ({ id, title, description }) => {
   return (
-    <Link href={`/vocabulary/list/${title}`}>
+    <Link href={`/vocabulary/book/${id}`} as={`/vocabulary/book/${title}`}>
       <li id={id}>
         <Canvas>
           <mesh>
