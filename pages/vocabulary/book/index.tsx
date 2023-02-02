@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
 import VocabularyDocumentList from "@/components/vocabulary/list/document/VocabularyDocumentList";
-import { authService } from "@/firebase-config";
 import { Document } from "@/types/Document";
+import { AuthContext } from "@/auth/AuthProvider";
 
-const VocabularyDocumentListPage = () => {
+const VocabularyBookListPage = () => {
   const [documentList, setDocumentList] = useState<Document[]>([]);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const user = authService.currentUser;
-    const api = user
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${user.uid}.json`
+    const api = currentUser
+      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}.json`
       : "";
     fetch(api)
       .then((response) => {
@@ -28,15 +28,15 @@ const VocabularyDocumentListPage = () => {
         }
         setDocumentList(documentList);
       });
-  }, []);
+  }, [currentUser]);
 
   return (
     <MainLayout>
-      <h1>Vocabulary Document List Page</h1>
-      <Link href="/vocabulary/form/document">Add New Document</Link>
+      <h1>Vocabulary Book List Page</h1>
+      <Link href="/vocabulary/book/form">Add New Book</Link>
       <VocabularyDocumentList documentList={documentList} />
     </MainLayout>
   );
 };
 
-export default VocabularyDocumentListPage;
+export default VocabularyBookListPage;

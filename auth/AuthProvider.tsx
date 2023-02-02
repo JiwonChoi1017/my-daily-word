@@ -1,10 +1,11 @@
 import React, { useEffect, useState, createContext } from "react";
-import { signOut, User } from "firebase/auth";
 import {
-  authService,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-} from "firebase-config";
+  signOut,
+  User,
+} from "firebase/auth";
+import { authService } from "firebase-config";
 
 type UserInfo = {
   email: string;
@@ -54,8 +55,10 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    authService.onAuthStateChanged((currentUser) => {
-      setCurrentUser(currentUser);
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUser(user);
+      }
     });
   }, []);
 

@@ -1,15 +1,17 @@
 import React from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import VocabularyDocumentForm from "@/components/vocabulary/form/document/VocabularyDocumentForm";
+import VocabularyBookForm from "@/components/vocabulary/book/form/VocabularyBookForm";
 import { authService } from "@/firebase-config";
 import { useRouter } from "next/router";
 
-const VocabularyDocumentFormPage = () => {
+const VocabularyBookFormPage = () => {
   const router = useRouter();
 
   const onAddDocumentHandler = (documentInfo: {
     title: string;
     description: string;
+    word: string;
+    meaning: string;
   }) => {
     const user = authService.currentUser;
     const api = user
@@ -22,17 +24,17 @@ const VocabularyDocumentFormPage = () => {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
-        router.push("/vocabulary/list");
+        router.push("/vocabulary/book");
       })
       .catch();
   };
 
   return (
     <MainLayout>
-      <h1>Vocabulary Document Form Page</h1>
-      <VocabularyDocumentForm onAddDocumentHandler={onAddDocumentHandler} />
+      <h1>Vocabulary Book Form Page</h1>
+      <VocabularyBookForm onAddDocumentHandler={onAddDocumentHandler} />
     </MainLayout>
   );
 };
 
-export default VocabularyDocumentFormPage;
+export default VocabularyBookFormPage;
