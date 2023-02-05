@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
-import VocabularyDocumentList from "@/components/vocabulary/list/document/VocabularyDocumentList";
-import { Document } from "@/types/Document";
+import VocabularyBookList from "@/components/vocabulary/book/VocabularyBookList";
+import { Book } from "@/types/Book";
 import { AuthContext } from "@/auth/AuthProvider";
 
 const VocabularyBookListPage = () => {
-  const [documentList, setDocumentList] = useState<Document[]>([]);
+  const [bookList, setBookList] = useState<Book[]>([]);
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -18,15 +18,15 @@ const VocabularyBookListPage = () => {
         return response.json();
       })
       .then((data) => {
-        const documentList = [];
+        const bookList = [];
         for (const key in data) {
           const document = {
             id: key,
             ...data[key],
           };
-          documentList.push(document);
+          bookList.push(document);
         }
-        setDocumentList(documentList);
+        setBookList(bookList);
       });
   }, [currentUser]);
 
@@ -34,7 +34,7 @@ const VocabularyBookListPage = () => {
     <MainLayout>
       <h1>Vocabulary Book List Page</h1>
       <Link href="/vocabulary/book/form">Add New Book</Link>
-      <VocabularyDocumentList documentList={documentList} />
+      <VocabularyBookList bookList={bookList} />
     </MainLayout>
   );
 };

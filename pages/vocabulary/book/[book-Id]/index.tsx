@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import VocabularyItemList from "@/components/vocabulary/list/item/VocabularyItemList";
+import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { BookContext } from "@/book/BookProvider";
 
 const VocabularyWordListPage = () => {
   const router = useRouter();
-  // TODO: bookのidを取得し、データを取ってくるようにしたい
-  console.log(router);
+  const { book } = useContext(BookContext);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    console.log(router.query, book);
+  });
 
   return (
     <MainLayout>
       <h1>Word List Page</h1>
-      <VocabularyItemList />
+      <VocabularyWordList />
       <Link href="/vocabulary/word/form">Add New Word</Link>
     </MainLayout>
   );
