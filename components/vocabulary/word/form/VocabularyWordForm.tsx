@@ -1,11 +1,39 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const VocabularyWordForm = () => {
+  const [examples, setExamples] = useState<number>(1);
+
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningRef = useRef<HTMLInputElement>(null);
   const pronunciationRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const examplesRef = useRef<HTMLInputElement[]>(null);
+  const examplesRef = useRef<HTMLInputElement[]>([]);
+
+  useEffect(() => {
+    examplesRef.current = examplesRef.current.slice(0, examples);
+  }, [examples]);
+
+  const examplesInput = Array.from(Array(examples)).map((e, idx) => {
+    return (
+      <input
+        key={idx}
+        ref={(el) => {
+          if (!el) {
+            return;
+          }
+          examplesRef.current[idx] = el;
+        }}
+        type="text"
+        id={`examples_${idx}`}
+      />
+    );
+  });
+
+  const onAddExampleHandler = () => {
+    setExamples((prevState) => {
+      return prevState + 1;
+    });
+  };
 
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,9 +71,12 @@ const VocabularyWordForm = () => {
         <label htmlFor="description">description</label>
         <textarea ref={descriptionRef} id="description" rows={5} required />
       </div>
-      {/* TODO: inputタグで例を複数追加できるようにしたい。（string[]） */}
       <div>
-        <label htmlFor="examples">examples</label>
+        <label>examples</label>
+        {examplesInput}
+        <div onClick={onAddExampleHandler} style={{ cursor: "pointer" }}>
+          add example
+        </div>
       </div>
       <div>
         <button>add</button>
