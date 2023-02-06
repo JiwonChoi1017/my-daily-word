@@ -1,11 +1,14 @@
+import { Word } from "@/types/Vocabulary";
 import React from "react";
 import VocabularyWord from "./VocabularyWord";
 
-const VocabularyWordList = () => {
+const VocabularyWordList: React.FC<{ wordList: Word[] }> = ({ wordList }) => {
   return (
     <div>
       <ul>
-        <VocabularyWord />
+        {wordList.map((word) => {
+          return <VocabularyWord key={word.id} wordInfo={word} />;
+        })}
       </ul>
     </div>
   );

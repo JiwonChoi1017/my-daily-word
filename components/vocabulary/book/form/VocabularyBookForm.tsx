@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 
 const VocabularyBookForm: React.FC<{
-  onAddDocumentHandler: (documentInfo: {
+  onAddBookHandler: (bookInfo: {
     title: string;
     description: string;
     word: string;
     meaning: string;
   }) => void;
-}> = ({ onAddDocumentHandler }) => {
+}> = ({ onAddBookHandler }) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const wordRef = useRef<HTMLSelectElement>(null);
@@ -25,7 +25,7 @@ const VocabularyBookForm: React.FC<{
       return;
     }
 
-    onAddDocumentHandler({
+    onAddBookHandler({
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       word: wordRef.current.value,

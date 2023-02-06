@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from "react";
-import { AuthContext } from "@/auth/AuthProvider";
+import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
 
 const SignInForm = () => {

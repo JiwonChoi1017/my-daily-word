@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const VocabularyBookFormPage = () => {
   const router = useRouter();
 
-  const onAddDocumentHandler = (documentInfo: {
+  const onAddBookHandler = (bookInfo: {
     title: string;
     description: string;
     word: string;
@@ -20,7 +20,7 @@ const VocabularyBookFormPage = () => {
 
     fetch(api, {
       method: "POST",
-      body: JSON.stringify(documentInfo),
+      body: JSON.stringify(bookInfo),
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
@@ -32,7 +32,7 @@ const VocabularyBookFormPage = () => {
   return (
     <MainLayout>
       <h1>Vocabulary Book Form Page</h1>
-      <VocabularyBookForm onAddDocumentHandler={onAddDocumentHandler} />
+      <VocabularyBookForm onAddBookHandler={onAddBookHandler} />
     </MainLayout>
   );
 };

@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { BookContext } from "@/book/BookProvider";
 import { useRouter } from "next/router";
 
 const VocabularyBook: React.FC<{
@@ -9,11 +8,9 @@ const VocabularyBook: React.FC<{
   description: string;
 }> = ({ id, title, description }) => {
   const router = useRouter();
-  const { setBook } = useContext(BookContext);
 
   const clickBookHandler = () => {
-    setBook({ id, title });
-    router.push(`/vocabulary/book/${title}`);
+    router.push(`/vocabulary/book/${id}`);
   };
 
   return (
