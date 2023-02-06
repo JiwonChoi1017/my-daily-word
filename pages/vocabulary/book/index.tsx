@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
 import VocabularyBookList from "@/components/vocabulary/book/VocabularyBookList";
-import { Book } from "@/types/Book";
-import { AuthContext } from "@/auth/AuthProvider";
+import { Book } from "@/types/Vocabulary";
+import { AuthContext } from "@/context/auth/AuthProvider";
 
 const VocabularyBookListPage = () => {
   const [bookList, setBookList] = useState<Book[]>([]);
@@ -20,11 +20,11 @@ const VocabularyBookListPage = () => {
       .then((data) => {
         const bookList = [];
         for (const key in data) {
-          const document = {
+          const book = {
             id: key,
             ...data[key],
           };
-          bookList.push(document);
+          bookList.push(book);
         }
         setBookList(bookList);
       });

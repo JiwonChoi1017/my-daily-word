@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const VocabularyWordForm = () => {
+const VocabularyWordForm: React.FC<{
+  onAddWordHandler: (wordInfo: {
+    word: string;
+    meaning: string;
+    pronunciation: string;
+    description: string;
+    examples: string[];
+  }) => void;
+}> = ({ onAddWordHandler }) => {
   const [examples, setExamples] = useState<number>(1);
 
   const wordRef = useRef<HTMLInputElement>(null);
@@ -47,6 +55,19 @@ const VocabularyWordForm = () => {
     ) {
       return;
     }
+
+    const exampleList: string[] = [];
+    examplesRef.current.map((example) => {
+      exampleList.push(example.value);
+    });
+
+    onAddWordHandler({
+      word: wordRef.current.value,
+      meaning: meaningRef.current.value,
+      pronunciation: pronunciationRef.current.value,
+      description: descriptionRef.current.value,
+      examples: exampleList,
+    });
   };
 
   return (
@@ -55,6 +76,11 @@ const VocabularyWordForm = () => {
         onSubmitHandler(e);
       }}
     >
+      {/* 
+        TODO: meaningがあるので、descriptionは多分いらない気がする.  
+        あと、meaningも複数入力できるように修正。
+        それから、お気に入り用のフラグも追加したい。
+      */}
       <div>
         <label htmlFor="word">word</label>
         <input ref={wordRef} type="text" id="word" required />

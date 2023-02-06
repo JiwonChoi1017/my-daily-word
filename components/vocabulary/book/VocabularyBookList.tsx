@@ -1,4 +1,4 @@
-import { Book } from "@/types/Book";
+import { Book } from "@/types/Vocabulary";
 import React from "react";
 import VocabularyBook from "./VocabularyBook";
 
