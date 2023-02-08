@@ -25,7 +25,7 @@ const SignInForm = () => {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     });
-    router.push("/vocabulary/book");
+    router.push("/vocabulary/list");
   };
 
   return (
