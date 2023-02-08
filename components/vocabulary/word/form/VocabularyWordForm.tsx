@@ -5,7 +5,6 @@ const VocabularyWordForm: React.FC<{
     word: string;
     meaning: string;
     pronunciation: string;
-    description: string;
     examples: string[];
   }) => void;
 }> = ({ onAddWordHandler }) => {
@@ -14,7 +13,6 @@ const VocabularyWordForm: React.FC<{
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningRef = useRef<HTMLInputElement>(null);
   const pronunciationRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const examplesRef = useRef<HTMLInputElement[]>([]);
 
   useEffect(() => {
@@ -50,7 +48,6 @@ const VocabularyWordForm: React.FC<{
       !wordRef.current ||
       !meaningRef.current ||
       !pronunciationRef.current ||
-      !descriptionRef.current ||
       !examplesRef.current
     ) {
       return;
@@ -65,7 +62,6 @@ const VocabularyWordForm: React.FC<{
       word: wordRef.current.value,
       meaning: meaningRef.current.value,
       pronunciation: pronunciationRef.current.value,
-      description: descriptionRef.current.value,
       examples: exampleList,
     });
   };
@@ -77,8 +73,7 @@ const VocabularyWordForm: React.FC<{
       }}
     >
       {/* 
-        TODO: meaningがあるので、descriptionは多分いらない気がする.  
-        あと、meaningも複数入力できるように修正。
+        TODO: meaningも複数入力できるように修正。
         それから、お気に入り用のフラグも追加したい。
       */}
       <div>
@@ -92,10 +87,6 @@ const VocabularyWordForm: React.FC<{
       <div>
         <label htmlFor="pronunciation">pronunciation</label>
         <input ref={pronunciationRef} type="text" id="pronunciation" required />
-      </div>
-      <div>
-        <label htmlFor="description">description</label>
-        <textarea ref={descriptionRef} id="description" rows={5} required />
       </div>
       <div>
         <label>examples</label>

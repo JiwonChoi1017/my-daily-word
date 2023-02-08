@@ -9,6 +9,5 @@ export type Word = {
   word: string;
   meaning: string;
   pronunciation: string;
-  description: string;
   examples: string[];
 };

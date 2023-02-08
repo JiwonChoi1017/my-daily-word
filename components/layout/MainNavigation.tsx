@@ -29,7 +29,7 @@ const MainNavigation = () => {
         <ul>
           <li>{signInLink}</li>
           <li>
-            <Link href="/vocabulary/book">List</Link>
+            <Link href="/vocabulary/list">List</Link>
           </li>
           <li>
             <Link href="/vocabulary/quiz/quiz-id">Quiz</Link>

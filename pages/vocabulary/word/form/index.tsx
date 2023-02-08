@@ -12,7 +12,6 @@ const VocabularyWordFormPage = () => {
     word: string;
     meaning: string;
     pronunciation: string;
-    description: string;
     examples: string[];
   }) => {
     const user = authService.currentUser;
@@ -26,7 +25,7 @@ const VocabularyWordFormPage = () => {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
-        router.push(`/vocabulary/book/${bookId}`);
+        router.push(`/vocabulary/list/${bookId}`);
       })
       .catch();
   };
