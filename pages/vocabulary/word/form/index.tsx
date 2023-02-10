@@ -3,6 +3,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
 import { useRouter } from "next/router";
 import { authService } from "@/firebase-config";
+import { Meaning } from "@/types/Vocabulary";
 
 const VocabularyWordFormPage = () => {
   const router = useRouter();
@@ -10,9 +11,9 @@ const VocabularyWordFormPage = () => {
 
   const onAddWordHandler = (wordInfo: {
     word: string;
-    meaning: string;
+    meanings: Meaning[];
     pronunciation: string;
-    examples: string[];
+    isFavorite: boolean;
   }) => {
     const user = authService.currentUser;
     const api = user
