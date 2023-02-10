@@ -1,68 +1,147 @@
+import { Meaning } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
 const VocabularyWordForm: React.FC<{
   onAddWordHandler: (wordInfo: {
     word: string;
-    meaning: string;
+    meanings: Meaning[];
     pronunciation: string;
-    examples: string[];
+    isFavorite: boolean;
   }) => void;
 }> = ({ onAddWordHandler }) => {
-  const [examples, setExamples] = useState<number>(1);
+  const [meanings, setMeanings] = useState<Meaning[]>([
+    { meaning: "", examples: [""] },
+  ]);
 
   const wordRef = useRef<HTMLInputElement>(null);
-  const meaningRef = useRef<HTMLInputElement>(null);
+  const meaningsRef = useRef<HTMLInputElement[]>([]);
   const pronunciationRef = useRef<HTMLInputElement>(null);
   const examplesRef = useRef<HTMLInputElement[]>([]);
 
   useEffect(() => {
-    examplesRef.current = examplesRef.current.slice(0, examples);
-  }, [examples]);
+    meaningsRef.current = meaningsRef.current.slice(0, meanings.length);
 
-  const examplesInput = Array.from(Array(examples)).map((e, idx) => {
-    return (
+    const examples: string[] = [];
+    meanings.map((meaning) => {
+      meaning.examples.map((example) => {
+        examples.push(example);
+      });
+    });
+    examplesRef.current = examplesRef.current.slice(0, examples.length);
+  }, [meanings]);
+
+  const onAddMeaningHandler = () => {
+    setMeanings((prevState) => {
+      return [...prevState, { meaning: "", examples: [""] }];
+    });
+  };
+
+  const onAddExampleHanlder = (e: React.MouseEvent<HTMLDivElement>) => {
+    // event.currenTarget: イベント処理中だけ event.currentTarget の値が利用できるらしい。
+    // もし console.log() で event オブジェクトを変数に格納し、コンソールで currentTarget キーを探すと、その値は null となる。
+    // https://developer.mozilla.org/ja/docs/Web/API/Event/currentTarget
+    const targetMeaningIndex = e.currentTarget?.dataset["meaningIndex"];
+    setMeanings((prevState) => {
+      if (!targetMeaningIndex) return prevState;
+
+      const newTargetMeaningIndex = +targetMeaningIndex;
+      if (isNaN(newTargetMeaningIndex)) return prevState;
+
+      const currentState = [...prevState];
+      const target = Object.assign({}, currentState[newTargetMeaningIndex]);
+      target.examples = [...target.examples, ""];
+      currentState[newTargetMeaningIndex] = target;
+
+      return currentState;
+    });
+  };
+
+  const meaningsInput = meanings.map((item, idx) => {
+    const meaningInput = (
       <input
-        key={idx}
         ref={(el) => {
           if (!el) {
             return;
           }
-          examplesRef.current[idx] = el;
+          meaningsRef.current[idx] = el;
         }}
+        key={`meaning_${idx}`}
+        id={`meaning_${idx}`}
         type="text"
-        id={`examples_${idx}`}
+        required
       />
     );
-  });
 
-  const onAddExampleHandler = () => {
-    setExamples((prevState) => {
-      return prevState + 1;
+    const examplesInput = item.examples.map((example, example_idx) => {
+      return (
+        <input
+          ref={(el) => {
+            if (!el) {
+              return;
+            }
+            examplesRef.current[example_idx] = el;
+          }}
+          key={`example_${idx}_${example_idx}`}
+          id={`example_${idx}_${example_idx}`}
+          type="text"
+          data-meaning-index={`${idx}`}
+        />
+      );
     });
-  };
+
+    const addExampleBtn = (
+      <div
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+          onAddExampleHanlder(e);
+        }}
+        style={{ cursor: "pointer" }}
+        data-meaning-index={`${idx}`}
+      >
+        add example
+      </div>
+    );
+
+    return (
+      <li key={idx}>
+        {meaningInput} {examplesInput} {addExampleBtn}
+        <br />
+      </li>
+    );
+  });
 
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (
       !wordRef.current ||
-      !meaningRef.current ||
+      !meaningsRef.current ||
       !pronunciationRef.current ||
       !examplesRef.current
     ) {
       return;
     }
 
-    const exampleList: string[] = [];
+    const meanings: Meaning[] = [];
+    meaningsRef.current.map((meaning) => {
+      meanings.push({ meaning: meaning.value, examples: [] });
+    });
+
+    // TODO: 例の追加がうまくいかない
     examplesRef.current.map((example) => {
-      exampleList.push(example.value);
+      const index = example.dataset["meaningIndex"];
+      if (!index) return;
+
+      const newIndex = +index;
+      if (isNaN(newIndex)) return;
+
+      meanings[newIndex].examples.push(example.value);
     });
 
     onAddWordHandler({
       word: wordRef.current.value,
-      meaning: meaningRef.current.value,
+      meanings: meanings,
       pronunciation: pronunciationRef.current.value,
-      examples: exampleList,
+      isFavorite: false,
     });
   };
 
@@ -72,27 +151,19 @@ const VocabularyWordForm: React.FC<{
         onSubmitHandler(e);
       }}
     >
-      {/* 
-        TODO: meaningも複数入力できるように修正。
-        それから、お気に入り用のフラグも追加したい。
-      */}
       <div>
         <label htmlFor="word">word</label>
         <input ref={wordRef} type="text" id="word" required />
-      </div>
-      <div>
-        <label htmlFor="meaning">meaning</label>
-        <input ref={meaningRef} type="text" id="meaning" required />
       </div>
       <div>
         <label htmlFor="pronunciation">pronunciation</label>
         <input ref={pronunciationRef} type="text" id="pronunciation" required />
       </div>
       <div>
-        <label>examples</label>
-        {examplesInput}
-        <div onClick={onAddExampleHandler} style={{ cursor: "pointer" }}>
-          add example
+        <label>meaning</label>
+        <ul>{meaningsInput}</ul>
+        <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
+          add meaning
         </div>
       </div>
       <div>

@@ -7,7 +7,11 @@ export type Book = {
 export type Word = {
   id: string;
   word: string;
-  meaning: string;
   pronunciation: string;
+  meanings: Meaning[];
+};
+
+export type Meaning = {
+  meaning: string;
   examples: string[];
 };
