@@ -6,6 +6,8 @@ import Link from "next/link";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import VocabularyWordSearchBox from "@/components/vocabulary/word/VocabularyWordSearchBox";
+import { db } from "@/firebase-config";
+import { ref, update } from "firebase/database";
 
 const VocabularyWordListPage = () => {
   const router = useRouter();
@@ -36,6 +38,23 @@ const VocabularyWordListPage = () => {
         }
         setWordList(wordList);
       });
+  };
+
+  const toggleFavoriteState = async (wordInfo: Word) => {
+    if (!currentUser || typeof id !== "string") return;
+
+    const { isFavorite } = wordInfo;
+    const path = `${currentUser.uid}/${id}/words/${wordInfo.id}`;
+    const wordRef = ref(db, path);
+
+    await update(wordRef, { isFavorite }).then(() => {
+      const targetIndex = wordList.findIndex((word) => word.id === wordInfo.id);
+      setWordList((prevState) => {
+        const currentState = [...prevState];
+        currentState[targetIndex] = wordInfo;
+        return currentState;
+      });
+    });
   };
 
   useEffect(() => {
@@ -77,7 +96,11 @@ const VocabularyWordListPage = () => {
       <h1>Word List Page</h1>
       <Link href={`/vocabulary/word/form?book_id=${id}`}>Add New Word</Link>
       <VocabularyWordSearchBox filterWordList={filterWordList} />
-      <VocabularyWordList bookId={bookId} wordList={wordList} />
+      <VocabularyWordList
+        bookId={bookId}
+        wordList={wordList}
+        toggleFavoriteState={toggleFavoriteState}
+      />
     </MainLayout>
   );
 };
