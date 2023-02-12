@@ -7,6 +7,7 @@ const VocabularyWordForm: React.FC<{
     meanings: Meaning[];
     pronunciation: string;
     isFavorite: boolean;
+    isMemorized: boolean;
   }) => void;
 }> = ({ onAddWordHandler }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
@@ -142,6 +143,7 @@ const VocabularyWordForm: React.FC<{
       meanings: meanings,
       pronunciation: pronunciationRef.current.value,
       isFavorite: false,
+      isMemorized: false,
     });
   };
 

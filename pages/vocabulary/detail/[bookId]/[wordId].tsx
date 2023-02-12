@@ -12,9 +12,10 @@ const VocabularyWordDetailPage = () => {
   const [word, setWord] = useState<Word>({
     id: "",
     word: "",
-    meaning: "",
     pronunciation: "",
-    examples: [],
+    meanings: [{ meaning: "", examples: [] }],
+    isFavorite: false,
+    isMemorized: false,
   });
 
   useEffect(() => {

@@ -14,6 +14,7 @@ const VocabularyWordFormPage = () => {
     meanings: Meaning[];
     pronunciation: string;
     isFavorite: boolean;
+    isMemorized: boolean;
   }) => {
     const user = authService.currentUser;
     const api = user
