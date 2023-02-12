@@ -9,6 +9,8 @@ export type Word = {
   word: string;
   pronunciation: string;
   meanings: Meaning[];
+  isFavorite: boolean;
+  isMemorized: boolean;
 };
 
 export type Meaning = {
