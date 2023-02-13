@@ -1,13 +1,24 @@
 import { Word } from "@/types/Vocabulary";
 import React from "react";
 
-const VocabularyWordDetail: React.FC<{ word: Word }> = ({ word }) => {
-  const { isFavorite, meanings } = word;
+const VocabularyWordDetail: React.FC<{
+  wordInfo: Word;
+  toggleFavoriteState: (wordInfo: Word) => void;
+}> = ({ wordInfo, toggleFavoriteState }) => {
+  const { isFavorite, meanings } = wordInfo;
+
+  const onClickFavoriteButtonHandler = () => {
+    toggleFavoriteState({ ...wordInfo, isFavorite: !isFavorite });
+  };
 
   const favoriteIcon = isFavorite ? (
-    <div>お気に入り登録済み</div>
+    <div style={{ cursor: "pointer" }} onClick={onClickFavoriteButtonHandler}>
+      お気に入り登録済み
+    </div>
   ) : (
-    <div>お気に入りに追加</div>
+    <div style={{ cursor: "pointer" }} onClick={onClickFavoriteButtonHandler}>
+      お気に入りに追加
+    </div>
   );
 
   const meaningList = meanings.map((meaning, index) => {
@@ -27,8 +38,8 @@ const VocabularyWordDetail: React.FC<{ word: Word }> = ({ word }) => {
 
   return (
     <div>
-      <p>{word.word}</p>
-      <p>{word.pronunciation}</p>
+      <p>{wordInfo.word}</p>
+      <p>{wordInfo.pronunciation}</p>
       {favoriteIcon}
       <ul>{meaningList}</ul>
     </div>

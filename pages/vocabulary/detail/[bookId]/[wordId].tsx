@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import VocabularyWordDetail from "@/components/vocabulary/word/detail/VocabularyWordDetail";
+import { ref, update } from "firebase/database";
+import { db } from "@/firebase-config";
 
 const VocabularyWordDetailPage = () => {
   const router = useRouter();
@@ -18,6 +20,23 @@ const VocabularyWordDetailPage = () => {
     isMemorized: false,
   });
 
+  // TODO: お気に入り機能を共通化したい
+  const toggleFavoriteState = async (wordInfo: Word) => {
+    if (!currentUser || typeof bookId !== "string") return;
+
+    const { isFavorite } = wordInfo;
+    const path = `${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
+    const wordRef = ref(db, path);
+
+    await update(wordRef, { isFavorite }).then(() => {
+      setWord((prevState) => {
+        const currentState = { ...prevState };
+        currentState.isFavorite = isFavorite;
+        return currentState;
+      });
+    });
+  };
+
   useEffect(() => {
     const api = currentUser
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${bookId}/words/${wordId}.json`
@@ -29,12 +48,15 @@ const VocabularyWordDetailPage = () => {
       .then((data) => {
         setWord({ id: wordId, ...data });
       });
-  }, []);
+  }, [currentUser]);
 
   return (
     <MainLayout>
       <h1>Vocabulary Detail Page</h1>
-      <VocabularyWordDetail word={word} />
+      <VocabularyWordDetail
+        wordInfo={word}
+        toggleFavoriteState={toggleFavoriteState}
+      />
     </MainLayout>
   );
 };
