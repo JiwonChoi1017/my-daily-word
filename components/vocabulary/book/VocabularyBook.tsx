@@ -2,6 +2,7 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { useRouter } from "next/router";
 
+// TODO: 修正・削除機能も実装
 const VocabularyBook: React.FC<{
   id: string;
   title: string;

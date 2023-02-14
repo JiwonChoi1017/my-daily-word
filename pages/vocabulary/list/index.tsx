@@ -9,6 +9,9 @@ const VocabularyBookListPage = () => {
   const [bookList, setBookList] = useState<Book[]>([]);
   const { currentUser } = useContext(AuthContext);
 
+  // TODO: ページネーションを実装したい（下記を参考）
+  // https://firebase.google.com/docs/firestore/query-data/query-cursors?hl=ja
+  // あと、並び順も
   useEffect(() => {
     const api = currentUser
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}.json`

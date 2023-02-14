@@ -2,6 +2,7 @@ import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
 import React from "react";
 
+// TODO: 修正・削除機能も実装
 const VocabularyWord: React.FC<{
   bookId: string;
   wordInfo: Word;

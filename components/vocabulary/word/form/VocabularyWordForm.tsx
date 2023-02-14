@@ -1,6 +1,7 @@
 import { Meaning } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
+// TODO: 修正フォームも共通した方がいい？
 const VocabularyWordForm: React.FC<{
   onAddWordHandler: (wordInfo: {
     word: string;

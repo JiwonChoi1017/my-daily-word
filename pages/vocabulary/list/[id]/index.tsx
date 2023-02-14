@@ -18,6 +18,7 @@ const VocabularyWordListPage = () => {
 
   const filterWordList = (keyword: string) => {
     // TODO: APIを叩く処理を共通化したい
+    // あと、未ログイン時も使えるようにしたい
     const api = currentUser
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${id}/words.json`
       : "";
@@ -70,6 +71,9 @@ const VocabularyWordListPage = () => {
       setBookId(id[0]);
     }
 
+    // TODO: ページネーションを実装したい（下記を参考）
+    // https://firebase.google.com/docs/firestore/query-data/query-cursors?hl=ja
+    // あと、並び順も
     const api = currentUser
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${id}/words.json`
       : "";
