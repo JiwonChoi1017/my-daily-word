@@ -5,8 +5,8 @@ import VocabularyWord from "./VocabularyWord";
 const VocabularyWordList: React.FC<{
   bookId: string;
   wordList: Word[];
-  toggleFavoriteState: (wordInfo: Word) => void;
-}> = ({ bookId, wordList, toggleFavoriteState }) => {
+  toggleMemorizedState: (wordInfo: Word) => void;
+}> = ({ bookId, wordList, toggleMemorizedState }) => {
   return (
     <div>
       <ul>
@@ -16,7 +16,7 @@ const VocabularyWordList: React.FC<{
               key={word.id}
               bookId={bookId}
               wordInfo={word}
-              toggleFavoriteState={toggleFavoriteState}
+              toggleMemorizedState={toggleMemorizedState}
             />
           );
         })}

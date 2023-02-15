@@ -41,14 +41,14 @@ const VocabularyWordListPage = () => {
       });
   };
 
-  const toggleFavoriteState = async (wordInfo: Word) => {
+  const toggleMemorizedState = async (wordInfo: Word) => {
     if (!currentUser || typeof id !== "string") return;
 
-    const { isFavorite } = wordInfo;
+    const { isMemorized } = wordInfo;
     const path = `${currentUser.uid}/${id}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
-    await update(wordRef, { isFavorite }).then(() => {
+    await update(wordRef, { isMemorized }).then(() => {
       const targetIndex = wordList.findIndex((word) => word.id === wordInfo.id);
       setWordList((prevState) => {
         const currentState = [...prevState];
@@ -103,7 +103,7 @@ const VocabularyWordListPage = () => {
       <VocabularyWordList
         bookId={bookId}
         wordList={wordList}
-        toggleFavoriteState={toggleFavoriteState}
+        toggleMemorizedState={toggleMemorizedState}
       />
     </MainLayout>
   );

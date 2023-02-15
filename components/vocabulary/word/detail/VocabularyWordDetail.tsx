@@ -3,21 +3,22 @@ import React from "react";
 
 const VocabularyWordDetail: React.FC<{
   wordInfo: Word;
-  toggleFavoriteState: (wordInfo: Word) => void;
-}> = ({ wordInfo, toggleFavoriteState }) => {
-  const { isFavorite, meanings } = wordInfo;
+  toggleMemorizedState: (wordInfo: Word) => void;
+}> = ({ wordInfo, toggleMemorizedState }) => {
+  const { isMemorized, meanings } = wordInfo;
 
-  const onClickFavoriteButtonHandler = () => {
-    toggleFavoriteState({ ...wordInfo, isFavorite: !isFavorite });
+  const onClickMemorizedButtonHandler = () => {
+    toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
 
-  const favoriteIcon = isFavorite ? (
-    <div style={{ cursor: "pointer" }} onClick={onClickFavoriteButtonHandler}>
-      お気に入り登録済み
+  // 暗記フラグ
+  const memorizedIcon = isMemorized ? (
+    <div style={{ cursor: "pointer" }} onClick={onClickMemorizedButtonHandler}>
+      暗記
     </div>
   ) : (
-    <div style={{ cursor: "pointer" }} onClick={onClickFavoriteButtonHandler}>
-      お気に入りに追加
+    <div style={{ cursor: "pointer" }} onClick={onClickMemorizedButtonHandler}>
+      未暗記
     </div>
   );
 
@@ -40,7 +41,7 @@ const VocabularyWordDetail: React.FC<{
     <div>
       <p>{wordInfo.word}</p>
       <p>{wordInfo.pronunciation}</p>
-      {favoriteIcon}
+      {memorizedIcon}
       <ul>{meaningList}</ul>
     </div>
   );

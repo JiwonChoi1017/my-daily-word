@@ -6,9 +6,9 @@ import React from "react";
 const VocabularyWord: React.FC<{
   bookId: string;
   wordInfo: Word;
-  toggleFavoriteState: (wordInfo: Word) => void;
-}> = ({ bookId, wordInfo, toggleFavoriteState }) => {
-  const { id, word, isFavorite, meanings } = wordInfo;
+  toggleMemorizedState: (wordInfo: Word) => void;
+}> = ({ bookId, wordInfo, toggleMemorizedState }) => {
+  const { id, word, isMemorized, meanings } = wordInfo;
   const router = useRouter();
 
   const moveToDetailPage = (e: React.MouseEvent<HTMLLIElement>) => {
@@ -22,14 +22,15 @@ const VocabularyWord: React.FC<{
     router.push(`/vocabulary/detail/${bookId}/${id}`);
   };
 
-  const onClickFavoriteButtonHandler = () => {
-    toggleFavoriteState({ ...wordInfo, isFavorite: !isFavorite });
+  const onClickMemorizedButtonHandler = () => {
+    toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
 
-  const favoriteIcon = isFavorite ? (
-    <div onClick={onClickFavoriteButtonHandler}>お気に入り登録済み</div>
+  // 暗記フラグ
+  const memorizedIcon = isMemorized ? (
+    <div onClick={onClickMemorizedButtonHandler}>暗記</div>
   ) : (
-    <div onClick={onClickFavoriteButtonHandler}>お気に入りに追加</div>
+    <div onClick={onClickMemorizedButtonHandler}>未暗記</div>
   );
 
   const meaningList = meanings.map((meaning, index) => {
@@ -37,17 +38,20 @@ const VocabularyWord: React.FC<{
   });
 
   return (
-    <li
-      id={id}
-      style={{ cursor: "pointer" }}
-      onClick={(e: React.MouseEvent<HTMLLIElement>) => {
-        moveToDetailPage(e);
-      }}
-    >
-      <p>{word}</p>
-      <div className="_ignoreClick">{favoriteIcon}</div>
-      <ul>{meaningList}</ul>
-    </li>
+    <>
+      <li
+        id={id}
+        style={{ cursor: "pointer" }}
+        onClick={(e: React.MouseEvent<HTMLLIElement>) => {
+          moveToDetailPage(e);
+        }}
+      >
+        <p>{word}</p>
+        <div className="_ignoreClick">{memorizedIcon}</div>
+        <ul>{meaningList}</ul>
+      </li>
+      <br />
+    </>
   );
 };
 
