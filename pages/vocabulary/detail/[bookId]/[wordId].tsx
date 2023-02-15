@@ -16,22 +16,21 @@ const VocabularyWordDetailPage = () => {
     word: "",
     pronunciation: "",
     meanings: [{ meaning: "", examples: [] }],
-    isFavorite: false,
     isMemorized: false,
   });
 
-  // TODO: お気に入り機能を共通化したい
-  const toggleFavoriteState = async (wordInfo: Word) => {
+  // TODO: 暗記フラグ機能を共通化したい
+  const toggleMemorizedState = async (wordInfo: Word) => {
     if (!currentUser || typeof bookId !== "string") return;
 
-    const { isFavorite } = wordInfo;
+    const { isMemorized } = wordInfo;
     const path = `${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
-    await update(wordRef, { isFavorite }).then(() => {
+    await update(wordRef, { isMemorized }).then(() => {
       setWord((prevState) => {
         const currentState = { ...prevState };
-        currentState.isFavorite = isFavorite;
+        currentState.isMemorized = isMemorized;
         return currentState;
       });
     });
@@ -55,7 +54,7 @@ const VocabularyWordDetailPage = () => {
       <h1>Vocabulary Detail Page</h1>
       <VocabularyWordDetail
         wordInfo={word}
-        toggleFavoriteState={toggleFavoriteState}
+        toggleMemorizedState={toggleMemorizedState}
       />
     </MainLayout>
   );

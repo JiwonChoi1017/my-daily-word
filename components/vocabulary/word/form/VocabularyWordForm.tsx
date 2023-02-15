@@ -7,13 +7,14 @@ const VocabularyWordForm: React.FC<{
     word: string;
     meanings: Meaning[];
     pronunciation: string;
-    isFavorite: boolean;
     isMemorized: boolean;
   }) => void;
 }> = ({ onAddWordHandler }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
   ]);
+
+  const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
 
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningsRef = useRef<HTMLInputElement[]>([]);
@@ -36,6 +37,9 @@ const VocabularyWordForm: React.FC<{
     setMeanings((prevState) => {
       return [...prevState, { meaning: "", examples: [""] }];
     });
+    setExampleRefIndex((prevState) => {
+      return prevState + 1;
+    });
   };
 
   const onAddExampleHanlder = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -56,38 +60,43 @@ const VocabularyWordForm: React.FC<{
 
       return currentState;
     });
+    setExampleRefIndex((prevState) => {
+      return prevState + 1;
+    });
   };
 
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
-      <input
-        ref={(el) => {
-          if (!el) {
-            return;
-          }
-          meaningsRef.current[idx] = el;
-        }}
-        key={`meaning_${idx}`}
-        id={`meaning_${idx}`}
-        type="text"
-        required
-      />
-    );
-
-    const examplesInput = item.examples.map((example, example_idx) => {
-      return (
+      <li key={`meaning_${idx}`}>
         <input
           ref={(el) => {
             if (!el) {
               return;
             }
-            examplesRef.current[example_idx] = el;
+            meaningsRef.current[idx] = el;
           }}
-          key={`example_${idx}_${example_idx}`}
-          id={`example_${idx}_${example_idx}`}
+          id={`meaning_${idx}`}
           type="text"
-          data-meaning-index={`${idx}`}
+          required
         />
+      </li>
+    );
+
+    const examplesInput = item.examples.map((example, example_idx) => {
+      return (
+        <li key={`example_${idx}_${example_idx}`}>
+          <input
+            ref={(el) => {
+              if (!el) {
+                return;
+              }
+              examplesRef.current[exampleRefIndex] = el;
+            }}
+            id={`example_${idx}_${example_idx}`}
+            type="text"
+            data-meaning-index={`${idx}`}
+          />
+        </li>
       );
     });
 
@@ -104,10 +113,13 @@ const VocabularyWordForm: React.FC<{
     );
 
     return (
-      <li key={idx}>
-        {meaningInput} {examplesInput} {addExampleBtn}
-        <br />
-      </li>
+      <div key={idx}>
+        <ul key={`meaning_${idx}`}>{meaningInput}</ul>
+        <label>examples</label>
+        <ul key={`examples_${idx}`}>
+          {examplesInput} {addExampleBtn}
+        </ul>
+      </div>
     );
   });
 
@@ -128,7 +140,6 @@ const VocabularyWordForm: React.FC<{
       meanings.push({ meaning: meaning.value, examples: [] });
     });
 
-    // TODO: 例の追加がうまくいかない
     examplesRef.current.map((example) => {
       const index = example.dataset["meaningIndex"];
       if (!index) return;
@@ -143,7 +154,6 @@ const VocabularyWordForm: React.FC<{
       word: wordRef.current.value,
       meanings: meanings,
       pronunciation: pronunciationRef.current.value,
-      isFavorite: false,
       isMemorized: false,
     });
   };
@@ -164,7 +174,7 @@ const VocabularyWordForm: React.FC<{
       </div>
       <div>
         <label>meaning</label>
-        <ul>{meaningsInput}</ul>
+        {meaningsInput}
         <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
           add meaning
         </div>

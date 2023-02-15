@@ -9,8 +9,6 @@ export type Word = {
   word: string;
   pronunciation: string;
   meanings: Meaning[];
-  // TODO:お気に入り機能いる？？
-  isFavorite: boolean;
   isMemorized: boolean;
 };
 

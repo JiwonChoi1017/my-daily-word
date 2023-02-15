@@ -13,7 +13,6 @@ const VocabularyWordFormPage = () => {
     word: string;
     meanings: Meaning[];
     pronunciation: string;
-    isFavorite: boolean;
     isMemorized: boolean;
   }) => {
     const user = authService.currentUser;
