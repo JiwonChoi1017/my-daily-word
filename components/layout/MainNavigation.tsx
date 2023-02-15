@@ -7,6 +7,7 @@ const MainNavigation = () => {
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
   const { signOutHandler, currentUser } = useContext(AuthContext);
   const router = useRouter();
+  const [bookId, setBookId] = useState<string>("");
 
   const onSignOutHandler = async () => {
     await signOutHandler();
@@ -21,6 +22,11 @@ const MainNavigation = () => {
 
   useEffect(() => {
     setIsSignIn(!!currentUser);
+
+    const { id } = router.query;
+    if (!id) return;
+
+    setBookId(typeof id === "string" ? id : id[0]);
   }, [currentUser]);
 
   return (
@@ -31,9 +37,11 @@ const MainNavigation = () => {
           <li>
             <Link href="/vocabulary/list">List</Link>
           </li>
-          <li>
-            <Link href="/vocabulary/quiz/quiz-id">Quiz</Link>
-          </li>
+          {bookId && (
+            <li>
+              <Link href={`/vocabulary/list/${bookId}/quiz`}>Quiz</Link>
+            </li>
+          )}
         </ul>
       </div>
     </header>

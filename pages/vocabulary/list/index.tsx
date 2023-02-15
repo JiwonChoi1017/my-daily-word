@@ -13,6 +13,10 @@ const VocabularyBookListPage = () => {
   // https://firebase.google.com/docs/firestore/query-data/query-cursors?hl=ja
   // あと、並び順も
   useEffect(() => {
+    // TODO: fetchを使っている箇所を全部firebase/databaseを使用するように修正。下記参考
+    // await get(query(wordRef)).then((data) => {
+    //   console.log(data.val());
+    // });
     const api = currentUser
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}.json`
       : "";
