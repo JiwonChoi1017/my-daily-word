@@ -26,7 +26,7 @@ const VocabularyWordFormPage = () => {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
-        router.push(`/vocabulary/list/${bookId}`);
+        router.push(`/vocabulary/list/${bookId}/?page=1`);
       })
       .catch();
   };

@@ -11,7 +11,7 @@ const VocabularyBook: React.FC<{
   const router = useRouter();
 
   const clickBookHandler = () => {
-    router.push(`/vocabulary/list/${id}`);
+    router.push(`/vocabulary/list/${id}/?page=1`);
   };
 
   return (

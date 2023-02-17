@@ -35,7 +35,7 @@ const MainNavigation = () => {
         <ul>
           <li>{signInLink}</li>
           <li>
-            <Link href="/vocabulary/list">List</Link>
+            <Link href="/vocabulary/list?page=1">List</Link>
           </li>
           {bookId && (
             <li>

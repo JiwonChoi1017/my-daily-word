@@ -2,8 +2,13 @@ import { Book } from "@/types/Vocabulary";
 import React from "react";
 import VocabularyBook from "./VocabularyBook";
 
-const VocabularyBookList: React.FC<{ bookList: Book[] }> = ({ bookList }) => {
-  return (
+const VocabularyBookList: React.FC<{ bookList: Book[]; loading: boolean }> = ({
+  bookList,
+  loading,
+}) => {
+  const bookListHtml = loading ? (
+    <div>Loading...</div>
+  ) : (
     <div>
       <ul>
         {bookList.map((book) => {
@@ -19,6 +24,7 @@ const VocabularyBookList: React.FC<{ bookList: Book[] }> = ({ bookList }) => {
       </ul>
     </div>
   );
+  return bookListHtml;
 };
 
 export default VocabularyBookList;

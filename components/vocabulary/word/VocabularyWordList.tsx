@@ -6,8 +6,11 @@ const VocabularyWordList: React.FC<{
   bookId: string;
   wordList: Word[];
   toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({ bookId, wordList, toggleMemorizedState }) => {
-  return (
+  loading: boolean;
+}> = ({ bookId, wordList, toggleMemorizedState, loading }) => {
+  const wordListHtml = loading ? (
+    <div>Loading...</div>
+  ) : (
     <div>
       <ul>
         {wordList.map((word) => {
@@ -23,6 +26,7 @@ const VocabularyWordList: React.FC<{
       </ul>
     </div>
   );
+  return wordListHtml;
 };
 
 export default VocabularyWordList;

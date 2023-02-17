@@ -21,7 +21,7 @@ export default function Home() {
             <meshNormalMaterial />
           </mesh>
         </Canvas>
-        <Link href="/vocabulary/list">Start!</Link>
+        <Link href="/vocabulary/list?page=1">Start!</Link>
       </main>
     </>
   );
