@@ -24,7 +24,7 @@ const VocabularyBookFormPage = () => {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => {
-        router.push("/vocabulary/list");
+        router.push("/vocabulary/list?page=1");
       })
       .catch();
   };

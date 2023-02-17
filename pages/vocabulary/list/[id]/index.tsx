@@ -7,16 +7,20 @@ import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import VocabularyWordSearchBox from "@/components/vocabulary/word/VocabularyWordSearchBox";
 import { db } from "@/firebase-config";
-import { ref, update } from "firebase/database";
+import { get, limitToLast, query, ref, update } from "firebase/database";
+import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 
 const VocabularyWordListPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, page } = router.query;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
   const { currentUser } = useContext(AuthContext);
 
   const filterWordList = (keyword: string) => {
+    setLoading(true);
     // TODO: APIを叩く処理を共通化したい
     // あと、未ログイン時も使えるようにしたい
     const api = currentUser
@@ -38,6 +42,7 @@ const VocabularyWordListPage = () => {
           }
         }
         setWordList(wordList);
+        setLoading(false);
       });
   };
 
@@ -71,28 +76,37 @@ const VocabularyWordListPage = () => {
       setBookId(id[0]);
     }
 
-    // TODO: ページネーションを実装したい（下記を参考）
-    // https://firebase.google.com/docs/firestore/query-data/query-cursors?hl=ja
-    // あと、並び順も
-    const api = currentUser
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${id}/words.json`
-      : "";
-    fetch(api)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        const wordList = [];
-        for (const key in data) {
-          const word = {
-            id: key,
-            ...data[key],
-          };
-          wordList.push(word);
-        }
+    // TODO: 次ページも取得するように、並び順も実装
+    // https://cpoint-lab.co.jp/article/202107/20639/
+    const fetchWordist = async () => {
+      if (!currentUser) return;
+      if (page) {
+        setEnd(VOCABULARY_LIST_RESULTS * +page);
+      }
 
-        setWordList(wordList);
-      });
+      const path = `${currentUser.uid}/${id}/words`;
+      const wordsRef = ref(db, path);
+      await get(query(wordsRef, limitToLast(end)))
+        .then((response) => {
+          return response.val();
+        })
+        .then((value) => {
+          const wordList = [];
+          for (const key in value) {
+            const word = {
+              id: key,
+              ...value[key],
+            };
+            wordList.push(word);
+          }
+
+          setWordList(wordList);
+
+          setLoading(false);
+        });
+    };
+
+    fetchWordist();
   }, [currentUser, id]);
 
   return (
@@ -104,6 +118,7 @@ const VocabularyWordListPage = () => {
         bookId={bookId}
         wordList={wordList}
         toggleMemorizedState={toggleMemorizedState}
+        loading={loading}
       />
     </MainLayout>
   );
