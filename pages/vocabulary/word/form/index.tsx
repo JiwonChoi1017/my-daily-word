@@ -14,10 +14,11 @@ const VocabularyWordFormPage = () => {
     meanings: Meaning[];
     pronunciation: string;
     isMemorized: boolean;
+    createdAt: string;
   }) => {
     const user = authService.currentUser;
     const api = user
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${user.uid}/${bookId}/words.json`
+      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}/${bookId}/words.json`
       : "";
 
     fetch(api, {

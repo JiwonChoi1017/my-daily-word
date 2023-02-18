@@ -7,6 +7,7 @@ const VocabularyBookForm: React.FC<{
     description: string;
     word: string;
     meaning: string;
+    createdAt: string;
   }) => void;
 }> = ({ onAddBookHandler }) => {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -26,11 +27,20 @@ const VocabularyBookForm: React.FC<{
       return;
     }
 
+    const date = new Date();
+    const currentDateString = date.toLocaleDateString().split("/").join("");
+    const currentTimeString = date
+      .toLocaleTimeString()
+      .split(":")
+      .join("")
+      .padStart(6, "0");
+
     onAddBookHandler({
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       word: wordRef.current.value,
       meaning: meaningRef.current.value,
+      createdAt: `${currentDateString}${currentTimeString}`,
     });
   };
 

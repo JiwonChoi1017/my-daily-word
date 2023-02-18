@@ -2,6 +2,8 @@ export type Book = {
   id: string;
   title: string;
   description: string;
+  createdAt: string;
+  modifiedAt: string;
 };
 
 export type Word = {
@@ -10,6 +12,8 @@ export type Word = {
   pronunciation: string;
   meanings: Meaning[];
   isMemorized: boolean;
+  createdAt: string;
+  modifiedAt: string;
 };
 
 export type Meaning = {

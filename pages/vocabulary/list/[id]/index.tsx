@@ -7,7 +7,14 @@ import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import VocabularyWordSearchBox from "@/components/vocabulary/word/VocabularyWordSearchBox";
 import { db } from "@/firebase-config";
-import { get, limitToLast, query, ref, update } from "firebase/database";
+import {
+  get,
+  limitToLast,
+  orderByChild,
+  query,
+  ref,
+  update,
+} from "firebase/database";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 
 const VocabularyWordListPage = () => {
@@ -24,7 +31,7 @@ const VocabularyWordListPage = () => {
     // TODO: APIを叩く処理を共通化したい
     // あと、未ログイン時も使えるようにしたい
     const api = currentUser
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${id}/words.json`
+      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${currentUser.uid}/${id}/words.json`
       : "";
     fetch(api)
       .then((response) => {
@@ -50,7 +57,7 @@ const VocabularyWordListPage = () => {
     if (!currentUser || typeof id !== "string") return;
 
     const { isMemorized } = wordInfo;
-    const path = `${currentUser.uid}/${id}/words/${wordInfo.id}`;
+    const path = `users/${currentUser.uid}/${id}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
@@ -84,24 +91,22 @@ const VocabularyWordListPage = () => {
         setEnd(VOCABULARY_LIST_RESULTS * +page);
       }
 
-      const path = `${currentUser.uid}/${id}/words`;
+      const path = `users/${currentUser.uid}/${id}/words`;
       const wordsRef = ref(db, path);
-      await get(query(wordsRef, limitToLast(end)))
+      await get(query(wordsRef, orderByChild("createdAt"), limitToLast(end)))
         .then((response) => {
           return response.val();
         })
         .then((value) => {
           const wordList = [];
-          for (const key in value) {
+          for (const key of Object.keys(value).reverse()) {
             const word = {
               id: key,
               ...value[key],
             };
             wordList.push(word);
           }
-
           setWordList(wordList);
-
           setLoading(false);
         });
     };

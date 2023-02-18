@@ -4,7 +4,7 @@ import Link from "next/link";
 import VocabularyBookList from "@/components/vocabulary/book/VocabularyBookList";
 import { Book } from "@/types/Vocabulary";
 import { AuthContext } from "@/context/auth/AuthProvider";
-import { get, limitToLast, query, ref } from "firebase/database";
+import { get, limitToLast, orderByChild, query, ref } from "firebase/database";
 import { db } from "@/firebase-config";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import { useRouter } from "next/router";
@@ -27,15 +27,15 @@ const VocabularyBookListPage = () => {
         setEnd(VOCABULARY_LIST_RESULTS * +page);
       }
 
-      const path = currentUser.uid;
+      const path = `users/${currentUser.uid}`;
       const booksRef = ref(db, path);
-      await get(query(booksRef, limitToLast(end)))
+      await get(query(booksRef, orderByChild("createdAt"), limitToLast(end)))
         .then((response) => {
           return response.val();
         })
         .then((value) => {
           const bookList = [];
-          for (const key in value) {
+          for (const key of Object.keys(value).reverse()) {
             const book = {
               id: key,
               ...value[key],

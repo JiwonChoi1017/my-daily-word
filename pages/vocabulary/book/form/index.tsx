@@ -12,10 +12,11 @@ const VocabularyBookFormPage = () => {
     description: string;
     word: string;
     meaning: string;
+    createdAt: string;
   }) => {
     const user = authService.currentUser;
     const api = user
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${user.uid}.json`
+      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}.json`
       : "";
 
     fetch(api, {
