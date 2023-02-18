@@ -8,6 +8,7 @@ const VocabularyWordForm: React.FC<{
     meanings: Meaning[];
     pronunciation: string;
     isMemorized: boolean;
+    createdAt: string;
   }) => void;
 }> = ({ onAddWordHandler }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
@@ -150,11 +151,20 @@ const VocabularyWordForm: React.FC<{
       meanings[newIndex].examples.push(example.value);
     });
 
+    const date = new Date();
+    const currentDateString = date.toLocaleDateString().split("/").join("");
+    const currentTimeString = date
+      .toLocaleTimeString()
+      .split(":")
+      .join("")
+      .padStart(6, "0");
+
     onAddWordHandler({
       word: wordRef.current.value,
       meanings: meanings,
       pronunciation: pronunciationRef.current.value,
       isMemorized: false,
+      createdAt: `${currentDateString}${currentTimeString}`,
     });
   };
 

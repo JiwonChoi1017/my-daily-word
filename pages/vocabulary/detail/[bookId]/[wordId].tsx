@@ -17,6 +17,8 @@ const VocabularyWordDetailPage = () => {
     pronunciation: "",
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
+    createdAt: "",
+    modifiedAt: "",
   });
 
   // TODO: 暗記フラグ機能を共通化したい
@@ -24,7 +26,7 @@ const VocabularyWordDetailPage = () => {
     if (!currentUser || typeof bookId !== "string") return;
 
     const { isMemorized } = wordInfo;
-    const path = `${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
+    const path = `users/${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
@@ -38,7 +40,7 @@ const VocabularyWordDetailPage = () => {
 
   useEffect(() => {
     const api = currentUser
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/${currentUser.uid}/${bookId}/words/${wordId}.json`
+      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${currentUser.uid}/${bookId}/words/${wordId}.json`
       : "";
     fetch(api)
       .then((response) => {
