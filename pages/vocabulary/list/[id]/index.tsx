@@ -20,10 +20,12 @@ import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 const VocabularyWordListPage = () => {
   const router = useRouter();
   const { id, page } = router.query;
+
   const [loading, setLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
+
   const { currentUser } = useContext(AuthContext);
 
   const filterWordList = (keyword: string) => {
@@ -83,8 +85,7 @@ const VocabularyWordListPage = () => {
       setBookId(id[0]);
     }
 
-    // TODO: 次ページも取得するように、並び順も実装
-    // https://cpoint-lab.co.jp/article/202107/20639/
+    // TODO: 並び順も実装
     const fetchWordist = async () => {
       if (!currentUser) return;
       if (page) {
@@ -93,14 +94,15 @@ const VocabularyWordListPage = () => {
 
       const path = `users/${currentUser.uid}/${id}/words`;
       const wordsRef = ref(db, path);
+
       await get(query(wordsRef, orderByChild("createdAt"), limitToLast(end)))
         .then((response) => {
           return response.val();
         })
         .then((value) => {
-          const wordList = [];
+          const wordList: Word[] = [];
           for (const key of Object.keys(value).reverse()) {
-            const word = {
+            const word: Word = {
               id: key,
               ...value[key],
             };

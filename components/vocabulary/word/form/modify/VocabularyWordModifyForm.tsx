@@ -1,15 +1,7 @@
 import { Meaning } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
-const VocabularyWordForm: React.FC<{
-  onAddWordHandler: (wordInfo: {
-    word: string;
-    meanings: Meaning[];
-    pronunciation: string;
-    isMemorized: boolean;
-    createdAt: string;
-  }) => void;
-}> = ({ onAddWordHandler }) => {
+const VocabularyWordModifyForm = () => {
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
   ]);
@@ -157,16 +149,9 @@ const VocabularyWordForm: React.FC<{
       .split(":")
       .join("")
       .padStart(6, "0");
-
-    onAddWordHandler({
-      word: wordRef.current.value,
-      meanings: meanings,
-      pronunciation: pronunciationRef.current.value,
-      isMemorized: false,
-      createdAt: `${currentDateString}${currentTimeString}`,
-    });
   };
 
+  // TODO: 値を引き継ぐように
   return (
     <form
       onSubmit={(e: React.FormEvent) => {
@@ -195,4 +180,4 @@ const VocabularyWordForm: React.FC<{
   );
 };
 
-export default VocabularyWordForm;
+export default VocabularyWordModifyForm;

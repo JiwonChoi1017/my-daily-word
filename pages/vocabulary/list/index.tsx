@@ -16,27 +16,28 @@ const VocabularyBookListPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookList, setBookList] = useState<Book[]>([]);
+
   const { currentUser } = useContext(AuthContext);
 
-  // TODO: 次ページも取得するように、並び順も実装
-  // https://cpoint-lab.co.jp/article/202107/20639/
+  // TODO: 並び順も実装
   useEffect(() => {
-    const fetchBookList = async () => {
-      if (!currentUser) return;
-      if (page) {
-        setEnd(VOCABULARY_LIST_RESULTS * +page);
-      }
+    if (!currentUser) return;
+    if (page) {
+      setEnd(VOCABULARY_LIST_RESULTS * +page);
+    }
 
-      const path = `users/${currentUser.uid}`;
-      const booksRef = ref(db, path);
+    const path = `users/${currentUser.uid}`;
+    const booksRef = ref(db, path);
+
+    const fetchBookList = async () => {
       await get(query(booksRef, orderByChild("createdAt"), limitToLast(end)))
         .then((response) => {
           return response.val();
         })
         .then((value) => {
-          const bookList = [];
+          const bookList: Book[] = [];
           for (const key of Object.keys(value).reverse()) {
-            const book = {
+            const book: Book = {
               id: key,
               ...value[key],
             };
