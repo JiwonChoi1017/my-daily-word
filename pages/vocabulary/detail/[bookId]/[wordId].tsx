@@ -23,10 +23,12 @@ const VocabularyWordDetailPage = () => {
 
   // TODO: 暗記フラグ機能を共通化したい
   const toggleMemorizedState = async (wordInfo: Word) => {
-    if (!currentUser || typeof bookId !== "string") return;
+    if (!currentUser) return;
 
     const { isMemorized } = wordInfo;
-    const path = `users/${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
+    const path = `users/${currentUser.uid}/${bookId as string}/words/${
+      wordInfo.id
+    }`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
@@ -55,6 +57,7 @@ const VocabularyWordDetailPage = () => {
     <MainLayout>
       <h1>Vocabulary Detail Page</h1>
       <VocabularyWordDetail
+        bookId={bookId as string}
         wordInfo={word}
         toggleMemorizedState={toggleMemorizedState}
       />

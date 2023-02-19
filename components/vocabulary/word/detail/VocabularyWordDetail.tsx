@@ -1,10 +1,12 @@
 import { Word } from "@/types/Vocabulary";
+import Link from "next/link";
 import React from "react";
 
 const VocabularyWordDetail: React.FC<{
+  bookId: string;
   wordInfo: Word;
   toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({ wordInfo, toggleMemorizedState }) => {
+}> = ({ bookId, wordInfo, toggleMemorizedState }) => {
   const { isMemorized, meanings } = wordInfo;
 
   const onClickMemorizedButtonHandler = () => {
@@ -43,6 +45,12 @@ const VocabularyWordDetail: React.FC<{
       <p>{wordInfo.pronunciation}</p>
       {memorizedIcon}
       <ul>{meaningList}</ul>
+      <Link
+        href={`/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`}
+      >
+        修正
+      </Link>
+      <button>削除</button>
     </div>
   );
 };
