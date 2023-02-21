@@ -1,11 +1,10 @@
-import { Meaning } from "@/types/Vocabulary";
+import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
-const VocabularyWordModifyForm = () => {
-  const [meanings, setMeanings] = useState<Meaning[]>([
-    { meaning: "", examples: [""] },
-  ]);
-
+const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
+  wordInfo,
+}) => {
+  const [meanings, setMeanings] = useState<Meaning[]>([]);
   const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
 
   const wordRef = useRef<HTMLInputElement>(null);
@@ -14,6 +13,7 @@ const VocabularyWordModifyForm = () => {
   const examplesRef = useRef<HTMLInputElement[]>([]);
 
   useEffect(() => {
+    setMeanings(wordInfo.meanings);
     meaningsRef.current = meaningsRef.current.slice(0, meanings.length);
 
     const examples: string[] = [];
@@ -22,8 +22,9 @@ const VocabularyWordModifyForm = () => {
         examples.push(example);
       });
     });
+
     examplesRef.current = examplesRef.current.slice(0, examples.length);
-  }, [meanings]);
+  }, [meanings, wordInfo.meanings]);
 
   const onAddMeaningHandler = () => {
     setMeanings((prevState) => {
@@ -69,6 +70,7 @@ const VocabularyWordModifyForm = () => {
           }}
           id={`meaning_${idx}`}
           type="text"
+          defaultValue={item.meaning}
           required
         />
       </li>
@@ -82,10 +84,12 @@ const VocabularyWordModifyForm = () => {
               if (!el) {
                 return;
               }
+              // TODO: indexどうすればいいんだろう
               examplesRef.current[exampleRefIndex] = el;
             }}
             id={`example_${idx}_${example_idx}`}
             type="text"
+            defaultValue={example}
             data-meaning-index={`${idx}`}
           />
         </li>
@@ -149,6 +153,12 @@ const VocabularyWordModifyForm = () => {
       .split(":")
       .join("")
       .padStart(6, "0");
+    console.log(
+      wordRef.current.value,
+      pronunciationRef.current.value,
+      meaningsRef,
+      examplesRef
+    );
   };
 
   // TODO: 値を引き継ぐように
@@ -160,11 +170,23 @@ const VocabularyWordModifyForm = () => {
     >
       <div>
         <label htmlFor="word">word</label>
-        <input ref={wordRef} type="text" id="word" required />
+        <input
+          ref={wordRef}
+          type="text"
+          id="word"
+          defaultValue={wordInfo.word}
+          required
+        />
       </div>
       <div>
         <label htmlFor="pronunciation">pronunciation</label>
-        <input ref={pronunciationRef} type="text" id="pronunciation" required />
+        <input
+          ref={pronunciationRef}
+          type="text"
+          id="pronunciation"
+          defaultValue={wordInfo.pronunciation}
+          required
+        />
       </div>
       <div>
         <label>meaning</label>
