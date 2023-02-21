@@ -46,6 +46,7 @@ const VocabularyBookListPage = () => {
           setBookList(bookList);
           setLoading(false);
         });
+      // TODO: 例外処理追加
     };
 
     fetchBookList();
