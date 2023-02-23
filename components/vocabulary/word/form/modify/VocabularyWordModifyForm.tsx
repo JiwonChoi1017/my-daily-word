@@ -1,11 +1,11 @@
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
-const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
-  wordInfo,
-}) => {
+const VocabularyWordModifyForm: React.FC<{
+  wordInfo: Word;
+  updateWord: (wordInfo: Word) => void;
+}> = ({ wordInfo, updateWord }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([]);
-  const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
 
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningsRef = useRef<HTMLInputElement[]>([]);
@@ -24,14 +24,11 @@ const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
     });
 
     examplesRef.current = examplesRef.current.slice(0, examples.length);
-  }, [meanings, wordInfo.meanings]);
+  }, [wordInfo.meanings]);
 
   const onAddMeaningHandler = () => {
     setMeanings((prevState) => {
       return [...prevState, { meaning: "", examples: [""] }];
-    });
-    setExampleRefIndex((prevState) => {
-      return prevState + 1;
     });
   };
 
@@ -52,9 +49,6 @@ const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
       currentState[newTargetMeaningIndex] = target;
 
       return currentState;
-    });
-    setExampleRefIndex((prevState) => {
-      return prevState + 1;
     });
   };
 
@@ -77,6 +71,17 @@ const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
     );
 
     const examplesInput = item.examples.map((example, example_idx) => {
+      const prevExampleList: string[] = [];
+      for (let i = 0; i <= idx; i++) {
+        const prevMeaning = meanings[i];
+        prevMeaning.examples.map((prevExample, prev_example_idx) => {
+          if (i < idx || (i === idx && example_idx > prev_example_idx)) {
+            prevExampleList.push(prevExample);
+          }
+        });
+      }
+      const currentExampleIndex = prevExampleList.length;
+
       return (
         <li key={`example_${idx}_${example_idx}`}>
           <input
@@ -84,8 +89,7 @@ const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
               if (!el) {
                 return;
               }
-              // TODO: indexどうすればいいんだろう
-              examplesRef.current[exampleRefIndex] = el;
+              examplesRef.current[currentExampleIndex] = el;
             }}
             id={`example_${idx}_${example_idx}`}
             type="text"
@@ -153,15 +157,16 @@ const VocabularyWordModifyForm: React.FC<{ wordInfo: Word }> = ({
       .split(":")
       .join("")
       .padStart(6, "0");
-    console.log(
-      wordRef.current.value,
-      pronunciationRef.current.value,
-      meaningsRef,
-      examplesRef
-    );
+
+    updateWord({
+      ...wordInfo,
+      word: wordRef.current.value,
+      meanings,
+      pronunciation: pronunciationRef.current.value,
+      modifiedAt: `${currentDateString}${currentTimeString}`,
+    });
   };
 
-  // TODO: 値を引き継ぐように
   return (
     <form
       onSubmit={(e: React.FormEvent) => {

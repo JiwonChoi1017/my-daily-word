@@ -2,7 +2,7 @@ import VocabularyWordModifyForm from "@/components/vocabulary/word/form/modify/V
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { db } from "@/firebase-config";
 import { Word } from "@/types/Vocabulary";
-import { get, ref } from "firebase/database";
+import { get, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -22,6 +22,21 @@ const VocabularyWordModifyFormPage = () => {
   });
 
   const { currentUser } = useContext(AuthContext);
+
+  const updateWord = async (wordInfo: Word) => {
+    if (!currentUser) return;
+
+    const { word, pronunciation, meanings, modifiedAt } = wordInfo;
+    const path = `users/${currentUser.uid}/${bookId as string}/words/${wordId}`;
+    const wordRef = ref(db, path);
+
+    await update(wordRef, { word, pronunciation, meanings, modifiedAt }).then(
+      () => {
+        router.push(`/vocabulary/detail/${bookId}/${wordId}`);
+      }
+    );
+    // TODO: 例外処理追加
+  };
 
   useEffect(() => {
     if (!currentUser) return;
@@ -47,7 +62,7 @@ const VocabularyWordModifyFormPage = () => {
 
   return (
     <div>
-      <VocabularyWordModifyForm wordInfo={word} />
+      <VocabularyWordModifyForm wordInfo={word} updateWord={updateWord} />
     </div>
   );
 };

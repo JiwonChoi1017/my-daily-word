@@ -6,11 +6,16 @@ const VocabularyWordDetail: React.FC<{
   bookId: string;
   wordInfo: Word;
   toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({ bookId, wordInfo, toggleMemorizedState }) => {
+  deleteWord: () => void;
+}> = ({ bookId, wordInfo, toggleMemorizedState, deleteWord }) => {
   const { isMemorized, meanings } = wordInfo;
 
   const onClickMemorizedButtonHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
+  };
+
+  const onClickDeleteButtonHandler = () => {
+    deleteWord();
   };
 
   // 暗記フラグ
@@ -50,7 +55,7 @@ const VocabularyWordDetail: React.FC<{
       >
         修正
       </Link>
-      <button>削除</button>
+      <button onClick={onClickDeleteButtonHandler}>削除</button>
     </div>
   );
 };

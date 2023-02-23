@@ -160,7 +160,7 @@ const VocabularyWordForm: React.FC<{
 
     onAddWordHandler({
       word: wordRef.current.value,
-      meanings: meanings,
+      meanings,
       pronunciation: pronunciationRef.current.value,
       isMemorized: false,
       createdAt: `${currentDateString}${currentTimeString}`,

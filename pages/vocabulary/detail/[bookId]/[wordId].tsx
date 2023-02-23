@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import VocabularyWordDetail from "@/components/vocabulary/word/detail/VocabularyWordDetail";
-import { ref, update } from "firebase/database";
+import { ref, remove, update } from "firebase/database";
 import { db } from "@/firebase-config";
 
 const VocabularyWordDetailPage = () => {
@@ -38,6 +38,19 @@ const VocabularyWordDetailPage = () => {
         return currentState;
       });
     });
+    // TODO: 例外処理追加
+  };
+
+  const deleteWord = async () => {
+    if (!currentUser) return;
+
+    const path = `users/${currentUser.uid}/${bookId as string}/words/${wordId}`;
+    const wordRef = ref(db, path);
+
+    await remove(wordRef).then(() => {
+      router.push(`/vocabulary/list/${bookId}`);
+    });
+    // TODO: 例外処理追加
   };
 
   useEffect(() => {
@@ -60,6 +73,7 @@ const VocabularyWordDetailPage = () => {
         bookId={bookId as string}
         wordInfo={word}
         toggleMemorizedState={toggleMemorizedState}
+        deleteWord={deleteWord}
       />
     </MainLayout>
   );
