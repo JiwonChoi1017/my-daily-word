@@ -1,14 +1,8 @@
-import { Meaning } from "@/types/Vocabulary";
+import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
 const VocabularyWordForm: React.FC<{
-  onAddWordHandler: (wordInfo: {
-    word: string;
-    meanings: Meaning[];
-    pronunciation: string;
-    isMemorized: boolean;
-    createdAt: string;
-  }) => void;
+  onAddWordHandler: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
 }> = ({ onAddWordHandler }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
@@ -151,7 +145,11 @@ const VocabularyWordForm: React.FC<{
     });
 
     const date = new Date();
-    const currentDateString = date.toLocaleDateString().split("/").join("");
+    const currentDateArray: string[] = date.toLocaleDateString().split("/");
+    // 日時に0をつけて文字列を結合
+    const currentDateString = currentDateArray
+      .map((date) => date.padStart(2, "0"))
+      .join("");
     const currentTimeString = date
       .toLocaleTimeString()
       .split(":")

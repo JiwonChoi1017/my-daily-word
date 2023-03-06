@@ -151,7 +151,11 @@ const VocabularyWordModifyForm: React.FC<{
     });
 
     const date = new Date();
-    const currentDateString = date.toLocaleDateString().split("/").join("");
+    const currentDateArray: string[] = date.toLocaleDateString().split("/");
+    // 日時に0をつけて文字列を結合
+    const currentDateString = currentDateArray
+      .map((date) => date.padStart(2, "0"))
+      .join("");
     const currentTimeString = date
       .toLocaleTimeString()
       .split(":")

@@ -3,17 +3,12 @@ import MainLayout from "@/components/layout/MainLayout";
 import VocabularyBookForm from "@/components/vocabulary/book/form/VocabularyBookForm";
 import { authService } from "@/firebase-config";
 import { useRouter } from "next/router";
+import { Book } from "@/types/Vocabulary";
 
 const VocabularyBookFormPage = () => {
   const router = useRouter();
 
-  const onAddBookHandler = (bookInfo: {
-    title: string;
-    description: string;
-    word: string;
-    meaning: string;
-    createdAt: string;
-  }) => {
+  const onAddBookHandler = (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
     const user = authService.currentUser;
     const api = user
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}.json`

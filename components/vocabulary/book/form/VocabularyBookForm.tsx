@@ -1,13 +1,8 @@
+import { Book } from "@/types/Vocabulary";
 import React, { useRef } from "react";
 
 const VocabularyBookForm: React.FC<{
-  onAddBookHandler: (bookInfo: {
-    title: string;
-    description: string;
-    word: string;
-    meaning: string;
-    createdAt: string;
-  }) => void;
+  onAddBookHandler: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
 }> = ({ onAddBookHandler }) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -27,7 +22,11 @@ const VocabularyBookForm: React.FC<{
     }
 
     const date = new Date();
-    const currentDateString = date.toLocaleDateString().split("/").join("");
+    const currentDateArray: string[] = date.toLocaleDateString().split("/");
+    // 日時に0をつけて文字列を結合
+    const currentDateString = currentDateArray
+      .map((date) => date.padStart(2, "0"))
+      .join("");
     const currentTimeString = date
       .toLocaleTimeString()
       .split(":")
@@ -40,6 +39,7 @@ const VocabularyBookForm: React.FC<{
       word: wordRef.current.value,
       meaning: meaningRef.current.value,
       createdAt: `${currentDateString}${currentTimeString}`,
+      isFavorite: false,
     });
   };
 

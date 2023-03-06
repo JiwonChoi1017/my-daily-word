@@ -1,9 +1,12 @@
 export type Book = {
   id: string;
   title: string;
+  word: string;
+  meaning: string;
   description: string;
   createdAt: string;
   modifiedAt: string;
+  isFavorite: boolean;
 };
 
 export type Word = {
