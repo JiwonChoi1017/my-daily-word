@@ -101,6 +101,12 @@ const VocabularyWordListPage = () => {
         })
         .then((value) => {
           const wordList: Word[] = [];
+          // ゼロマッチ
+          if (!value) {
+            setWordList([]);
+            setLoading(false);
+            return;
+          }
           for (const key of Object.keys(value).reverse()) {
             const word: Word = {
               id: key,
