@@ -9,11 +9,15 @@ import {
   orderByChild,
   query,
   ref,
+  update,
 } from "firebase/database";
 import { db } from "@/firebase-config";
-import { Word } from "@/types/Vocabulary";
+import { Book, Word } from "@/types/Vocabulary";
+import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 
 export default function Home() {
+  const [bookId, setBookId] = useState<string>("");
+  const [bookTitle, setBookTitle] = useState<string>("");
   const [randomWord, setRandomWord] = useState<Word>({
     id: "",
     word: "",
@@ -40,7 +44,10 @@ export default function Home() {
           return response.val();
         })
         .then((value) => {
-          return Object.keys(value)[0];
+          const firstBookKey = Object.keys(value)[0];
+          const firstBook: Book = value[firstBookKey];
+          setBookTitle(firstBook.title);
+          return firstBookKey;
         });
 
       const wordsPath = `users/${currentUser.uid}/${bookId}/words`;
@@ -62,14 +69,42 @@ export default function Home() {
           const randomIndex = Math.floor(Math.random() * wordList.length);
           setRandomWord(wordList[randomIndex]);
         });
+
+      setBookId(bookId);
     };
 
     fetchRandomWord();
   }, [currentUser]);
 
+  const toggleMemorizedState = async (wordInfo: Word) => {
+    if (!currentUser) return;
+
+    const { isMemorized } = wordInfo;
+    const path = `users/${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
+    const wordRef = ref(db, path);
+
+    await update(wordRef, { isMemorized }).then(() => {
+      setRandomWord((prevState: Word) => {
+        const currentState = { ...prevState };
+        currentState.isMemorized = isMemorized;
+        return currentState;
+      });
+    });
+  };
+
   return (
     <MainLayout>
-      <Link href="/vocabulary/list?page=1">Start!</Link>
+      <ul>
+        <VocabularyWord
+          bookId={bookId}
+          wordInfo={randomWord}
+          toggleMemorizedState={toggleMemorizedState}
+        />
+      </ul>
+      <Link href={`/vocabulary/list/${bookId}?page=1`}>
+        {bookTitle}単語帳へ
+      </Link>
+      <Link href="/vocabulary/list?page=1">単語帳リストへ</Link>
     </MainLayout>
   );
 }
