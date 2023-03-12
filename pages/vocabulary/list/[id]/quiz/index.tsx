@@ -8,14 +8,16 @@ import { db } from "@/firebase-config";
 import { Word } from "@/types/Vocabulary";
 import VocabularyQuizItem from "@/components/vocabulary/quiz/VocabularyQuizItem";
 import { VOCABULARY_QUIZ_COUNT } from "@/constants/constants";
+import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizResult";
 
 const VocabularyQuizPage = () => {
   const { query } = useRouter();
   const { id } = query;
 
   const [showModal, setShowModal] = useState<boolean>(true);
+  const [showResult, setShowResult] = useState<boolean>(false);
   const [quizKind, setQuizKind] = useState<"word" | "meaning">("word");
-  const [currentQuizNumber, setCurrentQuizNumber] = useState<number>(0);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answersList, setAnswersList] = useState<string[][]>([]);
   const [correctAnswerList, setCorrectAnswerList] = useState<
     { id: string; word: string; meaning: string }[]
@@ -110,6 +112,28 @@ const VocabularyQuizPage = () => {
     return array;
   };
 
+  const checkAnswer = (answer: string) => {
+    const correctAnswer = correctAnswerList[currentQuizIndex];
+    const { word, meaning } = correctAnswer;
+    let isCorrect = false;
+
+    if (quizKind === "word") {
+      isCorrect = answer === word;
+    } else {
+      isCorrect = answer === meaning;
+    }
+
+    setTimeout(() => {
+      if (currentQuizIndex < correctAnswerList.length - 1) {
+        setCurrentQuizIndex((prevState) => {
+          return prevState + 1;
+        });
+      } else {
+        setShowResult(true);
+      }
+    }, 1500);
+  };
+
   return (
     <MainLayout>
       <h1>Vocabulary Quiz Page</h1>
@@ -119,12 +143,14 @@ const VocabularyQuizPage = () => {
         fetchQuizMeaning={fetchQuizMeaning}
       />
       <VocabularyQuizItem
-        show={!showModal}
+        show={!showModal && !showResult}
         quizKind={quizKind}
-        currentQuizNumber={currentQuizNumber}
+        currentQuizIndex={currentQuizIndex}
         answersList={answersList}
         correctAnswerList={correctAnswerList}
+        checkAnswer={checkAnswer}
       />
+      <VocabularyQuizResult show={showResult} />
     </MainLayout>
   );
 };
