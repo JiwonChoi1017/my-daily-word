@@ -1,8 +1,10 @@
+import { QUIZ_KIND } from "@/constants/quizConstans";
+import { QuizKind } from "@/types/Quiz";
 import React, { useState } from "react";
 
 const VocabularyQuizItem: React.FC<{
   show: boolean;
-  quizKind: "word" | "meaning";
+  quizKind: QuizKind;
   currentQuizIndex: number;
   answersList: string[][];
   correctAnswerList: { id: string; word: string; meaning: string }[];
@@ -33,16 +35,16 @@ const VocabularyQuizItem: React.FC<{
     setTimeout(() => {
       setCheckedValue(0);
       setShowIcon(false);
-    }, 1500);
+    }, 1000);
   };
 
   const currentQuestionItem = correctAnswerList[currentQuizIndex];
   const question =
-    quizKind === "word"
+    quizKind === QUIZ_KIND.word
       ? currentQuestionItem.meaning
       : currentQuestionItem.word;
   const correctAnswer =
-    quizKind === "word"
+    quizKind === QUIZ_KIND.word
       ? currentQuestionItem.word
       : currentQuestionItem.meaning;
   const answerList = answersList[currentQuizIndex];
