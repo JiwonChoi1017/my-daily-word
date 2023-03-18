@@ -15,6 +15,11 @@ import { db } from "@/firebase-config";
 import { Book, Word } from "@/types/Vocabulary";
 import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 
+/**
+ * ホーム画面.
+ *
+ * @returns {JSX.Element} ホーム画面.
+ */
 export default function Home() {
   const [bookId, setBookId] = useState<string>("");
   const [bookTitle, setBookTitle] = useState<string>("");
@@ -93,7 +98,7 @@ export default function Home() {
   };
 
   return (
-    <MainLayout>
+    <MainLayout showNavigation={false}>
       <ul>
         <VocabularyWord
           bookId={bookId}
