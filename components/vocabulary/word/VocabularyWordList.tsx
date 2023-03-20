@@ -12,18 +12,16 @@ const VocabularyWordList: React.FC<{
     <div>Loading...</div>
   ) : (
     <div>
-      <ul>
-        {wordList.map((word) => {
-          return (
-            <VocabularyWord
-              key={word.id}
-              bookId={bookId}
-              wordInfo={word}
-              toggleMemorizedState={toggleMemorizedState}
-            />
-          );
-        })}
-      </ul>
+      {wordList.map((word) => {
+        return (
+          <VocabularyWord
+            key={word.id}
+            bookId={bookId}
+            wordInfo={word}
+            toggleMemorizedState={toggleMemorizedState}
+          />
+        );
+      })}
     </div>
   );
   return wordListHtml;

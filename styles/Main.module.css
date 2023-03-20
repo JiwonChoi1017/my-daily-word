@@ -1,28 +1,26 @@
 .header {
-  width: 100%;
+  width: 85%;
   height: 85px;
-  position: fixed;
-  z-index: 999;
+  margin: auto;
+  font-family: cursive;
 }
 
 .header__inner {
-  padding: 0 50px;
+  padding-top: 30px;
+  padding-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: inherit;
   position: relative;
+  border-bottom: 2.5px double #322a27;
 }
 
-.header__border__box {
-  border: 1.2px solid;
-  padding: 20px;
-  max-width: 5rem;
-}
-
-.header__title {
+.header__logo {
   width: 30%;
   cursor: pointer;
+  text-align: center;
+  font-size: 40px;
 }
 
 .navigation ul {
@@ -32,6 +30,6 @@
 }
 
 .main {
-  margin: 3rem auto;
-  width: 90%;
+  width: 85%;
+  margin: 5rem auto;
 }

@@ -99,13 +99,11 @@ export default function Home() {
 
   return (
     <MainLayout showNavigation={false}>
-      <ul>
-        <VocabularyWord
-          bookId={bookId}
-          wordInfo={randomWord}
-          toggleMemorizedState={toggleMemorizedState}
-        />
-      </ul>
+      <VocabularyWord
+        bookId={bookId}
+        wordInfo={randomWord}
+        toggleMemorizedState={toggleMemorizedState}
+      />
       <Link href={`/vocabulary/list/${bookId}?page=1`}>
         {bookTitle}単語帳へ
       </Link>

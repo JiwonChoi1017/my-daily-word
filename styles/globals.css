@@ -1,7 +1,30 @@
 body {
-  background-color: #f4e9db;
+  background-color: #faf2e8;
+  color: #322a27;
+  font-family: Georgia, serif;
 }
 
-main {
-  display: flex;
+html:before,
+html:after,
+body:before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  border: 1.5px solid #322a27;
+}
+
+html:after {
+  z-index: 10;
+  top: auto;
+  border-width: 0 0 1px;
+}
+
+body:before {
+  z-index: 10;
+  bottom: auto;
+  border-width: 1px 0 0;
 }
