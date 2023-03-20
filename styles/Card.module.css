@@ -1,0 +1,10 @@
+.card {
+  background-color: white;
+  margin: 20px 0;
+  padding: 20px 50px;
+  cursor: pointer;
+}
+
+.card:first-child {
+  margin-top: 30px;
+}

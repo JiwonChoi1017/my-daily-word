@@ -124,7 +124,6 @@ const VocabularyWordListPage = () => {
 
   return (
     <MainLayout>
-      <h1>Word List Page</h1>
       <Link href={`/vocabulary/word/form?book_id=${id}`}>Add New Word</Link>
       <VocabularyWordSearchBox filterWordList={filterWordList} />
       <VocabularyWordList

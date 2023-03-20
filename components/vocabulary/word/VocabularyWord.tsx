@@ -1,3 +1,4 @@
+import Card from "@/components/layout/Card";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
 import React from "react";
@@ -10,7 +11,7 @@ const VocabularyWord: React.FC<{
   const { id, word, isMemorized, meanings } = wordInfo;
   const router = useRouter();
 
-  const moveToDetailPage = (e: React.MouseEvent<HTMLLIElement>) => {
+  const moveToDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     // MEMO: event.target と event.currentTarget の違い
     // event.target: イベントが発生した要素を表す.
@@ -37,20 +38,18 @@ const VocabularyWord: React.FC<{
   });
 
   return (
-    <>
-      <li
+    <Card>
+      <div
         id={id}
-        style={{ cursor: "pointer" }}
-        onClick={(e: React.MouseEvent<HTMLLIElement>) => {
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
           moveToDetailPage(e);
         }}
       >
         <p>{word}</p>
         <div className="_ignoreClick">{memorizedIcon}</div>
         <ul>{meaningList}</ul>
-      </li>
-      <br />
-    </>
+      </div>
+    </Card>
   );
 };
 

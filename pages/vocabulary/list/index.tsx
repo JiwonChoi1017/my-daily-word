@@ -54,7 +54,6 @@ const VocabularyBookListPage = () => {
 
   return (
     <MainLayout>
-      <h1>Vocabulary Book List Page</h1>
       <Link href="/vocabulary/book/form">Add New Book</Link>
       <VocabularyBookList bookList={bookList} loading={loading} />
     </MainLayout>

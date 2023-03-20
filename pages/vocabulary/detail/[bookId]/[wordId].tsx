@@ -68,7 +68,6 @@ const VocabularyWordDetailPage = () => {
 
   return (
     <MainLayout>
-      <h1>Vocabulary Detail Page</h1>
       <VocabularyWordDetail
         bookId={bookId as string}
         wordInfo={word}

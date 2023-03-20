@@ -36,13 +36,13 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
     setBookId(typeof id === "string" ? id : id[0]);
   }, [currentUser]);
 
-  const onClickTitleHandler = () => {
+  const onClickLogoHandler = () => {
     router.push("/");
   };
 
   const onSignOutHandler = async () => {
     await signOutHandler();
-    onClickTitleHandler();
+    onClickLogoHandler();
   };
 
   const signInLink = isSignIn ? (
@@ -69,8 +69,10 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
   return (
     <header className={classes.header}>
       <div className={classes.header__inner}>
-        <div className={classes.header__border__box}>{currentDate}</div>
-        <h1 className={classes.header__title} onClick={onClickTitleHandler}>
+        <div>
+          <p>{currentDate}</p>
+        </div>
+        <h1 className={classes.header__logo} onClick={onClickLogoHandler}>
           Daily Word
         </h1>
         <div className={classes.header__border__box}>{signInLink}</div>
