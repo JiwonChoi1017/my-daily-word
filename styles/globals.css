@@ -28,3 +28,23 @@ body:before {
   bottom: auto;
   border-width: 1px 0 0;
 }
+
+ul {
+  list-style-type: none;
+}
+
+.title__wrap {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.description {
+  margin-bottom: 0;
+  padding: 0;
+  font-size: 18px;
+}
