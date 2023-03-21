@@ -17,11 +17,16 @@ import {
 } from "firebase/database";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 
+/**
+ * 単語リスト画面.
+ *
+ * @returns {JSX.Element} 単語リスト画面.
+ */
 const VocabularyWordListPage = () => {
   const router = useRouter();
   const { id, page } = router.query;
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
@@ -29,7 +34,7 @@ const VocabularyWordListPage = () => {
   const { currentUser } = useContext(AuthContext);
 
   const filterWordList = (keyword: string) => {
-    setLoading(true);
+    setIsLoading(true);
     // TODO: APIを叩く処理を共通化したい
     // あと、未ログイン時も使えるようにしたい
     const api = currentUser
@@ -51,7 +56,7 @@ const VocabularyWordListPage = () => {
           }
         }
         setWordList(wordList);
-        setLoading(false);
+        setIsLoading(false);
       });
   };
 
@@ -104,7 +109,7 @@ const VocabularyWordListPage = () => {
           // ゼロマッチ
           if (!value) {
             setWordList([]);
-            setLoading(false);
+            setIsLoading(false);
             return;
           }
           for (const key of Object.keys(value).reverse()) {
@@ -115,7 +120,7 @@ const VocabularyWordListPage = () => {
             wordList.push(word);
           }
           setWordList(wordList);
-          setLoading(false);
+          setIsLoading(false);
         });
     };
 
@@ -126,11 +131,12 @@ const VocabularyWordListPage = () => {
     <MainLayout>
       <Link href={`/vocabulary/word/form?book_id=${id}`}>Add New Word</Link>
       <VocabularyWordSearchBox filterWordList={filterWordList} />
+      {/* 単語リスト */}
       <VocabularyWordList
         bookId={bookId}
         wordList={wordList}
         toggleMemorizedState={toggleMemorizedState}
-        loading={loading}
+        isLoading={isLoading}
       />
     </MainLayout>
   );

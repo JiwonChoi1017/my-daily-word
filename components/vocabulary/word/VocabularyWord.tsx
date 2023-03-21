@@ -1,14 +1,25 @@
 import Card from "@/components/layout/Card";
+import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
 import React from "react";
 
+/**
+ * 単語.
+ *
+ * @param {boolean} isLoading - ローディング中か.
+ * @param {string} bookId - 単語帳id.
+ * @param {Word} wordInfo - 単語情報.
+ * @param {function} toggleMemorizedState - 暗記状態を更新.
+ * @returns {JSX.Element} 単語.
+ */
 const VocabularyWord: React.FC<{
+  isLoading?: boolean;
   bookId: string;
   wordInfo: Word;
   toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({ bookId, wordInfo, toggleMemorizedState }) => {
-  const { id, word, isMemorized, meanings } = wordInfo;
+}> = ({ isLoading, bookId, wordInfo, toggleMemorizedState }) => {
+  const { id, word, pronunciation, isMemorized, meanings } = wordInfo;
   const router = useRouter();
 
   const moveToDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -25,30 +36,40 @@ const VocabularyWord: React.FC<{
   const onClickMemorizedButtonHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
-
   // 暗記フラグ
-  const memorizedIcon = isMemorized ? (
+  const memorizedFlag = isMemorized ? (
     <div onClick={onClickMemorizedButtonHandler}>暗記</div>
   ) : (
     <div onClick={onClickMemorizedButtonHandler}>未暗記</div>
   );
-
+  // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
-    return <li key={`${meaning}_${index}`}>{meaning.meaning}</li>;
+    return (
+      <li key={`${meaning}_${index}`}>
+        {index + 1}. {meaning.meaning}
+      </li>
+    );
   });
 
   return (
     <Card>
-      <div
-        id={id}
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-          moveToDetailPage(e);
-        }}
-      >
-        <p>{word}</p>
-        <div className="_ignoreClick">{memorizedIcon}</div>
-        <ul>{meaningList}</ul>
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div
+          id={id}
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            moveToDetailPage(e);
+          }}
+        >
+          <div className="title__wrap">
+            <span className="title">{word}</span>
+            <span>[{pronunciation}]</span>
+          </div>
+          <div className="_ignoreClick">{memorizedFlag}</div>
+          <ul className="description">{meaningList}</ul>
+        </div>
+      )}
     </Card>
   );
 };

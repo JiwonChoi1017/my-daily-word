@@ -9,11 +9,16 @@ import { db } from "@/firebase-config";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import { useRouter } from "next/router";
 
+/**
+ * 単語帳リスト画面.
+ *
+ * @returns {JSX.Element} 単語帳リスト画面.
+ */
 const VocabularyBookListPage = () => {
   const router = useRouter();
   const { page } = router.query;
-
-  const [loading, setLoading] = useState<boolean>(true);
+  // ローディング中か
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookList, setBookList] = useState<Book[]>([]);
 
@@ -44,7 +49,7 @@ const VocabularyBookListPage = () => {
             bookList.push(book);
           }
           setBookList(bookList);
-          setLoading(false);
+          setIsLoading(false);
         });
       // TODO: 例外処理追加
     };
@@ -53,9 +58,10 @@ const VocabularyBookListPage = () => {
   }, [currentUser]);
 
   return (
-    <MainLayout>
+    <MainLayout showNavigation={false}>
       <Link href="/vocabulary/book/form">Add New Book</Link>
-      <VocabularyBookList bookList={bookList} loading={loading} />
+      {/* 単語リスト */}
+      <VocabularyBookList bookList={bookList} isLoading={isLoading} />
     </MainLayout>
   );
 };

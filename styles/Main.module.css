@@ -13,7 +13,7 @@
   justify-content: space-between;
   height: inherit;
   position: relative;
-  border-bottom: 2.5px double #322a27;
+  border-bottom: 2px double #322a27;
 }
 
 .header__logo {
@@ -24,7 +24,6 @@
 }
 
 .navigation ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
 }
