@@ -2,7 +2,7 @@ import { AuthContext } from "@/context/auth/AuthProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import classes from "../../styles/Main.module.css";
+import classes from "../../styles/Header.module.css";
 
 /**
  * ヘッダー.
@@ -51,6 +51,7 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
     <Link href="/sign-in">ログイン</Link>
   );
 
+  // ナビゲーション
   const navigation = showNavigation && (
     <nav className={classes.navigation}>
       <ul>

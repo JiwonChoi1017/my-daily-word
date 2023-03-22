@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import {
@@ -87,6 +86,7 @@ export default function Home() {
     fetchRandomWord();
   }, [currentUser]);
 
+  // 暗記状態をトーグル
   const toggleMemorizedState = async (wordInfo: Word) => {
     if (!currentUser) return;
 

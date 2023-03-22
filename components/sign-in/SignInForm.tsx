@@ -2,6 +2,11 @@ import React, { useContext, useRef } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
 
+/**
+ * ログインフォーム.
+ *
+ * @returns {JSX.Element} ログインフォーム.
+ */
 const SignInForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -10,6 +15,7 @@ const SignInForm = () => {
 
   const { signInHandler } = useContext(AuthContext);
 
+  // 送信イベント
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     // e.preventDefault(): submitイベントの発生元であるフォームが持つデフォルトの動作をキャンセルするメソッド.
     // フォームが持つデフォルトの動作とは、フォームの内容を指定したURLへ送信するという動作のことをいう.
@@ -26,6 +32,12 @@ const SignInForm = () => {
       password: passwordRef.current.value,
     });
     router.push("/vocabulary/list?page=1");
+  };
+  // ユーザ登録ボタンクリックイベント
+  const onClickSignUpButtonHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // ユーザ登録画面に遷移
+    router.push("/sign-up");
   };
 
   return (
@@ -47,7 +59,17 @@ const SignInForm = () => {
           type="password"
         />
       </div>
-      <button type="submit">ログイン</button>
+      <button type="submit" className="first">
+        ログイン
+      </button>
+      <button
+        className="second"
+        onClick={(e: React.MouseEvent) => {
+          onClickSignUpButtonHandler(e);
+        }}
+      >
+        新規登録
+      </button>
     </form>
   );
 };

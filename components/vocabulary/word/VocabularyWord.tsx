@@ -7,7 +7,7 @@ import React from "react";
 /**
  * 単語.
  *
- * @param {boolean} isLoading - ローディング中か.
+ * @param {boolean} isLoading - (任意)ローディング中か.
  * @param {string} bookId - 単語帳id.
  * @param {Word} wordInfo - 単語情報.
  * @param {function} toggleMemorizedState - 暗記状態を更新.
@@ -52,7 +52,7 @@ const VocabularyWord: React.FC<{
   });
 
   return (
-    <Card>
+    <Card clickHandler={moveToDetailPage}>
       {isLoading ? (
         <Loader />
       ) : (

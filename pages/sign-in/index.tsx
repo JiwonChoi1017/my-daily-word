@@ -1,16 +1,21 @@
+import MainLayout from "@/components/layout/MainLayout";
 import SignInForm from "@/components/sign-in/SignInForm";
-import Link from "next/link";
-
 import React from "react";
+import UserForm from "@/components/layout/UserForm";
 
-const SignUpPage = () => {
+/**
+ * ログイン画面.
+ *
+ * @returns {JSX.Element} ログイン画面.
+ */
+const SignInPage = () => {
   return (
-    <>
-      <h1>ログイン</h1>
-      <SignInForm />
-      <Link href="/sign-up">ユーザ登録</Link>
-    </>
+    <MainLayout showNavigation={false}>
+      <UserForm>
+        <SignInForm />
+      </UserForm>
+    </MainLayout>
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

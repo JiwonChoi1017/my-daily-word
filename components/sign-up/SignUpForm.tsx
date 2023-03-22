@@ -2,6 +2,11 @@ import React, { useContext, useRef } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
 
+/**
+ * ユーザ登録フォーム.
+ *
+ * @returns {JSX.Element} ユーザ登録フォーム.
+ */
 const SignUpForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -10,6 +15,7 @@ const SignUpForm = () => {
 
   const { signUpHandler } = useContext(AuthContext);
 
+  // 送信イベント
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: バリデーションチェックを入れる
@@ -21,6 +27,13 @@ const SignUpForm = () => {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     });
+    router.push("/sign-in");
+  };
+
+  // キャンセルイベント
+  const onCancelHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // ログイン画面に戻る
     router.push("/sign-in");
   };
 
@@ -52,7 +65,17 @@ const SignUpForm = () => {
           placeholder="パスワードを入力してください。"
         />
       </div>
-      <button type="submit">登録</button>
+      <button type="submit" className="first">
+        登録
+      </button>
+      <button
+        className="second"
+        onClick={(e: React.MouseEvent) => {
+          onCancelHandler(e);
+        }}
+      >
+        キャンセル
+      </button>
     </form>
   );
 };
