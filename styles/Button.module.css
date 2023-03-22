@@ -8,10 +8,9 @@
   font: inherit;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
-  border-radius: 4px;
-  background-color: #800040;
+  background-color: #322a27;
   color: white;
-  border: 1px solid #800040;
+  border: none;
   margin: 0 0.5rem;
 }
 
@@ -20,9 +19,8 @@
   font: inherit;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
-  border-radius: 4px;
-  background-color: #800040;
+  background-color: #322a27;
   color: white;
-  border: 1px solid #800040;
+  border: none;
   margin: 0 0.5rem;
 }

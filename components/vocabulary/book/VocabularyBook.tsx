@@ -18,13 +18,18 @@ const VocabularyBook: React.FC<{
 }> = ({ id, title, description }) => {
   const router = useRouter();
   // 単語帳クリックイベント
-  const clickBookHandler = () => {
+  const clickBookHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     router.push(`/vocabulary/list/${id}/?page=1`);
   };
 
   return (
-    <Card>
-      <div id={id} onClick={clickBookHandler}>
+    <Card clickHandler={clickBookHandler}>
+      <div
+        id={id}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+          clickBookHandler(e);
+        }}
+      >
         <div className="title__wrap">
           <span className="title">{title}</span>
         </div>

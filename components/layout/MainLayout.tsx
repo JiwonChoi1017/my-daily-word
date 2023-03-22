@@ -1,11 +1,11 @@
 import Header from "./Header";
 import React from "react";
-import classes from "../../styles/Main.module.css";
+import classes from "../../styles/MainLayout.module.css";
 
 /**
  * メインレイアウト.
  *
- * @param {React.ReactNode} (任意)children.
+ * @param {React.ReactNode} children - (任意)children.
  * @param {boolean} showNavigation - ナビゲーションを表示するか.
  * @returns {JSX.Element} メインレイアウト.
  */

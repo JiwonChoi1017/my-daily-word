@@ -23,9 +23,30 @@
   font-size: 40px;
 }
 
+.navigation {
+  display: flex;
+  margin: 20px 0;
+  background-color: #322a27;
+}
+
 .navigation ul {
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+.navigation ul li {
+  display: inline;
+  float: left;
+}
+
+.navigation ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 15px;
+  font-family: Georgia, serif;
+  text-decoration: none;
 }
 
 .main {
