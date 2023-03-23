@@ -11,6 +11,8 @@ const VocabularyWordDetailPage = () => {
   const router = useRouter();
   const { bookId, wordId } = router.query;
   const { currentUser } = useContext(AuthContext);
+  // ローディング中か
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [word, setWord] = useState<Word>({
     id: "",
     word: "",
@@ -63,12 +65,14 @@ const VocabularyWordDetailPage = () => {
       })
       .then((data) => {
         setWord({ id: wordId, ...data });
+        setIsLoading(false);
       });
   }, [currentUser]);
 
   return (
     <MainLayout>
       <VocabularyWordDetail
+        isLoading={isLoading}
         bookId={bookId as string}
         wordInfo={word}
         toggleMemorizedState={toggleMemorizedState}
