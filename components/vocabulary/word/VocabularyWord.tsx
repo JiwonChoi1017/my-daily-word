@@ -3,6 +3,7 @@ import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
 import React from "react";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 
 /**
  * 単語.
@@ -37,10 +38,13 @@ const VocabularyWord: React.FC<{
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
   // 暗記フラグ
-  const memorizedFlag = isMemorized ? (
-    <div onClick={onClickMemorizedButtonHandler}>暗記</div>
-  ) : (
-    <div onClick={onClickMemorizedButtonHandler}>未暗記</div>
+  const bookmark = (
+    <div
+      className="bookmark _ignoreClick"
+      onClick={onClickMemorizedButtonHandler}
+    >
+      {isMemorized ? <FaBookmark /> : <FaRegBookmark />}
+    </div>
   );
   // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
@@ -66,7 +70,7 @@ const VocabularyWord: React.FC<{
             <span className="title">{word}</span>
             <span>[{pronunciation}]</span>
           </div>
-          <div className="_ignoreClick">{memorizedFlag}</div>
+          {bookmark}
           <ul className="description">{meaningList}</ul>
         </div>
       )}

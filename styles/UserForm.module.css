@@ -18,6 +18,10 @@
   border-bottom: 1.2px solid #322a27;
 }
 
+.userform input:focus {
+  outline: none;
+}
+
 .userform button[class="first"] {
   width: 100%;
   font: inherit;

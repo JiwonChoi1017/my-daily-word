@@ -31,9 +31,16 @@ body:before {
 
 ul {
   list-style-type: none;
+  padding: 0;
+}
+
+::placeholder {
+  font-family: Georgia, serif;
 }
 
 .title__wrap {
+  display: inline-block;
+  justify-content: space-between;
   font-size: 30px;
   margin-bottom: 30px;
 }
@@ -45,6 +52,20 @@ ul {
 
 .description {
   margin-bottom: 0;
-  padding: 0;
   font-size: 18px;
+}
+
+.description li {
+  margin-bottom: 5px;
+}
+
+.description .example {
+  margin-top: 20px;
+}
+
+.bookmark {
+  font-size: 24px;
+  color: #2831d9b7;
+  float: right;
+  cursor: pointer;
 }

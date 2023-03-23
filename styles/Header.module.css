@@ -12,7 +12,6 @@
   align-items: center;
   justify-content: space-between;
   height: inherit;
-  position: relative;
   border-bottom: 2px double #322a27;
 }
 
@@ -47,9 +46,4 @@
   padding: 10px 15px;
   font-family: Georgia, serif;
   text-decoration: none;
-}
-
-.main {
-  width: 85%;
-  margin: 5rem auto;
 }

@@ -1,40 +1,50 @@
+import Card from "@/components/layout/Card";
+import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import Link from "next/link";
 import React from "react";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
+/**
+ * 単語詳細.
+ *
+ * @param {boolean} isLoading - (任意)ローディング中か.
+ * @param {string} bookId - 単語帳id.
+ * @param {Word} wordInfo - 単語情報.
+ * @param {function} toggleMemorizedState - 暗記状態を更新.
+ * @param {function} deleteWord - 単語削除.
+ * @returns {JSX.Element} 単語詳細.
+ */
 const VocabularyWordDetail: React.FC<{
+  isLoading: boolean;
   bookId: string;
   wordInfo: Word;
   toggleMemorizedState: (wordInfo: Word) => void;
   deleteWord: () => void;
-}> = ({ bookId, wordInfo, toggleMemorizedState, deleteWord }) => {
+}> = ({ isLoading, bookId, wordInfo, toggleMemorizedState, deleteWord }) => {
   const { isMemorized, meanings } = wordInfo;
-
+  // 暗記状態を更新
   const onClickMemorizedButtonHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
-
+  // 単語を削除
   const onClickDeleteButtonHandler = () => {
     deleteWord();
   };
-
   // 暗記フラグ
-  const memorizedIcon = isMemorized ? (
-    <div style={{ cursor: "pointer" }} onClick={onClickMemorizedButtonHandler}>
-      暗記
-    </div>
-  ) : (
-    <div style={{ cursor: "pointer" }} onClick={onClickMemorizedButtonHandler}>
-      未暗記
+  const bookmark = (
+    <div className="bookmark" onClick={onClickMemorizedButtonHandler}>
+      {isMemorized ? <FaBookmark /> : <FaRegBookmark />}
     </div>
   );
-
+  // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
     return (
       <li key={`${meaning.meaning}_${index}`}>
-        <p>{meaning.meaning}</p>
+        {index + 1}. {meaning.meaning}
         {meaning.examples && (
-          <ul>
+          <ul className="example">
+            <span>例</span>
             {meaning.examples.map((example, index) => {
               return <li key={`${example}_${index}`}>{example}</li>;
             })}
@@ -45,18 +55,26 @@ const VocabularyWordDetail: React.FC<{
   });
 
   return (
-    <div>
-      <p>{wordInfo.word}</p>
-      <p>{wordInfo.pronunciation}</p>
-      {memorizedIcon}
-      <ul>{meaningList}</ul>
-      <Link
-        href={`/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`}
-      >
-        修正
-      </Link>
-      <button onClick={onClickDeleteButtonHandler}>削除</button>
-    </div>
+    <Card>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div>
+          <div className="title__wrap">
+            <span className="title">{wordInfo.word}</span>
+            <span>[{wordInfo.pronunciation}]</span>
+          </div>
+          {bookmark}
+          <ul className="description">{meaningList}</ul>
+          <Link
+            href={`/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`}
+          >
+            修正
+          </Link>
+          <button onClick={onClickDeleteButtonHandler}>削除</button>
+        </div>
+      )}
+    </Card>
   );
 };
 
