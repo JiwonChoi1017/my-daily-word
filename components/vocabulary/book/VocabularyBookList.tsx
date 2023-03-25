@@ -2,6 +2,8 @@ import Loader from "@/components/layout/Loader";
 import { Book } from "@/types/Vocabulary";
 import React from "react";
 import VocabularyBook from "./VocabularyBook";
+import { FaPlus } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 /**
  * 単語帳リスト.
@@ -14,10 +16,24 @@ const VocabularyBookList: React.FC<{
   bookList: Book[];
   isLoading: boolean;
 }> = ({ bookList, isLoading }) => {
+  // ルーター
+  const router = useRouter();
+  // 単語帳フォームに遷移
+  const moveToVocabularyBookForm = () => {
+    router.push("/vocabulary/book/form");
+  };
+  // 単語帳追加アイコン
+  const addBookIcon = (
+    <div className="addIcon" onClick={moveToVocabularyBookForm}>
+      <FaPlus />
+    </div>
+  );
+  // 単語帳リスト
   const bookListHtml = isLoading ? (
     <Loader />
   ) : (
     <>
+      {addBookIcon}
       {bookList.map((book) => {
         return (
           <VocabularyBook

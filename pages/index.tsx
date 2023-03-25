@@ -16,6 +16,10 @@ import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 import Button from "@/components/layout/Button";
 import { useRouter } from "next/router";
 import classes from "../styles/Button.module.css";
+import { v4 as uuidv4 } from "uuid";
+import { ErrorInfo } from "@/types/Error";
+import { ERROR_STATUS } from "@/constants/constants";
+import NotFound from "@/components/error/NotFound";
 
 /**
  * ホーム画面.
@@ -36,14 +40,34 @@ export default function Home() {
     createdAt: "",
     modifiedAt: "",
   });
+  const [errorInfo, setErrorInfo] = useState<ErrorInfo>({
+    status: ERROR_STATUS.SUCCESS,
+    code: 200,
+    message: "",
+  });
+
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
-    // TODO: words有無チェック
+    // idが存在しない場合、早期リターン
+    if (!userId) {
+      setErrorInfo({
+        status: ERROR_STATUS.NOT_FOUND_USER,
+        code: 404,
+        message: "ユーザが見つかりませんでした。",
+      });
+      setIsLoading(false);
+      return;
+    }
+
     const fetchRandomWord = async () => {
-      const booksPath = `users/${currentUser.uid}`;
+      const booksPath = `users/${userId}`;
       const booksRef = ref(db, booksPath);
 
       const bookId = await get(
@@ -57,9 +81,22 @@ export default function Home() {
           const firstBook: Book = value[firstBookKey];
           setBookTitle(firstBook.title);
           return firstBookKey;
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setErrorInfo({
+            status: ERROR_STATUS.NOT_FOUND_BOOK,
+            code: 404,
+            message:
+              "単語帳が見つかりませんでした。<br/>新しい単語帳を追加してください。",
+          });
         });
 
-      const wordsPath = `users/${currentUser.uid}/${bookId}/words`;
+      if (!bookId) {
+        return;
+      }
+
+      const wordsPath = `users/${userId}/${bookId}/words`;
       const wordsRef = ref(db, wordsPath);
 
       await get(query(wordsRef, orderByChild("isMemorized"), limitToFirst(10)))
@@ -77,6 +114,15 @@ export default function Home() {
           }
           const randomIndex = Math.floor(Math.random() * wordList.length);
           setRandomWord(wordList[randomIndex]);
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setErrorInfo({
+            status: ERROR_STATUS.NOT_FOUND_WORD,
+            code: 404,
+            message:
+              "単語が見つかりませんでした。新しい単語を追加してください。",
+          });
         });
 
       setBookId(bookId);
@@ -115,27 +161,35 @@ export default function Home() {
 
   return (
     <MainLayout showNavigation={false}>
-      {/* 今日の単語 */}
-      <VocabularyWord
-        isLoading={isLoading}
-        bookId={bookId}
-        wordInfo={randomWord}
-        toggleMemorizedState={toggleMemorizedState}
-      />
-      {/* ボタン */}
-      {!isLoading && (
-        <div className={classes.button__wrap}>
-          <Button
-            className={classes.button__double}
-            text={`「${bookTitle}」単語帳へ`}
-            clickHandler={moveToVocabularyWordList}
+      {errorInfo.status === ERROR_STATUS.SUCCESS ? (
+        <>
+          {/* 今日の単語 */}
+          <VocabularyWord
+            isLoading={isLoading}
+            bookId={bookId}
+            wordInfo={randomWord}
+            toggleMemorizedState={toggleMemorizedState}
           />
-          <Button
-            className={classes.button__double}
-            text={`単語帳リストへ`}
-            clickHandler={moveToVocabularyBookList}
-          />
-        </div>
+          {/* ボタン */}
+          {!isLoading && (
+            <div className={classes.button__wrap}>
+              <Button
+                className={classes.button}
+                text={`「${bookTitle}」単語帳へ`}
+                clickHandler={moveToVocabularyWordList}
+              />
+              <Button
+                className={classes.button}
+                text={`単語帳リストへ`}
+                clickHandler={moveToVocabularyBookList}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <NotFound errorInfo={errorInfo} />
+        </>
       )}
     </MainLayout>
   );

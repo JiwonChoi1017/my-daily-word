@@ -1,4 +1,4 @@
-import Card from "@/components/layout/Card";
+import Card from "@/components/ui/Card";
 import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";

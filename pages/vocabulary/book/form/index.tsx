@@ -1,34 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import VocabularyBookForm from "@/components/vocabulary/book/form/VocabularyBookForm";
-import { authService } from "@/firebase-config";
+import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 import { Book } from "@/types/Vocabulary";
+import { AuthContext } from "@/context/auth/AuthProvider";
+import { v4 as uuidv4 } from "uuid";
+import { ref, push } from "firebase/database";
 
+/**
+ * 単語帳フォーム画面.
+ *
+ * @returns {JSX.Element} 単語帳フォーム画面.
+ */
 const VocabularyBookFormPage = () => {
+  // 現在のユーザ
+  const { currentUser } = useContext(AuthContext);
+  // ルーター
   const router = useRouter();
+  // 単語帳追加イベントハンドラ
+  const addBookHandler = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
-  const onAddBookHandler = (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
-    const user = authService.currentUser;
-    const api = user
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}.json`
-      : "";
+    if (!userId) {
+      return;
+    }
 
-    fetch(api, {
-      method: "POST",
-      body: JSON.stringify(bookInfo),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(() => {
-        router.push("/vocabulary/list?page=1");
-      })
-      .catch();
+    const userPath = `users/${userId}`;
+    const userRef = ref(db, userPath);
+
+    await push(userRef, bookInfo).then(() => {
+      router.push("/vocabulary/list?page=1");
+    });
   };
 
   return (
     <MainLayout>
-      <h1>Vocabulary Book Form Page</h1>
-      <VocabularyBookForm onAddBookHandler={onAddBookHandler} />
+      <VocabularyBookForm addBookHandler={addBookHandler} />
     </MainLayout>
   );
 };

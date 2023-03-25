@@ -1,5 +1,5 @@
 import MainLayout from "@/components/layout/MainLayout";
-import UserForm from "@/components/layout/UserForm";
+import UserForm from "@/components/ui/UserForm";
 import SignUpForm from "@/components/sign-up/SignUpForm";
 
 import React from "react";

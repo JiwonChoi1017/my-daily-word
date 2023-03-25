@@ -1,14 +1,21 @@
 import { Book } from "@/types/Vocabulary";
 import React, { useRef } from "react";
 
+/**
+ * 単語帳フォーム.
+ *
+ * @param {function} addBookHandler - 単語帳追加イベントハンドラ.
+ * @returns {JSX.Element} 単語帳フォーム.
+ */
 const VocabularyBookForm: React.FC<{
-  onAddBookHandler: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
-}> = ({ onAddBookHandler }) => {
+  addBookHandler: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
+}> = ({ addBookHandler }) => {
+  // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const wordRef = useRef<HTMLSelectElement>(null);
   const meaningRef = useRef<HTMLSelectElement>(null);
-
+  // 送信イベントハンドラ
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -33,7 +40,7 @@ const VocabularyBookForm: React.FC<{
       .join("")
       .padStart(6, "0");
 
-    onAddBookHandler({
+    addBookHandler({
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       word: wordRef.current.value,
