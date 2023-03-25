@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import Link from "next/link";
 import VocabularyBookList from "@/components/vocabulary/book/VocabularyBookList";
 import { Book } from "@/types/Vocabulary";
 import { AuthContext } from "@/context/auth/AuthProvider";
@@ -8,6 +7,7 @@ import { get, limitToLast, orderByChild, query, ref } from "firebase/database";
 import { db } from "@/firebase-config";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * 単語帳リスト画面.
@@ -26,12 +26,21 @@ const VocabularyBookListPage = () => {
 
   // TODO: 並び順も実装
   useEffect(() => {
-    if (!currentUser) return;
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
+      return;
+    }
+
     if (page) {
       setEnd(VOCABULARY_LIST_RESULTS * +page);
     }
 
-    const path = `users/${currentUser.uid}`;
+    const path = `users/${userId}`;
     const booksRef = ref(db, path);
 
     const fetchBookList = async () => {
@@ -59,7 +68,6 @@ const VocabularyBookListPage = () => {
 
   return (
     <MainLayout showNavigation={false}>
-      <Link href="/vocabulary/book/form">Add New Book</Link>
       {/* 単語リスト */}
       <VocabularyBookList bookList={bookList} isLoading={isLoading} />
     </MainLayout>

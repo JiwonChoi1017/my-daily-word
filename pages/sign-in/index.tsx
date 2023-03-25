@@ -1,7 +1,7 @@
 import MainLayout from "@/components/layout/MainLayout";
 import SignInForm from "@/components/sign-in/SignInForm";
 import React from "react";
-import UserForm from "@/components/layout/UserForm";
+import UserForm from "@/components/ui/UserForm";
 
 /**
  * ログイン画面.

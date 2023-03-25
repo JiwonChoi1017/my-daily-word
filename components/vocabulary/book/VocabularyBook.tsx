@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Card from "@/components/layout/Card";
+import Card from "@/components/ui/Card";
 
 // TODO: 修正・削除機能・お気に入り追加機能も実装
 /**

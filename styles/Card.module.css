@@ -8,3 +8,10 @@
 .card:first-child {
   margin-top: 30px;
 }
+
+.card__error {
+  margin: 20px 0;
+  padding: 40px 50px;
+  border: 2px double;
+  text-align: center;
+}
