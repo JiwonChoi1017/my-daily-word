@@ -18,8 +18,8 @@ const VocabularyBookFormPage = () => {
   const { currentUser } = useContext(AuthContext);
   // ルーター
   const router = useRouter();
-  // 単語帳追加イベントハンドラ
-  const addBookHandler = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
+  // 単語帳追加イベント
+  const addBook = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
     if (!localStorage.getItem("uuid")) {
       localStorage.setItem("uuid", uuidv4());
     }
@@ -40,7 +40,7 @@ const VocabularyBookFormPage = () => {
 
   return (
     <MainLayout>
-      <VocabularyBookForm addBookHandler={addBookHandler} />
+      <VocabularyBookForm addBook={addBook} />
     </MainLayout>
   );
 };

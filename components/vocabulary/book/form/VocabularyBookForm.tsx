@@ -6,12 +6,12 @@ import classes from "../../../../styles/InputForm.module.css";
 /**
  * 単語帳フォーム.
  *
- * @param {function} addBookHandler - 単語帳追加イベントハンドラ.
+ * @param {function} addBook - 単語帳追加イベント.
  * @returns {JSX.Element} 単語帳フォーム.
  */
 const VocabularyBookForm: React.FC<{
-  addBookHandler: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
-}> = ({ addBookHandler }) => {
+  addBook: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
+}> = ({ addBook }) => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -42,7 +42,7 @@ const VocabularyBookForm: React.FC<{
       .join("")
       .padStart(6, "0");
 
-    addBookHandler({
+    addBook({
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       word: wordRef.current.value,

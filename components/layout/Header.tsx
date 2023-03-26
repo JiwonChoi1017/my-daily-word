@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import classes from "../../styles/Header.module.css";
+import { FaUser } from "react-icons/fa";
 
 /**
  * ヘッダー.
@@ -16,7 +17,7 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
   const { signOutHandler, currentUser } = useContext(AuthContext);
-
+  // ルーター
   const router = useRouter();
 
   useEffect(() => {
@@ -39,28 +40,36 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
   const onClickLogoHandler = () => {
     router.push("/");
   };
-
+  // ログイン画面に遷移
+  const moveToSignInPage = () => {
+    router.push("/sign-in");
+  };
+  // ログアウトイベントハンドラ
   const onSignOutHandler = async () => {
     await signOutHandler();
+    setIsSignIn(!!currentUser);
     onClickLogoHandler();
   };
-
-  const signInLink = isSignIn ? (
-    <button onClick={onSignOutHandler}>ログアウト</button>
-  ) : (
-    <Link href="/sign-in">ログイン</Link>
+  // ユーザアイコン
+  const userIcon = (
+    <div
+      className={classes.userIcon}
+      onClick={isSignIn ? onSignOutHandler : moveToSignInPage}
+    >
+      <FaUser />
+      <p>{isSignIn ? "ログアウト" : "ログイン"}</p>
+    </div>
   );
-
   // ナビゲーション
   const navigation = showNavigation && (
     <nav className={classes.navigation}>
       <ul>
         <li>
-          <Link href="/vocabulary/list?page=1">List</Link>
+          <Link href="/vocabulary/list?page=1">単語帳リスト</Link>
         </li>
         {bookId && (
           <li>
-            <Link href={`/vocabulary/list/${bookId}/quiz`}>Quiz</Link>
+            <Link href={`/vocabulary/list/${bookId}/quiz`}>クイズ</Link>
           </li>
         )}
       </ul>
@@ -76,7 +85,7 @@ const Header: React.FC<{ showNavigation: boolean }> = ({ showNavigation }) => {
         <h1 className={classes.header__logo} onClick={onClickLogoHandler}>
           Daily Word
         </h1>
-        <div className={classes.header__border__box}>{signInLink}</div>
+        <div className={classes.header__border__box}>{userIcon}</div>
       </div>
       {navigation}
     </header>

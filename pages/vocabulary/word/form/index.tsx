@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
 import { useRouter } from "next/router";
-import { authService } from "@/firebase-config";
 import { Word } from "@/types/Vocabulary";
+import { AuthContext } from "@/context/auth/AuthProvider";
+import { v4 as uuidv4 } from "uuid";
+import { push, ref } from "firebase/database";
+import { db } from "@/firebase-config";
 
 /**
  * 単語フォーム画面.
@@ -11,20 +14,28 @@ import { Word } from "@/types/Vocabulary";
  * @returns {JSX.Element} 単語フォーム画面.
  */
 const VocabularyWordFormPage = () => {
+  // 現在のユーザ
+  const { currentUser } = useContext(AuthContext);
+  // ルーター
   const router = useRouter();
+  // 単語帳id
   const bookId = router.query["book_id"];
+  // 単語追加イベント
+  const addWord = async (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
-  const addWordHandler = (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
-    const user = authService.currentUser;
-    const api = user
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}/${bookId}/words.json`
-      : "";
+    if (!userId) {
+      return;
+    }
 
-    fetch(api, {
-      method: "POST",
-      body: JSON.stringify(wordInfo),
-      headers: { "Content-Type": "application/json" },
-    })
+    const wordPath = `users/${userId}/${bookId}/words`;
+    const userRef = ref(db, wordPath);
+
+    await push(userRef, wordInfo)
       .then(() => {
         router.push(`/vocabulary/list/${bookId}/?page=1`);
       })
@@ -33,7 +44,7 @@ const VocabularyWordFormPage = () => {
 
   return (
     <MainLayout>
-      <VocabularyWordForm addWordHandler={addWordHandler} />
+      <VocabularyWordForm addWord={addWord} />
     </MainLayout>
   );
 };

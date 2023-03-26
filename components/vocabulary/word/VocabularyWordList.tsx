@@ -2,9 +2,9 @@ import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useRef } from "react";
 import VocabularyWord from "./VocabularyWord";
-import VocabularyWordSearchBox from "./VocabularyWordSearchBox";
+import NotFoundWord from "@/components/error/NotFoundWord";
 
 /**
  * 単語リスト.
@@ -31,38 +31,62 @@ const VocabularyWordList: React.FC<{
 }) => {
   // ルーター
   const router = useRouter();
+  // キーワードのref
+  const keywordRef = useRef<HTMLInputElement>(null);
+  // キーワード変更イベントハンドラ
+  const onChangeKeywordHandler = () => {
+    if (!keywordRef.current) return;
+
+    const keywordValue = keywordRef.current.value;
+    filterWordList(keywordValue);
+  };
   // 単語フォームに遷移
   const moveToVocabularyWordForm = () => {
     router.push(`/vocabulary/word/form?book_id=${bookId}`);
   };
+  // 検索窓
+  const searchBox = (
+    <input ref={keywordRef} type="text" onChange={onChangeKeywordHandler} />
+  );
   // 単語追加アイコン
   const addWordIcon = (
-    <div className="addIcon" onClick={moveToVocabularyWordForm}>
+    <div className="addIcon alignRight" onClick={moveToVocabularyWordForm}>
       <FaPlus />
     </div>
   );
+  const wordTopModule = (
+    <div className="wordTopModule">
+      {searchBox}
+      {addWordIcon}
+    </div>
+  );
   // 単語リスト
-  const wordListHtml = isLoading ? (
-    <Loader />
-  ) : (
+  const wordListElement = (
     <>
-      <div style={{ justifyContent: "center" }}>
-        <VocabularyWordSearchBox filterWordList={filterWordList} />
-        {addWordIcon}
-      </div>
-      {wordList.map((word) => {
-        return (
-          <VocabularyWord
-            key={word.id}
-            bookId={bookId}
-            wordInfo={word}
-            toggleMemorizedState={toggleMemorizedState}
-          />
-        );
-      })}
+      {wordTopModule}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {!wordList.length ? (
+            <NotFoundWord />
+          ) : (
+            wordList.map((word) => {
+              return (
+                <VocabularyWord
+                  key={word.id}
+                  bookId={bookId}
+                  wordInfo={word}
+                  toggleMemorizedState={toggleMemorizedState}
+                />
+              );
+            })
+          )}
+        </>
+      )}
     </>
   );
-  return wordListHtml;
+  return wordListElement;
 };
 
 export default VocabularyWordList;

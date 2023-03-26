@@ -5,12 +5,12 @@ import React, { useEffect, useRef, useState } from "react";
 /**
  * 単語フォーム.
  *
- * @param {function} addWordHandler - 単語追加イベントハンドラ.
+ * @param {function} addWord - 単語追加イベント.
  * @returns {JSX.Element} 単語フォーム.
  */
 const VocabularyWordForm: React.FC<{
-  addWordHandler: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
-}> = ({ addWordHandler }) => {
+  addWord: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
+}> = ({ addWord }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
   ]);
@@ -108,7 +108,7 @@ const VocabularyWordForm: React.FC<{
         style={{ cursor: "pointer" }}
         data-meaning-index={`${idx}`}
       >
-        add example
+        例文を追加
       </div>
     );
 
@@ -162,7 +162,7 @@ const VocabularyWordForm: React.FC<{
       .join("")
       .padStart(6, "0");
 
-    addWordHandler({
+    addWord({
       word: wordRef.current.value,
       meanings,
       pronunciation: pronunciationRef.current.value,
@@ -195,7 +195,7 @@ const VocabularyWordForm: React.FC<{
           <label>意味</label>
           {meaningsInput}
           <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
-            add meaning
+            意味を追加
           </div>
         </div>
         <button className="first">単語を追加</button>
