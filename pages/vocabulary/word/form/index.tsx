@@ -5,11 +5,16 @@ import { useRouter } from "next/router";
 import { authService } from "@/firebase-config";
 import { Word } from "@/types/Vocabulary";
 
+/**
+ * 単語フォーム画面.
+ *
+ * @returns {JSX.Element} 単語フォーム画面.
+ */
 const VocabularyWordFormPage = () => {
   const router = useRouter();
   const bookId = router.query["book_id"];
 
-  const onAddWordHandler = (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
+  const addWordHandler = (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
     const user = authService.currentUser;
     const api = user
       ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${user.uid}/${bookId}/words.json`
@@ -28,8 +33,7 @@ const VocabularyWordFormPage = () => {
 
   return (
     <MainLayout>
-      <h1>Vocabulary Word Form Page</h1>
-      <VocabularyWordForm onAddWordHandler={onAddWordHandler} />
+      <VocabularyWordForm addWordHandler={addWordHandler} />
     </MainLayout>
   );
 };

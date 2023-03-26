@@ -1,17 +1,16 @@
 .header {
   width: 85%;
-  height: 85px;
   margin: auto;
   font-family: cursive;
 }
 
 .header__inner {
+  height: 85px;
   padding-top: 30px;
   padding-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: inherit;
   border-bottom: 2px double #322a27;
 }
 
@@ -23,20 +22,18 @@
 }
 
 .navigation {
-  display: flex;
   margin: 20px 0;
   background-color: #322a27;
+  text-align: center;
 }
 
 .navigation ul {
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 .navigation ul li {
-  display: inline;
-  float: left;
+  display: inline-block;
 }
 
 .navigation ul li a {

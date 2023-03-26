@@ -1,5 +1,7 @@
+import InputForm from "@/components/ui/InputForm";
 import { Book } from "@/types/Vocabulary";
 import React, { useRef } from "react";
+import classes from "../../../../styles/InputForm.module.css";
 
 /**
  * 単語帳フォーム.
@@ -51,39 +53,48 @@ const VocabularyBookForm: React.FC<{
   };
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent) => {
-        onSubmitHandler(e);
-      }}
-    >
-      <div>
-        <label htmlFor="title">title</label>
-        <input ref={titleRef} type="text" id="title" required />
+    <InputForm>
+      <div className={classes.inputform__inner}>
+        <form
+          onSubmit={(e: React.FormEvent) => {
+            onSubmitHandler(e);
+          }}
+        >
+          <div>
+            <label htmlFor="title">タイトル</label>
+            <input ref={titleRef} type="text" id="title" required />
+          </div>
+          <div>
+            <label htmlFor="word">原文の言語</label>
+            <div className={classes.selectbox}>
+              <select ref={wordRef} id="word" required>
+                <option value="japanese">日本語</option>
+                <option value="korean">韓国語</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="meaning">訳文の言語</label>
+            <div className={classes.selectbox}>
+              <select ref={meaningRef} id="meaning" required>
+                <option value="japanese">日本語</option>
+                <option value="korean">韓国語</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="description">詳細</label>
+            <textarea
+              ref={descriptionRef}
+              id="description"
+              rows={10}
+              required
+            />
+          </div>
+          <button className="first">単語帳を追加</button>
+        </form>
       </div>
-      <div>
-        <label htmlFor="word">word</label>
-        <select ref={wordRef} id="word" required>
-          <option value="japanese">japanese</option>
-          <option value="english">english</option>
-          <option value="korean">korean</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="meaning">meaning</label>
-        <select ref={meaningRef} id="meaning" required>
-          <option value="japanese">japanese</option>
-          <option value="english">english</option>
-          <option value="korean">korean</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="description">description</label>
-        <textarea ref={descriptionRef} id="description" rows={5} required />
-      </div>
-      <div>
-        <button>add</button>
-      </div>
-    </form>
+    </InputForm>
   );
 };
 

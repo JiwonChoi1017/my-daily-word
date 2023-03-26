@@ -20,7 +20,7 @@ const NotFound: React.FC<{ errorInfo: ErrorInfo }> = ({ errorInfo }) => {
   const moveToVocabularyBookForm = () => {
     router.push("/vocabulary/book/form");
   };
-
+  // 単語帳フォームボタン
   const bookFormButton =
     status === ERROR_STATUS.NOT_FOUND_BOOK ? (
       <div className={classes.button__wrap}>
@@ -33,10 +33,29 @@ const NotFound: React.FC<{ errorInfo: ErrorInfo }> = ({ errorInfo }) => {
     ) : (
       <></>
     );
+  // 単語帳リストに遷移
+  const moveToVocabularyBookList = () => {
+    router.push("/vocabulary/list?page=1");
+  };
+  // 単語帳リストボタン
+  const bookListButton =
+    status === ERROR_STATUS.NOT_FOUND_WORD ? (
+      <div className={classes.button__wrap}>
+        <Button
+          className={`${classes.button} marginTop20`}
+          text={"単語帳リストへ移動"}
+          clickHandler={moveToVocabularyBookList}
+        />
+      </div>
+    ) : (
+      <></>
+    );
+
   return (
     <Card isError={true}>
       <div dangerouslySetInnerHTML={{ __html: message }}></div>
       {bookFormButton}
+      {bookListButton}
     </Card>
   );
 };

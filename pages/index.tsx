@@ -121,7 +121,7 @@ export default function Home() {
             status: ERROR_STATUS.NOT_FOUND_WORD,
             code: 404,
             message:
-              "単語が見つかりませんでした。新しい単語を追加してください。",
+              "単語が見つかりませんでした。<br/>新しい単語を追加してください。",
           });
         });
 

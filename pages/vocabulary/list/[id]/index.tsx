@@ -2,10 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
-import VocabularyWordSearchBox from "@/components/vocabulary/word/VocabularyWordSearchBox";
 import { db } from "@/firebase-config";
 import {
   get,
@@ -16,6 +14,7 @@ import {
   update,
 } from "firebase/database";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * 単語リスト画面.
@@ -23,43 +22,55 @@ import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
  * @returns {JSX.Element} 単語リスト画面.
  */
 const VocabularyWordListPage = () => {
+  // ルーター
   const router = useRouter();
   const { id, page } = router.query;
-
+  // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
-
+  // 現在のユーザ
   const { currentUser } = useContext(AuthContext);
 
   const filterWordList = (keyword: string) => {
     setIsLoading(true);
-    // TODO: APIを叩く処理を共通化したい
-    // あと、未ログイン時も使えるようにしたい
-    const api = currentUser
-      ? `https://my-own-vocabulary-default-rtdb.firebaseio.com/users/${currentUser.uid}/${id}/words.json`
-      : "";
-    fetch(api)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        const wordList = [];
-        for (const key in data) {
-          const word: Word = {
-            id: key,
-            ...data[key],
-          };
-          if (!keyword || word.word.startsWith(keyword)) {
-            wordList.push(word);
-          }
-        }
-        setWordList(wordList);
-        setIsLoading(false);
-      });
-  };
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
+    if (!userId) {
+      return;
+    }
+
+    const path = `users/${userId}/${id}/words`;
+    const wordsRef = ref(db, path);
+    // TODO: APIを叩く処理を共通化したい
+    const fetchWordList = async () => {
+      await get(wordsRef)
+        .then((response) => {
+          return response.val();
+        })
+        .then((data) => {
+          const wordList = [];
+          for (const key in data) {
+            const word: Word = {
+              id: key,
+              ...data[key],
+            };
+            if (!keyword || word.word.startsWith(keyword)) {
+              wordList.push(word);
+            }
+          }
+          setWordList(wordList);
+          setIsLoading(false);
+        });
+    };
+    fetchWordList();
+  };
+  // 暗記状態を更新
   const toggleMemorizedState = async (wordInfo: Word) => {
     if (!currentUser || typeof id !== "string") return;
 
@@ -92,12 +103,21 @@ const VocabularyWordListPage = () => {
 
     // TODO: 並び順も実装
     const fetchWordist = async () => {
-      if (!currentUser) return;
       if (page) {
         setEnd(VOCABULARY_LIST_RESULTS * +page);
       }
 
-      const path = `users/${currentUser.uid}/${id}/words`;
+      if (!localStorage.getItem("uuid")) {
+        localStorage.setItem("uuid", uuidv4());
+      }
+      const localStorageUuid = localStorage.getItem("uuid");
+      const userId = currentUser?.uid ?? localStorageUuid;
+
+      if (!userId) {
+        return;
+      }
+
+      const path = `users/${userId}/${id}/words`;
       const wordsRef = ref(db, path);
 
       await get(query(wordsRef, orderByChild("createdAt"), limitToLast(end)))
@@ -129,12 +149,11 @@ const VocabularyWordListPage = () => {
 
   return (
     <MainLayout>
-      <Link href={`/vocabulary/word/form?book_id=${id}`}>Add New Word</Link>
-      <VocabularyWordSearchBox filterWordList={filterWordList} />
       {/* 単語リスト */}
       <VocabularyWordList
         bookId={bookId}
         wordList={wordList}
+        filterWordList={filterWordList}
         toggleMemorizedState={toggleMemorizedState}
         isLoading={isLoading}
       />

@@ -11,6 +11,11 @@ import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstans";
 import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizResult";
 import { QuizKind } from "@/types/Quiz";
 
+/**
+ * クイズ画面.
+ *
+ * @returns {JSX.Element} クイズ画面.
+ */
 const VocabularyQuizPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -195,7 +200,6 @@ const VocabularyQuizPage = () => {
 
   return (
     <MainLayout>
-      <h1>Vocabulary Quiz Page</h1>
       <VocabularyQuizSelectModal
         show={showModal}
         fetchQuizWord={fetchQuizWord}
