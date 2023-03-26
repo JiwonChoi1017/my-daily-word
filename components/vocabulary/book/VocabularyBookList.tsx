@@ -10,12 +10,14 @@ import { useRouter } from "next/router";
  *
  * @param {Book[]} bookList - 単語帳リスト.
  * @param {boolean} isLoading - ローディング中か.
+ * @param {function} toggleFavoriteState - お気に入り状態更新イベント.
  * @returns {JSX.Element} 単語帳リスト.
  */
 const VocabularyBookList: React.FC<{
   bookList: Book[];
   isLoading: boolean;
-}> = ({ bookList, isLoading }) => {
+  toggleFavoriteState: (bookInfo: Book) => void;
+}> = ({ bookList, isLoading, toggleFavoriteState }) => {
   // ルーター
   const router = useRouter();
   // 単語帳フォームに遷移
@@ -38,9 +40,8 @@ const VocabularyBookList: React.FC<{
         return (
           <VocabularyBook
             key={book.id}
-            id={book.id}
-            title={book.title}
-            description={book.description}
+            bookInfo={book}
+            toggleFavoriteState={toggleFavoriteState}
           />
         );
       })}

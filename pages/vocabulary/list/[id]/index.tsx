@@ -32,7 +32,7 @@ const VocabularyWordListPage = () => {
   const [wordList, setWordList] = useState<Word[]>([]);
   // 現在のユーザ
   const { currentUser } = useContext(AuthContext);
-
+  // 単語を絞り込む
   const filterWordList = (keyword: string) => {
     setIsLoading(true);
     if (!localStorage.getItem("uuid")) {
@@ -72,10 +72,16 @@ const VocabularyWordListPage = () => {
   };
   // 暗記状態を更新
   const toggleMemorizedState = async (wordInfo: Word) => {
-    if (!currentUser || typeof id !== "string") return;
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId || typeof id !== "string") return;
 
     const { isMemorized } = wordInfo;
-    const path = `users/${currentUser.uid}/${id}/words/${wordInfo.id}`;
+    const path = `users/${userId}/${id}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {

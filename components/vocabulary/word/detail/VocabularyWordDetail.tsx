@@ -23,11 +23,11 @@ const VocabularyWordDetail: React.FC<{
   deleteWord: () => void;
 }> = ({ isLoading, bookId, wordInfo, toggleMemorizedState, deleteWord }) => {
   const { isMemorized, meanings } = wordInfo;
-  // 暗記状態を更新
+  // 暗記状態更新イベントハンドラ
   const onClickMemorizedButtonHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
-  // 単語を削除
+  // 単語削除イベントハンドラ
   const onClickDeleteButtonHandler = () => {
     deleteWord();
   };

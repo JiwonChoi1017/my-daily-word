@@ -33,16 +33,13 @@ const VocabularyWord: React.FC<{
 
     router.push(`/vocabulary/detail/${bookId}/${id}`);
   };
-
-  const onClickMemorizedButtonHandler = () => {
+  // 暗記フラグクリックイベントハンドラ
+  const onClickBookmarkHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
   // 暗記フラグ
   const bookmark = (
-    <div
-      className="bookmark _ignoreClick"
-      onClick={onClickMemorizedButtonHandler}
-    >
+    <div className="bookmark _ignoreClick" onClick={onClickBookmarkHandler}>
       {isMemorized ? <FaBookmark /> : <FaRegBookmark />}
     </div>
   );

@@ -21,6 +21,18 @@
   font-size: 40px;
 }
 
+.userIcon {
+  font-size: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.userIcon p {
+  margin: 0;
+  font-size: 14px;
+  font-family: cursive;
+}
+
 .navigation {
   margin: 20px 0;
   background-color: #322a27;
