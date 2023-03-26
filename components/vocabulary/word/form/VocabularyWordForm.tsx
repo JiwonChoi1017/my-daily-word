@@ -1,15 +1,21 @@
+import InputForm from "@/components/ui/InputForm";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
+/**
+ * 単語フォーム.
+ *
+ * @param {function} addWordHandler - 単語追加イベントハンドラ.
+ * @returns {JSX.Element} 単語フォーム.
+ */
 const VocabularyWordForm: React.FC<{
-  onAddWordHandler: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
-}> = ({ onAddWordHandler }) => {
+  addWordHandler: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
+}> = ({ addWordHandler }) => {
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
   ]);
-
   const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
-
+  // 各入力項目のref
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningsRef = useRef<HTMLInputElement[]>([]);
   const pronunciationRef = useRef<HTMLInputElement>(null);
@@ -35,7 +41,7 @@ const VocabularyWordForm: React.FC<{
       return prevState + 1;
     });
   };
-
+  // 例文追加イベントハンドラ
   const onAddExampleHanlder = (e: React.MouseEvent<HTMLDivElement>) => {
     // event.currenTarget: イベント処理中だけ event.currentTarget の値が利用できるらしい。
     // もし console.log() で event オブジェクトを変数に格納し、コンソールで currentTarget キーを探すと、その値は null となる。
@@ -109,14 +115,14 @@ const VocabularyWordForm: React.FC<{
     return (
       <div key={idx}>
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
-        <label>examples</label>
+        <label>例文</label>
         <ul key={`examples_${idx}`}>
           {examplesInput} {addExampleBtn}
         </ul>
       </div>
     );
   });
-
+  // 送信イベントハンドラ
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -156,7 +162,7 @@ const VocabularyWordForm: React.FC<{
       .join("")
       .padStart(6, "0");
 
-    onAddWordHandler({
+    addWordHandler({
       word: wordRef.current.value,
       meanings,
       pronunciation: pronunciationRef.current.value,
@@ -166,30 +172,35 @@ const VocabularyWordForm: React.FC<{
   };
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent) => {
-        onSubmitHandler(e);
-      }}
-    >
-      <div>
-        <label htmlFor="word">word</label>
-        <input ref={wordRef} type="text" id="word" required />
-      </div>
-      <div>
-        <label htmlFor="pronunciation">pronunciation</label>
-        <input ref={pronunciationRef} type="text" id="pronunciation" required />
-      </div>
-      <div>
-        <label>meaning</label>
-        {meaningsInput}
-        <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
-          add meaning
+    <InputForm>
+      <form
+        onSubmit={(e: React.FormEvent) => {
+          onSubmitHandler(e);
+        }}
+      >
+        <div>
+          <label htmlFor="word">単語</label>
+          <input ref={wordRef} type="text" id="word" required />
         </div>
-      </div>
-      <div>
-        <button>add</button>
-      </div>
-    </form>
+        <div>
+          <label htmlFor="pronunciation">発音</label>
+          <input
+            ref={pronunciationRef}
+            type="text"
+            id="pronunciation"
+            required
+          />
+        </div>
+        <div>
+          <label>意味</label>
+          {meaningsInput}
+          <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
+            add meaning
+          </div>
+        </div>
+        <button className="first">単語を追加</button>
+      </form>
+    </InputForm>
   );
 };
 

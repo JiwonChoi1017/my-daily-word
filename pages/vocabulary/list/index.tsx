@@ -15,13 +15,14 @@ import { v4 as uuidv4 } from "uuid";
  * @returns {JSX.Element} 単語帳リスト画面.
  */
 const VocabularyBookListPage = () => {
+  // ルーター
   const router = useRouter();
   const { page } = router.query;
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookList, setBookList] = useState<Book[]>([]);
-
+  // 現在のユーザ
   const { currentUser } = useContext(AuthContext);
 
   // TODO: 並び順も実装
@@ -68,7 +69,7 @@ const VocabularyBookListPage = () => {
 
   return (
     <MainLayout showNavigation={false}>
-      {/* 単語リスト */}
+      {/* 単語帳リスト */}
       <VocabularyBookList bookList={bookList} isLoading={isLoading} />
     </MainLayout>
   );
