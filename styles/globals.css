@@ -100,3 +100,8 @@ ul {
 .alignRight {
   margin: 0 0 0 auto;
 }
+
+.errorMsg {
+  color: red;
+  font-size: 14px;
+}
