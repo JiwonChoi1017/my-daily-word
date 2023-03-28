@@ -134,10 +134,18 @@ export default function Home() {
 
   // 暗記状態をトーグル
   const toggleMemorizedState = async (wordInfo: Word) => {
-    if (!currentUser) return;
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
+      return;
+    }
 
     const { isMemorized } = wordInfo;
-    const path = `users/${currentUser.uid}/${bookId}/words/${wordInfo.id}`;
+    const path = `users/${userId}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
