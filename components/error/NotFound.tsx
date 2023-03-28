@@ -2,7 +2,7 @@ import { ERROR_STATUS } from "@/constants/constants";
 import { ErrorInfo } from "@/types/Error";
 import React from "react";
 import Card from "../ui/Card";
-import classes from "../../styles/Button.module.css";
+import classes from "../../components/layout/Button.module.css";
 import Button from "../layout/Button";
 import { useRouter } from "next/router";
 
