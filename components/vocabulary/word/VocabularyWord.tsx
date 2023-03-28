@@ -21,8 +21,9 @@ const VocabularyWord: React.FC<{
   toggleMemorizedState: (wordInfo: Word) => void;
 }> = ({ isLoading, bookId, wordInfo, toggleMemorizedState }) => {
   const { id, word, pronunciation, isMemorized, meanings } = wordInfo;
+  // ルーター
   const router = useRouter();
-
+  // 詳細ページへ移動
   const moveToDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     // MEMO: event.target と event.currentTarget の違い
