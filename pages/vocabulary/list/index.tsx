@@ -81,6 +81,12 @@ const VocabularyBookListPage = () => {
         })
         .then((value) => {
           const bookList: Book[] = [];
+          // ゼロマッチ
+          if (!value) {
+            setBookList([]);
+            setIsLoading(false);
+            return;
+          }
           for (const key of Object.keys(value).reverse()) {
             const book: Book = {
               id: key,
@@ -91,7 +97,6 @@ const VocabularyBookListPage = () => {
           setBookList(bookList);
           setIsLoading(false);
         });
-      // TODO: 例外処理追加
     };
 
     fetchBookList();

@@ -42,7 +42,7 @@ export default function Home() {
   });
   const [errorInfo, setErrorInfo] = useState<ErrorInfo>({
     status: ERROR_STATUS.SUCCESS,
-    code: 200,
+    code: "",
     message: "",
   });
 
@@ -59,8 +59,8 @@ export default function Home() {
     if (!userId) {
       setErrorInfo({
         status: ERROR_STATUS.NOT_FOUND_USER,
-        code: 404,
-        message: "ユーザが見つかりませんでした。",
+        code: "not-exist-user",
+        message: "ユーザーが見つかりませんでした。",
       });
       setIsLoading(false);
       return;
@@ -86,7 +86,7 @@ export default function Home() {
           setIsLoading(false);
           setErrorInfo({
             status: ERROR_STATUS.NOT_FOUND_BOOK,
-            code: 404,
+            code: "not-exist-vocabulary-book",
             message:
               "単語帳が見つかりませんでした。<br/>新しい単語帳を追加してください。",
           });
@@ -119,7 +119,7 @@ export default function Home() {
           setIsLoading(false);
           setErrorInfo({
             status: ERROR_STATUS.NOT_FOUND_WORD,
-            code: 404,
+            code: "not-exist-vocabulary-word",
             message:
               "単語が見つかりませんでした。<br/>新しい単語を追加してください。",
           });

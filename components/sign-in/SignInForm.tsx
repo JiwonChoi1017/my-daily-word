@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
 import Button from "../layout/Button";
+import { ErrorInfo } from "@/types/Error";
 
 /**
  * ログインフォーム.
@@ -14,10 +15,12 @@ const SignInForm = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   // 活性/非活性状態
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  // エラー情報
+  const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
   // ルーター
   const router = useRouter();
-  // エラー情報、ログインイベントハンドラ
-  const { errorInfo, setErrorInfo, signInHandler } = useContext(AuthContext);
+  // ログインイベントハンドラ
+  const { signInHandler } = useContext(AuthContext);
   // 送信イベント
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     // e.preventDefault(): submitイベントの発生元であるフォームが持つデフォルトの動作をキャンセルするメソッド.
@@ -25,22 +28,24 @@ const SignInForm = () => {
     // 現在のURLに対してフォームの送信が行われると、結果的にページがリロードされてしまう.
     // そのため、e.preventDefault()を呼び出し、デフォルトの動作をキャンセルする。
     e.preventDefault();
+    // 入力漏れがある場合、何もせずリターン
     if (!emailRef.current || !passwordRef.current) {
       return;
     }
-    // ログインイベント発火
-    await signInHandler({
+    // ログインイベントを発火させ、エラー情報を取得
+    const errorInfo = await signInHandler({
       email: emailRef.current.value,
       password: passwordRef.current.value,
     });
+    setErrorInfo(errorInfo);
     // ログインに成功した場合、単語帳リストへ移動
     if (errorInfo && errorInfo.status === "success") {
       router.push("/vocabulary/list?page=1");
     }
   };
-  // ユーザ登録ボタンクリックイベント
+  // ユーザー登録ボタンクリックイベント
   const onClickSignUpButtonHandler = () => {
-    // ユーザ登録画面に遷移
+    // ユーザー登録画面に遷移
     router.push("/sign-up");
   };
   // 入力変更イベントハンドラ
@@ -51,11 +56,6 @@ const SignInForm = () => {
     // 活性/非活性状態を更新
     setIsDisabled(!email || !password);
   };
-
-  useEffect(() => {
-    setErrorInfo(null);
-  }, []);
-
   // エラーメッセージ
   const errorMsg = errorInfo?.status === "error" && (
     <p className="errorMsg">{errorInfo.message}</p>
@@ -74,7 +74,7 @@ const SignInForm = () => {
           ref={emailRef}
           id="email"
           name="email"
-          type="email"
+          type="text"
           onChange={onChangeInputHandler}
         />
       </div>
