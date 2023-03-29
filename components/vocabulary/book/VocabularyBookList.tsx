@@ -4,6 +4,7 @@ import React from "react";
 import VocabularyBook from "./VocabularyBook";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
+import NotFoundList from "@/components/error/NotFoundList";
 
 /**
  * 単語帳リスト.
@@ -31,20 +32,28 @@ const VocabularyBookList: React.FC<{
     </div>
   );
   // 単語帳リスト
-  const bookListHtml = isLoading ? (
-    <Loader />
-  ) : (
+  const bookListHtml = (
     <>
       {addBookIcon}
-      {bookList.map((book) => {
-        return (
-          <VocabularyBook
-            key={book.id}
-            bookInfo={book}
-            toggleFavoriteState={toggleFavoriteState}
-          />
-        );
-      })}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {!bookList.length ? (
+            <NotFoundList />
+          ) : (
+            bookList.map((book) => {
+              return (
+                <VocabularyBook
+                  key={book.id}
+                  bookInfo={book}
+                  toggleFavoriteState={toggleFavoriteState}
+                />
+              );
+            })
+          )}
+        </>
+      )}
     </>
   );
   return bookListHtml;

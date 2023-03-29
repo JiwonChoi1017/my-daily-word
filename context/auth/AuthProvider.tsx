@@ -9,18 +9,17 @@ import {
 import { authService } from "firebase-config";
 import { ErrorInfo } from "../../types/Error";
 
+// ユーザー情報
 type UserInfo = {
   email: string;
   password: string;
 };
-
+// ユーザー情報コンテキスト
 type UserInfoContext = {
-  signInHandler: (userInfo: UserInfo) => void;
-  signUpHandler: (userInfo: UserInfo) => void;
+  signInHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
+  signUpHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
   signOutHandler: () => void;
   currentUser: User | null;
-  errorInfo: ErrorInfo | null;
-  setErrorInfo: React.Dispatch<React.SetStateAction<ErrorInfo | null>>;
 };
 
 export const AuthContext = createContext<UserInfoContext>(
@@ -30,68 +29,108 @@ export const AuthContext = createContext<UserInfoContext>(
 export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  // 現在のユーザ
+  // 現在のユーザー
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  // エラー情報
-  const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
   // ログインイベントハンドラ
   const signInHandler = async (userInfo: UserInfo) => {
     const { email, password } = userInfo;
 
-    await signInWithEmailAndPassword(authService, email, password)
+    return await signInWithEmailAndPassword(authService, email, password)
       .then(() => {
-        setErrorInfo({
+        return {
           status: "success",
-          code: 200,
+          code: "",
           message: "",
-        });
+        };
       })
       .catch((error) => {
-        if (error.code === AuthErrorCodes.USER_DELETED) {
-          setErrorInfo({
+        const errorCode: string = error.code ?? "";
+        const errorMsg: string = error.message ?? "";
+        if (errorCode === AuthErrorCodes.USER_DELETED) {
+          return {
             status: "error",
-            code: 404,
+            code: errorCode,
             message:
               "アカウントが存在しません。他のアカウントを入力してください。",
-          });
-          return;
+          };
         }
 
         if (
-          error.code === AuthErrorCodes.INVALID_EMAIL ||
-          error.code === AuthErrorCodes.INVALID_PASSWORD
+          errorCode === AuthErrorCodes.INVALID_EMAIL ||
+          errorCode === AuthErrorCodes.INVALID_PASSWORD
         ) {
-          setErrorInfo({
+          return {
             status: "error",
-            code: 404,
+            code: errorCode,
             message: "ログインできませんでした。もう一度試してください。",
-          });
-          return;
+          };
         }
 
-        setErrorInfo({
+        return {
           status: "error",
-          code: 500,
-          message: error.message,
-        });
+          code: errorCode,
+          message: errorMsg,
+        };
       });
   };
-
+  // ユーザー登録イベントハンドラ
   const signUpHandler = async (userInfo: UserInfo) => {
     const { email, password } = userInfo;
-    try {
-      await createUserWithEmailAndPassword(authService, email, password);
-    } catch (e) {
-      //
-    }
-  };
+    return await createUserWithEmailAndPassword(authService, email, password)
+      .then(() => {
+        return {
+          status: "success",
+          code: "",
+          message: "",
+        };
+      })
+      .catch((error) => {
+        const errorCode: string = error.code ?? "";
+        const errorMsg: string = error.message ?? "";
+        if (errorCode === AuthErrorCodes.INVALID_EMAIL) {
+          return {
+            status: "error",
+            code: errorCode,
+            message: "有効なメールアドレスを入力してください。",
+          };
+        }
 
+        if (errorCode === AuthErrorCodes.EMAIL_EXISTS) {
+          return {
+            status: "error",
+            code: errorCode,
+            message: "入力したメールアドレスはすでに存在します。",
+          };
+        }
+
+        if (errorCode === AuthErrorCodes.INVALID_PASSWORD) {
+          return {
+            status: "error",
+            code: errorCode,
+            message: "有効なパスワードを入力してください。",
+          };
+        }
+
+        if (errorCode === AuthErrorCodes.WEAK_PASSWORD) {
+          return {
+            status: "error",
+            code: errorCode,
+            message: "6文字以上の文字を入力してください。",
+          };
+        }
+
+        return {
+          status: "error",
+          code: errorCode,
+          message: errorMsg,
+        };
+      });
+  };
+  // ログアウトイベントハンドラ
   const signOutHandler = async () => {
-    try {
-      await signOut(authService);
-    } catch (e) {
-      //
-    }
+    await signOut(authService).then(() => {
+      setCurrentUser(null);
+    });
   };
 
   useEffect(() => {
@@ -109,8 +148,6 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
         signUpHandler,
         signOutHandler,
         currentUser,
-        errorInfo,
-        setErrorInfo,
       }}
     >
       {children}
