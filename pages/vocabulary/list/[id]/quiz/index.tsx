@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import VocabularyQuizSelectModal from "@/components/vocabulary/quiz/VocabularyQuizSelectModal";
+import VocabularyQuizSelect from "@/components/vocabulary/quiz/VocabularyQuizSelect";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { get, ref, update } from "firebase/database";
@@ -10,6 +10,10 @@ import VocabularyQuizItem from "@/components/vocabulary/quiz/VocabularyQuizItem"
 import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstans";
 import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizResult";
 import { QuizKind } from "@/types/Quiz";
+import { ErrorInfo } from "@/types/Error";
+import { ERROR_STATUS } from "@/constants/constants";
+import NotEnoughWord from "@/components/error/NotEnoughWord";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * クイズ画面.
@@ -17,10 +21,17 @@ import { QuizKind } from "@/types/Quiz";
  * @returns {JSX.Element} クイズ画面.
  */
 const VocabularyQuizPage = () => {
+  // ルーター
   const router = useRouter();
+  // 単語帳id
   const { id } = router.query;
-
-  const [showModal, setShowModal] = useState<boolean>(true);
+  // エラー情報
+  const [errorInfo, setErrorInfo] = useState<ErrorInfo>({
+    status: ERROR_STATUS.SUCCESS,
+    code: "",
+    message: "",
+  });
+  const [showSelect, setShowSelect] = useState<boolean>(true);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [quizKind, setQuizKind] = useState<QuizKind>(QUIZ_KIND.word);
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
@@ -28,7 +39,7 @@ const VocabularyQuizPage = () => {
   const [correctAnswerList, setCorrectAnswerList] = useState<
     { id: string; word: string; meaning: string }[]
   >([]);
-
+  // 現在のユーザー
   const { currentUser } = useContext(AuthContext);
 
   const moveToWordListPage = () => {
@@ -36,15 +47,22 @@ const VocabularyQuizPage = () => {
   };
 
   const showModalHandler = () => {
-    setShowModal(true);
+    setShowSelect(true);
   };
-
+  // クイズ用の単語を取得
   const fetchQuizWord = async () => {
     const wordList = await fetchAllWords();
-    const quizCount =
-      wordList.length >= VOCABULARY_QUIZ_COUNT
-        ? VOCABULARY_QUIZ_COUNT
-        : wordList.length;
+
+    // 単語の総件数が10件未満の場合
+    if (!wordList || wordList.length < VOCABULARY_QUIZ_COUNT) {
+      setErrorInfo({
+        status: "error",
+        code: ERROR_STATUS.NOT_ENOUGH_WORD,
+        message: "クイズを解くには、10件以上の単語が必要となります。",
+      });
+      return;
+    }
+
     const questionIndexList: number[] = [];
     const answersList: string[][] = [];
     const correctAnswerList: { id: string; word: string; meaning: string }[] =
@@ -52,7 +70,7 @@ const VocabularyQuizPage = () => {
 
     let questionCount = 0;
 
-    while (questionCount < quizCount) {
+    while (questionCount < VOCABULARY_QUIZ_COUNT) {
       const answerIndexList: number[] = [];
       const tempAnswerList = [];
 
@@ -87,11 +105,23 @@ const VocabularyQuizPage = () => {
     setQuizKind(QUIZ_KIND.word);
     setAnswersList(answersList);
     setCorrectAnswerList(correctAnswerList);
-    setShowModal(false);
+    setShowSelect(false);
   };
 
+  // クイズ用の意味を取得
   const fetchQuizMeaning = async () => {
     const wordList = await fetchAllWords();
+
+    // 単語の総件数が10件未満の場合
+    if (!wordList || wordList.length < VOCABULARY_QUIZ_COUNT) {
+      setErrorInfo({
+        status: "error",
+        code: ERROR_STATUS.NOT_ENOUGH_WORD,
+        message: "クイズを解くには、10件以上の単語が必要となります。",
+      });
+      return;
+    }
+
     const quizCount =
       wordList.length >= VOCABULARY_QUIZ_COUNT
         ? VOCABULARY_QUIZ_COUNT
@@ -140,13 +170,19 @@ const VocabularyQuizPage = () => {
     setQuizKind(QUIZ_KIND.meaning);
     setAnswersList(answersList);
     setCorrectAnswerList(correctAnswerList);
-    setShowModal(false);
+    setShowSelect(false);
   };
-
+  // 全ての単語を取得
   const fetchAllWords = async () => {
-    if (!currentUser) return [];
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
-    const path = `users/${currentUser.uid}/${id}/words`;
+    if (!userId) return;
+
+    const path = `users/${userId}/${id}/words`;
     const wordsRef = ref(db, path);
     const wordList: Word[] = [];
 
@@ -178,9 +214,15 @@ const VocabularyQuizPage = () => {
     const correctAnswer = correctAnswerList[currentQuizIndex];
     const { word, meaning } = correctAnswer;
 
-    if (!currentUser) return;
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
 
-    const path = `users/${currentUser.uid}/${id}/words/${correctAnswer.id}`;
+    if (!userId) return;
+
+    const path = `users/${userId}/${id}/words/${correctAnswer.id}`;
     const wordRef = ref(db, path);
     const isCorrect =
       quizKind === QUIZ_KIND.word ? answer === word : answer === meaning;
@@ -200,25 +242,31 @@ const VocabularyQuizPage = () => {
 
   return (
     <MainLayout>
-      <VocabularyQuizSelectModal
-        show={showModal}
-        fetchQuizWord={fetchQuizWord}
-        fetchQuizMeaning={fetchQuizMeaning}
-      />
-      <VocabularyQuizItem
-        show={!showModal && !showResult}
-        quizKind={quizKind}
-        currentQuizIndex={currentQuizIndex}
-        answersList={answersList}
-        correctAnswerList={correctAnswerList}
-        checkAnswer={checkAnswer}
-      />
-      <VocabularyQuizResult
-        show={showResult}
-        correctAnswerList={correctAnswerList}
-        moveToWordListPage={moveToWordListPage}
-        showModalHandler={showModalHandler}
-      />
+      {errorInfo.code === ERROR_STATUS.NOT_ENOUGH_WORD ? (
+        <NotEnoughWord errorInfo={errorInfo} bookId={id as string} />
+      ) : (
+        <>
+          <VocabularyQuizSelect
+            show={showSelect}
+            fetchQuizWord={fetchQuizWord}
+            fetchQuizMeaning={fetchQuizMeaning}
+          />
+          <VocabularyQuizItem
+            show={!showSelect && !showResult}
+            quizKind={quizKind}
+            currentQuizIndex={currentQuizIndex}
+            answersList={answersList}
+            correctAnswerList={correctAnswerList}
+            checkAnswer={checkAnswer}
+          />
+          <VocabularyQuizResult
+            show={showResult}
+            correctAnswerList={correctAnswerList}
+            moveToWordListPage={moveToWordListPage}
+            showModalHandler={showModalHandler}
+          />
+        </>
+      )}
     </MainLayout>
   );
 };

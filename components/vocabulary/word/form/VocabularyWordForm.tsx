@@ -114,6 +114,7 @@ const VocabularyWordForm: React.FC<{
 
     return (
       <div key={idx}>
+        <label>意味</label>
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
         <label>例文</label>
         <ul key={`examples_${idx}`}>
@@ -192,7 +193,6 @@ const VocabularyWordForm: React.FC<{
           />
         </div>
         <div>
-          <label>意味</label>
           {meaningsInput}
           <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
             意味を追加
