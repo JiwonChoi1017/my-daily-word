@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import VocabularyWord from "./VocabularyWord";
 import NotFoundWord from "@/components/error/NotFoundWord";
+import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 
 /**
  * 単語リスト.
@@ -60,28 +61,27 @@ const VocabularyWordList: React.FC<{
       {addWordIcon}
     </div>
   );
-  // 単語リスト
+  // 単語リスト要素
   const wordListElement = (
     <>
       {wordTopModule}
       {isLoading ? (
         <Loader />
+      ) : !wordList.length ? (
+        <NotFoundWord />
       ) : (
         <>
-          {!wordList.length ? (
-            <NotFoundWord />
-          ) : (
-            wordList.map((word) => {
-              return (
-                <VocabularyWord
-                  key={word.id}
-                  bookId={bookId}
-                  wordInfo={word}
-                  toggleMemorizedState={toggleMemorizedState}
-                />
-              );
-            })
-          )}
+          {wordList.map((word) => {
+            return (
+              <VocabularyWord
+                key={word.id}
+                bookId={bookId}
+                wordInfo={word}
+                toggleMemorizedState={toggleMemorizedState}
+              />
+            );
+          })}
+          <ScrollToTopButton />
         </>
       )}
     </>

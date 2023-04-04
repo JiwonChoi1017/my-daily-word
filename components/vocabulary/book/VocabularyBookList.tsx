@@ -5,6 +5,7 @@ import VocabularyBook from "./VocabularyBook";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
 import NotFoundList from "@/components/error/NotFoundList";
+import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 
 /**
  * 単語帳リスト.
@@ -31,32 +32,31 @@ const VocabularyBookList: React.FC<{
       <FaPlus />
     </div>
   );
-  // 単語帳リスト
-  const bookListHtml = (
+  // 単語帳リスト要素
+  const bookListElement = (
     <>
       {addBookIcon}
       {isLoading ? (
         <Loader />
+      ) : !bookList.length ? (
+        <NotFoundList />
       ) : (
         <>
-          {!bookList.length ? (
-            <NotFoundList />
-          ) : (
-            bookList.map((book) => {
-              return (
-                <VocabularyBook
-                  key={book.id}
-                  bookInfo={book}
-                  toggleFavoriteState={toggleFavoriteState}
-                />
-              );
-            })
-          )}
+          {bookList.map((book) => {
+            return (
+              <VocabularyBook
+                key={book.id}
+                bookInfo={book}
+                toggleFavoriteState={toggleFavoriteState}
+              />
+            );
+          })}
+          <ScrollToTopButton />
         </>
       )}
     </>
   );
-  return bookListHtml;
+  return bookListElement;
 };
 
 export default VocabularyBookList;
