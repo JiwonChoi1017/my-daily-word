@@ -54,7 +54,7 @@ const SignInForm = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     // 活性/非活性状態を更新
-    setIsDisabled(!email || !password);
+    setIsDisabled(!email || !password || password.length < 10);
   };
   // エラーメッセージ
   const errorMsg = errorInfo?.status === "error" && (
@@ -75,6 +75,9 @@ const SignInForm = () => {
           id="email"
           name="email"
           type="text"
+          // メールアドレスの長さについては下記を参考
+          // https://blog.anderiens.com/entry/length-of-mail-address
+          maxLength={254}
           onChange={onChangeInputHandler}
         />
       </div>

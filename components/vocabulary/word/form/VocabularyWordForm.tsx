@@ -11,9 +11,11 @@ import React, { useEffect, useRef, useState } from "react";
 const VocabularyWordForm: React.FC<{
   addWord: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
 }> = ({ addWord }) => {
+  // 意味状態
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
   ]);
+  // 例文refのインデックス
   const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
   // 各入力項目のref
   const wordRef = useRef<HTMLInputElement>(null);
@@ -64,7 +66,7 @@ const VocabularyWordForm: React.FC<{
       return prevState + 1;
     });
   };
-
+  // 意味入力欄
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
       <li key={`meaning_${idx}`}>
@@ -77,11 +79,12 @@ const VocabularyWordForm: React.FC<{
           }}
           id={`meaning_${idx}`}
           type="text"
+          maxLength={300}
           required
         />
       </li>
     );
-
+    // 例文入力欄
     const examplesInput = item.examples.map((example, example_idx) => {
       return (
         <li key={`example_${idx}_${example_idx}`}>
@@ -94,13 +97,14 @@ const VocabularyWordForm: React.FC<{
             }}
             id={`example_${idx}_${example_idx}`}
             type="text"
+            maxLength={300}
             data-meaning-index={`${idx}`}
           />
         </li>
       );
     });
-
-    const addExampleBtn = (
+    // 例文追加リンク
+    const addExampleInputLink = (
       <div
         onClick={(e: React.MouseEvent<HTMLDivElement>) => {
           onAddExampleHanlder(e);
@@ -118,7 +122,7 @@ const VocabularyWordForm: React.FC<{
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
         <label>例文</label>
         <ul key={`examples_${idx}`}>
-          {examplesInput} {addExampleBtn}
+          {examplesInput} {addExampleInputLink}
         </ul>
       </div>
     );
@@ -181,7 +185,7 @@ const VocabularyWordForm: React.FC<{
       >
         <div>
           <label htmlFor="word">単語</label>
-          <input ref={wordRef} type="text" id="word" required />
+          <input ref={wordRef} type="text" id="word" maxLength={50} required />
         </div>
         <div>
           <label htmlFor="pronunciation">発音</label>
@@ -189,6 +193,7 @@ const VocabularyWordForm: React.FC<{
             ref={pronunciationRef}
             type="text"
             id="pronunciation"
+            maxLength={100}
             required
           />
         </div>
