@@ -50,7 +50,7 @@ const SignUpForm = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     // 活性/非活性状態を更新
-    setIsDisabled(!email || !password);
+    setIsDisabled(!email || !password || password.length < 10);
   };
   // エラー状態か
   const isError = errorInfo?.status === "error" ?? false;
@@ -89,6 +89,7 @@ const SignUpForm = () => {
           className={`${isEmailError ? "error" : ""}`}
           name="email"
           type="text"
+          maxLength={254}
           placeholder="例：example@mail.com"
           onChange={onChangeInputHandler}
         />
@@ -102,7 +103,7 @@ const SignUpForm = () => {
           className={`${isPasswordError ? "error" : ""}`}
           name="password"
           type="password"
-          placeholder="例：6文字以上の文字"
+          placeholder="例：10文字以上の文字"
           onChange={onChangeInputHandler}
         />
         {passwordErrorMsg}

@@ -60,7 +60,7 @@ const VocabularyWordModifyForm: React.FC<{
       return currentState;
     });
   };
-
+  // 意味入力欄
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
       <li key={`meaning_${idx}`}>
@@ -73,12 +73,13 @@ const VocabularyWordModifyForm: React.FC<{
           }}
           id={`meaning_${idx}`}
           type="text"
+          maxLength={300}
           defaultValue={item.meaning}
           required
         />
       </li>
     );
-
+    // 例文入力欄
     const examplesInput = item.examples.map((example, example_idx) => {
       const prevExampleList: string[] = [];
       for (let i = 0; i <= idx; i++) {
@@ -102,14 +103,15 @@ const VocabularyWordModifyForm: React.FC<{
             }}
             id={`example_${idx}_${example_idx}`}
             type="text"
+            maxLength={300}
             defaultValue={example}
             data-meaning-index={`${idx}`}
           />
         </li>
       );
     });
-    // 例文追加ボタン
-    const addExampleBtn = (
+    // 例文追加リンク
+    const addExampleInputLink = (
       <div
         onClick={(e: React.MouseEvent<HTMLDivElement>) => {
           onAddExampleHanlder(e);
@@ -126,7 +128,7 @@ const VocabularyWordModifyForm: React.FC<{
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
         <label>例文</label>
         <ul key={`examples_${idx}`}>
-          {examplesInput} {addExampleBtn}
+          {examplesInput} {addExampleInputLink}
         </ul>
       </div>
     );
@@ -193,6 +195,7 @@ const VocabularyWordModifyForm: React.FC<{
             ref={wordRef}
             type="text"
             id="word"
+            maxLength={50}
             defaultValue={wordInfo.word}
             required
           />
@@ -203,6 +206,7 @@ const VocabularyWordModifyForm: React.FC<{
             ref={pronunciationRef}
             type="text"
             id="pronunciation"
+            maxLength={100}
             defaultValue={wordInfo.pronunciation}
             required
           />

@@ -62,7 +62,13 @@ const VocabularyBookForm: React.FC<{
         >
           <div>
             <label htmlFor="title">タイトル</label>
-            <input ref={titleRef} type="text" id="title" required />
+            <input
+              ref={titleRef}
+              type="text"
+              id="title"
+              maxLength={100}
+              required
+            />
           </div>
           <div>
             <label htmlFor="word">原文の言語</label>
@@ -88,6 +94,7 @@ const VocabularyBookForm: React.FC<{
               ref={descriptionRef}
               id="description"
               rows={10}
+              maxLength={1000}
               required
             />
           </div>
