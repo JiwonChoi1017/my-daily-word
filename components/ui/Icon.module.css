@@ -1,0 +1,34 @@
+.bookmarkIcon {
+  margin-left: 20px;
+  color: #2831d9b7;
+  cursor: pointer;
+}
+
+.modifyIcon {
+  margin-left: 20px;
+  color: #9b9390;
+  cursor: pointer;
+}
+
+.wordIconWrap {
+  font-size: 24px;
+  float: right;
+}
+
+.dropdown__lists {
+  margin: 5px 0;
+  box-shadow: 0px 0px 10px rgb(198, 198, 198);
+}
+
+.dropdown__list {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #322a27;
+  font-size: 14px;
+}
+
+.dropdown__list span {
+  margin-left: 10px;
+}

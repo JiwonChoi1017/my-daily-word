@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "../../styles/Card.module.css";
+import classes from "./Card.module.css";
 
 /**
  * カード.
@@ -15,7 +15,7 @@ const Card: React.FC<{
   isError?: boolean;
   className?: string;
   clickHandler?: (e: React.MouseEvent<HTMLDivElement>) => void;
-}> = ({ children, isError = false, className, clickHandler }) => {
+}> = ({ children, isError = false, className = "", clickHandler }) => {
   return (
     <div
       className={`${isError ? classes.card__error : classes.card} ${className}`}
