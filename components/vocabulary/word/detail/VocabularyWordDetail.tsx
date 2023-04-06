@@ -1,9 +1,9 @@
 import Card from "@/components/ui/Card";
 import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
-import Link from "next/link";
 import React from "react";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { WordIcon } from "@/components/ui/Icon";
+import { useRouter } from "next/router";
 
 /**
  * 単語詳細.
@@ -12,7 +12,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
  * @param {string} bookId - 単語帳id.
  * @param {Word} wordInfo - 単語情報.
  * @param {function} toggleMemorizedState - 暗記状態を更新.
- * @param {function} deleteWord - 単語削除.
+ * @param {function} deleteWord - 単語を削除.
  * @returns {JSX.Element} 単語詳細.
  */
 const VocabularyWordDetail: React.FC<{
@@ -22,21 +22,24 @@ const VocabularyWordDetail: React.FC<{
   toggleMemorizedState: (wordInfo: Word) => void;
   deleteWord: () => void;
 }> = ({ isLoading, bookId, wordInfo, toggleMemorizedState, deleteWord }) => {
+  // 単語情報
   const { isMemorized, meanings } = wordInfo;
-  // 暗記状態更新イベントハンドラ
-  const onClickMemorizedButtonHandler = () => {
+  // 暗記フラグクリックイベントハンドラ
+  const onClickBookmarkIconHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
-  // 単語削除イベントハンドラ
-  const onClickDeleteButtonHandler = () => {
+  // ルーター
+  const router = useRouter();
+  // 修正リンククリックイベントハンドラ
+  const onClickModifyLinkHandler = () => {
+    router.push(
+      `/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`
+    );
+  };
+  // 削除リンククリックイベントハンドラ
+  const onClickDeleteLinkHandler = () => {
     deleteWord();
   };
-  // 暗記フラグ
-  const bookmark = (
-    <div className="bookmark" onClick={onClickMemorizedButtonHandler}>
-      {isMemorized ? <FaBookmark /> : <FaRegBookmark />}
-    </div>
-  );
   // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
     return (
@@ -64,14 +67,14 @@ const VocabularyWordDetail: React.FC<{
             <span className="title">{wordInfo.word}</span>
             <span>[{wordInfo.pronunciation}]</span>
           </div>
-          {bookmark}
+          {/* アイコン */}
+          <WordIcon
+            isMemorized={isMemorized}
+            onClickBookmarkIconHandler={onClickBookmarkIconHandler}
+            onClickModifyLinkHandler={onClickModifyLinkHandler}
+            onClickDeleteLinkHandler={onClickDeleteLinkHandler}
+          />
           <ul className="description">{meaningList}</ul>
-          <Link
-            href={`/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`}
-          >
-            修正
-          </Link>
-          <button onClick={onClickDeleteButtonHandler}>削除</button>
         </div>
       )}
     </Card>
