@@ -1,0 +1,24 @@
+.wordListWrap {
+  margin-bottom: 40px;
+}
+
+.wordListWrap .titleWrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wordListWrap .titleWrap .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.wordListWrap .wordList:not(:first-child) {
+  border-top: 0.5px solid #9b9390;
+}
+
+.wordListWrap .meaning {
+  margin-bottom: 15px;
+  font-size: 18px;
+}

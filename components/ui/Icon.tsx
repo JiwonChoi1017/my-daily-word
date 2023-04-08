@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { AiOutlineMore, AiFillDelete } from "react-icons/ai";
-import { FaPen, FaBookmark, FaRegBookmark } from "react-icons/fa";
+import {
+  FaPen,
+  FaBookmark,
+  FaRegBookmark,
+  FaCheck,
+  FaTimes,
+} from "react-icons/fa";
 import classes from "./Icon.module.css";
 
 /**
@@ -106,5 +112,23 @@ export const WordIcon: React.FC<{
         onClickDeleteLinkHandler={onClickDeleteLinkHandler}
       />
     </div>
+  );
+};
+
+/**
+ * 回答チェックアイコン.
+ *
+ * @param {string} checkedAnswer - チェックをつけた回答.
+ * @param {string} correctAnswer - 正解.
+ * @returns {JSX.Element} 回答チェックアイコン.
+ */
+export const CheckAnswerIcon: React.FC<{
+  checkedAnswer: string;
+  correctAnswer: string;
+}> = ({ checkedAnswer, correctAnswer }) => {
+  return checkedAnswer === correctAnswer ? (
+    <FaCheck className={classes.correctAnswerIcon} />
+  ) : (
+    <FaTimes className={classes.wrongAnswerIcon} />
   );
 };

@@ -9,7 +9,7 @@ import { Word } from "@/types/Vocabulary";
 import VocabularyQuizItem from "@/components/vocabulary/quiz/VocabularyQuizItem";
 import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstans";
 import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizResult";
-import { QuizKind } from "@/types/Quiz";
+import { Answer, QuizKind } from "@/types/Quiz";
 import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";
 import NotEnoughWord from "@/components/error/NotEnoughWord";
@@ -34,25 +34,29 @@ const VocabularyQuizPage = () => {
   const [showSelect, setShowSelect] = useState<boolean>(true);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [quizKind, setQuizKind] = useState<QuizKind>(QUIZ_KIND.word);
+  // 現在のクイズインデックス
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answersList, setAnswersList] = useState<string[][]>([]);
-  const [correctAnswerList, setCorrectAnswerList] = useState<
-    { id: string; word: string; meaning: string }[]
-  >([]);
+  // 正解リストの状態
+  const [correctAnswerList, setCorrectAnswerList] = useState<Answer[]>([]);
   // 現在のユーザー
   const { currentUser } = useContext(AuthContext);
 
   const moveToWordListPage = () => {
     router.push(`/vocabulary/list/${id}/?page=1`);
   };
-
-  const showModalHandler = () => {
+  // クイズセレクトを表示
+  const showQuizSelect = () => {
+    // クイズ結果を非表示
+    setShowResult(false);
+    // 現在のクイズインデックスを初期化
+    setCurrentQuizIndex(0);
+    // セレクトを表示
     setShowSelect(true);
   };
   // クイズ用の単語を取得
   const fetchQuizWord = async () => {
     const wordList = await fetchAllWords();
-
     // 単語の総件数が10件未満の場合
     if (!wordList || wordList.length < VOCABULARY_QUIZ_COUNT) {
       setErrorInfo({
@@ -62,11 +66,12 @@ const VocabularyQuizPage = () => {
       });
       return;
     }
-
+    // 問題インデックスリスト
     const questionIndexList: number[] = [];
+    // 回答リスト
     const answersList: string[][] = [];
-    const correctAnswerList: { id: string; word: string; meaning: string }[] =
-      [];
+    // 正解リスト
+    const correctAnswerList: Answer[] = [];
 
     let questionCount = 0;
 
@@ -76,14 +81,14 @@ const VocabularyQuizPage = () => {
 
       const randomWordIndex = Math.floor(Math.random() * wordList.length);
       if (questionIndexList.includes(randomWordIndex)) continue;
-      const { id, word, meanings } = wordList[randomWordIndex];
+      const { id, word, pronunciation, meanings } = wordList[randomWordIndex];
       const randomMeaningIndex = Math.floor(Math.random() * meanings.length);
       const { meaning } = meanings[randomMeaningIndex];
 
       questionIndexList.push(randomWordIndex);
       answerIndexList.push(randomWordIndex);
       tempAnswerList.push(word);
-      correctAnswerList.push({ id, word, meaning });
+      correctAnswerList.push({ id, word, pronunciation, meaning });
 
       questionCount++;
 
@@ -111,7 +116,6 @@ const VocabularyQuizPage = () => {
   // クイズ用の意味を取得
   const fetchQuizMeaning = async () => {
     const wordList = await fetchAllWords();
-
     // 単語の総件数が10件未満の場合
     if (!wordList || wordList.length < VOCABULARY_QUIZ_COUNT) {
       setErrorInfo({
@@ -126,10 +130,12 @@ const VocabularyQuizPage = () => {
       wordList.length >= VOCABULARY_QUIZ_COUNT
         ? VOCABULARY_QUIZ_COUNT
         : wordList.length;
+    // 問題インデックスリスト
     const questionIndexList: number[] = [];
+    // 回答リスト
     const answersList: string[][] = [];
-    const correctAnswerList: { id: string; word: string; meaning: string }[] =
-      [];
+    // 正解リスト
+    const correctAnswerList: Answer[] = [];
 
     let questionCount = 0;
 
@@ -139,14 +145,14 @@ const VocabularyQuizPage = () => {
 
       const randomWordIndex = Math.floor(Math.random() * wordList.length);
       if (questionIndexList.includes(randomWordIndex)) continue;
-      const { id, word, meanings } = wordList[randomWordIndex];
+      const { id, word, pronunciation, meanings } = wordList[randomWordIndex];
       const randomMeaningIndex = Math.floor(Math.random() * meanings.length);
       const { meaning } = meanings[randomMeaningIndex];
 
       questionIndexList.push(randomWordIndex);
       answerIndexList.push(randomWordIndex);
       tempAnswerList.push(meaning);
-      correctAnswerList.push({ id, word, meaning });
+      correctAnswerList.push({ id, word, pronunciation, meaning });
 
       questionCount++;
 
@@ -263,7 +269,7 @@ const VocabularyQuizPage = () => {
             show={showResult}
             correctAnswerList={correctAnswerList}
             moveToWordListPage={moveToWordListPage}
-            showModalHandler={showModalHandler}
+            showQuizSelect={showQuizSelect}
           />
         </>
       )}

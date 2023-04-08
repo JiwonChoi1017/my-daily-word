@@ -1,44 +1,51 @@
+import Card from "@/components/ui/Card";
+import WordList from "@/components/word/WordList";
+import { Answer } from "@/types/Quiz";
 import React from "react";
+import classes from "../../layout/Button.module.css";
+import Button from "../../layout/Button";
 
+/**
+ * 単語クイズ結果.
+ *
+ * @param {boolean} show - 表示するか.
+ * @param {Answer[]} correctAnswerList - 正解リスト.
+ * @param {function} moveToWordListPage - 単語リストへ移動.
+ * @param {function} showQuizSelect - クイズセレクトを表示.
+ * @returns {JSX.Element} 単語クイズ結果.
+ */
 const VocabularyQuizResult: React.FC<{
   show: boolean;
-  correctAnswerList: { id: string; word: string; meaning: string }[];
+  correctAnswerList: Answer[];
   moveToWordListPage: () => void;
-  showModalHandler: () => void;
-}> = ({ show, correctAnswerList, moveToWordListPage, showModalHandler }) => {
-  const correctAnswerListHtml = (
-    <div>
-      <ul>
-        {correctAnswerList.map((answer) => {
-          return (
-            <li key={answer.id}>
-              <p>{answer.word}</p>
-              <p>{answer.meaning}</p>
-            </li>
-          );
-        })}
-      </ul>
+  showQuizSelect: () => void;
+}> = ({ show, correctAnswerList, moveToWordListPage, showQuizSelect }) => {
+  // ボタン要素
+  const buttonElement = (
+    <div className={classes.button__wrap}>
+      <Button
+        className={`${classes.button}`}
+        text={"単語リストへ"}
+        clickHandler={moveToWordListPage}
+      />
+      <Button
+        className={`${classes.button}`}
+        text={"次に進む"}
+        clickHandler={showQuizSelect}
+      />
     </div>
   );
-
-  const buttonHtml = (
-    <div>
-      <button onClick={moveToWordListPage}>単語リストへ</button>
-      <button onClick={showModalHandler}>次に進む</button>
-    </div>
-  );
-
-  const resultHtml = show ? (
-    <div>
-      <h2>Quiz Result</h2>
-      {correctAnswerListHtml}
-      {buttonHtml}
-    </div>
+  // 結果要素
+  const resultElement = show ? (
+    <Card>
+      <WordList wordList={correctAnswerList} />
+      {buttonElement}
+    </Card>
   ) : (
     <></>
   );
 
-  return resultHtml;
+  return resultElement;
 };
 
 export default VocabularyQuizResult;
