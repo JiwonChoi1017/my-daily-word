@@ -32,3 +32,13 @@
 .dropdown__list span {
   margin-left: 10px;
 }
+
+.correctAnswerIcon {
+  margin-left: 10px;
+  color: #28d97eeb;
+}
+
+.wrongAnswerIcon {
+  margin-left: 10px;
+  color: #ea142ddc;
+}

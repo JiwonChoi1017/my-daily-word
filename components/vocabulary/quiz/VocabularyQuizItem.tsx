@@ -1,13 +1,26 @@
+import Card from "@/components/ui/Card";
+import { CheckAnswerIcon } from "@/components/ui/Icon";
 import { QUIZ_KIND } from "@/constants/quizConstans";
-import { QuizKind } from "@/types/Quiz";
+import { Answer, QuizKind } from "@/types/Quiz";
 import React, { useState } from "react";
 
+/**
+ * 単語クイズアイテム.
+ *
+ * @param {boolean} show - 表示するか.
+ * @param {QuizKind} quizKind - クイズ種別.
+ * @param {number} currentQuizIndex - 現在のクイズインデックス.
+ * @param {string[][]} answersList - 回答リスト.
+ * @param {Answer[]} correctAnswerList - 正解リスト.
+ * @param {function} checkAnswer - 回答をチェック.
+ * @returns {JSX.Element} 単語クイズアイテム.
+ */
 const VocabularyQuizItem: React.FC<{
   show: boolean;
   quizKind: QuizKind;
   currentQuizIndex: number;
   answersList: string[][];
-  correctAnswerList: { id: string; word: string; meaning: string }[];
+  correctAnswerList: Answer[];
   checkAnswer: (answer: string) => void;
 }> = ({
   show,
@@ -50,13 +63,13 @@ const VocabularyQuizItem: React.FC<{
   const answerList = answersList[currentQuizIndex];
 
   return (
-    <div>
+    <Card>
       <h2>{question}</h2>
       <ul>
         {answerList.map((answer, index) => {
           const newIndex = index + 1;
           return (
-            <li key={newIndex}>
+            <li key={newIndex} className="marginBottom15 alignItemsCenter">
               <input
                 type="checkbox"
                 value={answer}
@@ -67,13 +80,16 @@ const VocabularyQuizItem: React.FC<{
               />
               {answer}
               {showIcon && checkedValue === newIndex && (
-                <div>{answer === correctAnswer ? "correct" : "wrong"}</div>
+                <CheckAnswerIcon
+                  checkedAnswer={answer}
+                  correctAnswer={correctAnswer}
+                />
               )}
             </li>
           );
         })}
       </ul>
-    </div>
+    </Card>
   );
 };
 
