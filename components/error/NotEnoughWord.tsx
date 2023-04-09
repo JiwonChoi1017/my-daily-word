@@ -1,7 +1,7 @@
 import Card from "../ui/Card";
 import React from "react";
 import classes from "../ui/Button.module.css";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 import { useRouter } from "next/router";
 import { ErrorInfo } from "@/types/Error";
 

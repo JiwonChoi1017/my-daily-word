@@ -3,7 +3,7 @@ import { ErrorInfo } from "@/types/Error";
 import React from "react";
 import Card from "../ui/Card";
 import classes from "../../components/ui/Button.module.css";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 import { useRouter } from "next/router";
 
 /**

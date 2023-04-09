@@ -13,7 +13,7 @@ import {
 import { db } from "@/firebase-config";
 import { Book, Word } from "@/types/Vocabulary";
 import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/router";
 import classes from "@/components/ui/Button.module.css";
 import { v4 as uuidv4 } from "uuid";

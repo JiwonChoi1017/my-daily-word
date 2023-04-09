@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 import { ErrorInfo } from "@/types/Error";
 
 /**
@@ -91,7 +91,12 @@ const SignInForm = () => {
           onChange={onChangeInputHandler}
         />
       </div>
-      <Button text="ログイン" isSubmit={true} isDisabled={isDisabled} />
+      <Button
+        text="ログイン"
+        className="first"
+        isSubmit={true}
+        isDisabled={isDisabled}
+      />
       <Button
         text="新規登録"
         className="second"

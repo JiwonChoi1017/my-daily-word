@@ -1,3 +1,4 @@
+import { Button, DoubleButton } from "@/components/ui/Button";
 import InputForm from "@/components/ui/InputForm";
 import { Book } from "@/types/Vocabulary";
 import React, { useRef } from "react";
@@ -7,11 +8,15 @@ import classes from "../../../../styles/InputForm.module.css";
  * 単語帳フォーム.
  *
  * @param {function} addBook - 単語帳追加イベント.
+ * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
+ * @param {function} onClickCancelButton - 前のページへ戻るイベント.
  * @returns {JSX.Element} 単語帳フォーム.
  */
 const VocabularyBookForm: React.FC<{
   addBook: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
-}> = ({ addBook }) => {
+  showCancelButton: boolean;
+  onClickCancelButton: () => void;
+}> = ({ addBook, showCancelButton, onClickCancelButton }) => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -51,6 +56,25 @@ const VocabularyBookForm: React.FC<{
       isFavorite: false,
     });
   };
+  // ボタン要素
+  const buttonElement = showCancelButton ? (
+    <DoubleButton
+      button={{
+        first: {
+          className: "second__double",
+          text: "キャンセル",
+          clickHandler: onClickCancelButton,
+        },
+        second: {
+          className: "first__double",
+          text: "単語帳を追加",
+          isSubmit: true,
+        },
+      }}
+    />
+  ) : (
+    <Button text="単語帳を追加" className="first" isSubmit={true} />
+  );
 
   return (
     <InputForm>
@@ -98,7 +122,7 @@ const VocabularyBookForm: React.FC<{
               required
             />
           </div>
-          <button className="first">単語帳を追加</button>
+          {buttonElement}
         </form>
       </div>
     </InputForm>
