@@ -6,6 +6,7 @@ import {
   FaRegBookmark,
   FaCheck,
   FaTimes,
+  FaAngleLeft,
 } from "react-icons/fa";
 import classes from "./Icon.module.css";
 
@@ -113,6 +114,15 @@ export const WordIcon: React.FC<{
       />
     </div>
   );
+};
+
+/**
+ * 前のページへ戻るアイコン.
+ *
+ * @returns {JSX.Element} 前のページへ戻るアイコン.
+ */
+export const GoBackIcon = () => {
+  return <FaAngleLeft className={classes.goBackIcon} />;
 };
 
 /**
