@@ -13,9 +13,9 @@ import {
 import { db } from "@/firebase-config";
 import { Book, Word } from "@/types/Vocabulary";
 import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
-import Button from "@/components/layout/Button";
+import Button from "@/components/ui/Button";
 import { useRouter } from "next/router";
-import classes from "@/components/layout/Button.module.css";
+import classes from "@/components/ui/Button.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";

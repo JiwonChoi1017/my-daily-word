@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
-import Button from "../layout/Button";
+import Button from "../ui/Button";
 import { ErrorInfo } from "@/types/Error";
 
 /**

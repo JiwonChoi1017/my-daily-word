@@ -1,7 +1,7 @@
 import Card from "@/components/ui/Card";
 import React from "react";
-import classes from "../../layout/Button.module.css";
-import Button from "../../layout/Button";
+import classes from "../../ui/Button.module.css";
+import Button from "../../ui/Button";
 
 /**
  * クイズ選択.

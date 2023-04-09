@@ -100,7 +100,7 @@ const VocabularyWordDetailPage = () => {
   }, [currentUser, bookId, wordId]);
 
   return (
-    <MainLayout>
+    <MainLayout showQuiz={true} showWordList={true} bookId={bookId as string}>
       <VocabularyWordDetail
         isLoading={isLoading}
         bookId={bookId as string}
