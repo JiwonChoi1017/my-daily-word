@@ -154,7 +154,7 @@ const VocabularyWordListPage = () => {
   }, [currentUser, id]);
 
   return (
-    <MainLayout>
+    <MainLayout showQuiz={true} bookId={bookId}>
       {/* 単語リスト */}
       <VocabularyWordList
         bookId={bookId}
