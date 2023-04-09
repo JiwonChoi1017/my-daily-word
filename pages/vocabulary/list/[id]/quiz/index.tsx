@@ -247,7 +247,7 @@ const VocabularyQuizPage = () => {
   };
 
   return (
-    <MainLayout showQuiz={true} bookId={id as string}>
+    <MainLayout showQuiz={true} showWordList={true} bookId={id as string}>
       {errorInfo.code === ERROR_STATUS.NOT_ENOUGH_WORD ? (
         <NotEnoughWord errorInfo={errorInfo} bookId={id as string} />
       ) : (

@@ -9,15 +9,17 @@ import { FaUser } from "react-icons/fa";
  * ヘッダー.
  *
  * @param {boolean} showNavigation - ナビゲーションを表示するか.
+ * @param {boolean} showWordList - 単語リストを表示するか.
  * @param {boolean} showQuiz - クイズを表示するか.
  * @param {string} bookId - 単語帳id.
  * @returns {JSX.Element} ヘッダー.
  */
 const Header: React.FC<{
   showNavigation: boolean;
+  showWordList: boolean;
   showQuiz: boolean;
   bookId: string;
-}> = ({ showNavigation, showQuiz, bookId }) => {
+}> = ({ showNavigation, showWordList, showQuiz, bookId }) => {
   const [currentDate, setCurrentDate] = useState<string>("");
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
@@ -67,6 +69,11 @@ const Header: React.FC<{
         <li>
           <Link href="/vocabulary/list?page=1">単語帳リスト</Link>
         </li>
+        {showWordList && bookId && (
+          <li>
+            <Link href={`/vocabulary/list/${bookId}?page=1`}>単語リスト</Link>
+          </li>
+        )}
         {showQuiz && bookId && (
           <li>
             <Link href={`/vocabulary/list/${bookId}/quiz`}>クイズ</Link>

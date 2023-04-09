@@ -43,7 +43,7 @@ const VocabularyWordFormPage = () => {
   };
 
   return (
-    <MainLayout showQuiz={true} bookId={bookId as string}>
+    <MainLayout showQuiz={true} showWordList={true} bookId={bookId as string}>
       <VocabularyWordForm addWord={addWord} />
     </MainLayout>
   );

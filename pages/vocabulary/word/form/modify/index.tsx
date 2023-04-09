@@ -85,7 +85,7 @@ const VocabularyWordModifyFormPage = () => {
   }, [currentUser, bookId, wordId]);
 
   return (
-    <MainLayout showQuiz={true} bookId={bookId}>
+    <MainLayout showQuiz={true} showWordList={true} bookId={bookId}>
       <VocabularyWordModifyForm wordInfo={word} updateWord={updateWord} />
     </MainLayout>
   );
