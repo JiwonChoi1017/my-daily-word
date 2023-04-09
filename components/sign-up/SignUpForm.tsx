@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { useRouter } from "next/router";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 import { AuthErrorCodes } from "firebase/auth";
 import { ErrorInfo } from "@/types/Error";
 
@@ -108,7 +108,12 @@ const SignUpForm = () => {
         />
         {passwordErrorMsg}
       </div>
-      <Button text="登録する" isSubmit={true} isDisabled={isDisabled} />
+      <Button
+        text="登録する"
+        className="first"
+        isSubmit={true}
+        isDisabled={isDisabled}
+      />
       <Button
         text="キャンセル"
         className="second"

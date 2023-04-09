@@ -1,3 +1,4 @@
+import { Button, DoubleButton } from "@/components/ui/Button";
 import InputForm from "@/components/ui/InputForm";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
@@ -6,11 +7,15 @@ import React, { useEffect, useRef, useState } from "react";
  * 単語フォーム.
  *
  * @param {function} addWord - 単語追加イベント.
+ * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
+ * @param {function} onClickCancelButton - 前のページへ戻るイベント.
  * @returns {JSX.Element} 単語フォーム.
  */
 const VocabularyWordForm: React.FC<{
   addWord: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
-}> = ({ addWord }) => {
+  showCancelButton: boolean;
+  onClickCancelButton: () => void;
+}> = ({ addWord, showCancelButton, onClickCancelButton }) => {
   // 意味状態
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
@@ -175,6 +180,25 @@ const VocabularyWordForm: React.FC<{
       createdAt: `${currentDateString}${currentTimeString}`,
     });
   };
+  // ボタン要素
+  const buttonElement = showCancelButton ? (
+    <DoubleButton
+      button={{
+        first: {
+          className: "second__double",
+          text: "キャンセル",
+          clickHandler: onClickCancelButton,
+        },
+        second: {
+          className: "first__double",
+          text: "単語を追加",
+          isSubmit: true,
+        },
+      }}
+    />
+  ) : (
+    <Button text="単語を追加" className="first" isSubmit={true} />
+  );
 
   return (
     <InputForm>
@@ -203,7 +227,7 @@ const VocabularyWordForm: React.FC<{
             意味を追加
           </div>
         </div>
-        <button className="first">単語を追加</button>
+        {buttonElement}
       </form>
     </InputForm>
   );
