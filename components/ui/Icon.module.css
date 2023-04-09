@@ -33,6 +33,11 @@
   margin-left: 10px;
 }
 
+.goBackIcon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
 .correctAnswerIcon {
   margin-left: 10px;
   color: #28d97eeb;

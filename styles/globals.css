@@ -118,6 +118,11 @@ ul {
   text-align: center;
 }
 
+.link {
+  color: #322a27;
+  text-decoration: none;
+}
+
 .errorMsg {
   color: red;
   font-size: 14px;
