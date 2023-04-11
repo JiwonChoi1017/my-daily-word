@@ -7,7 +7,7 @@ import { get, ref, update } from "firebase/database";
 import { db } from "@/firebase-config";
 import { Word } from "@/types/Vocabulary";
 import VocabularyQuizItem from "@/components/vocabulary/quiz/VocabularyQuizItem";
-import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstans";
+import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstants";
 import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizResult";
 import { Answer, QuizKind } from "@/types/Quiz";
 import { ErrorInfo } from "@/types/Error";

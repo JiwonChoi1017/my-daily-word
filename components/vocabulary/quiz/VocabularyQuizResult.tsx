@@ -2,7 +2,7 @@ import Card from "@/components/ui/Card";
 import WordList from "@/components/word/WordList";
 import { Answer } from "@/types/Quiz";
 import React from "react";
-import classes from "../../ui/Button.module.css";
+import classes from "../../../styles/Button.module.css";
 import { Button } from "../../ui/Button";
 
 /**
@@ -24,12 +24,12 @@ const VocabularyQuizResult: React.FC<{
   const buttonElement = (
     <div className={classes.button__wrap}>
       <Button
-        className={`${classes.button}`}
+        className="button"
         text={"単語リストへ"}
         clickHandler={moveToWordListPage}
       />
       <Button
-        className={`${classes.button}`}
+        className="button"
         text={"次に進む"}
         clickHandler={showQuizSelect}
       />

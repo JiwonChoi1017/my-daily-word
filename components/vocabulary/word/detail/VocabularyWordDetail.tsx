@@ -43,12 +43,13 @@ const VocabularyWordDetail: React.FC<{
   };
   // 前のページへ戻るリンク要素
   const goBackLinkElement = !isLoading && (
-    <div className="alignItemsCenter">
+    <Link
+      href={`/vocabulary/list/${bookId}?page=1`}
+      className="alignItemsCenter link"
+    >
       <GoBackIcon />
-      <Link href={`/vocabulary/list/${bookId}?page=1`} className="link">
-        単語リストへ戻る
-      </Link>
-    </div>
+      単語リストへ戻る
+    </Link>
   );
   // 意味リスト
   const meaningList = meanings.map((meaning, index) => {

@@ -1,6 +1,6 @@
 import Card from "@/components/ui/Card";
 import React from "react";
-import classes from "../../ui/Button.module.css";
+import classes from "../../../styles/Button.module.css";
 import { Button } from "../../ui/Button";
 
 /**
@@ -17,15 +17,11 @@ const VocabularyQuizSelect: React.FC<{
   fetchQuizMeaning: () => void;
 }> = ({ show, fetchQuizWord, fetchQuizMeaning }) => {
   return show ? (
-    <Card className={"textAlignCenter"}>
+    <Card className="textAlignCenter">
       <div className={classes.button__wrap}>
+        <Button className="button" text={"単語"} clickHandler={fetchQuizWord} />
         <Button
-          className={`${classes.button}`}
-          text={"単語"}
-          clickHandler={fetchQuizWord}
-        />
-        <Button
-          className={`${classes.button} marginTop20`}
+          className="button"
           text={"意味"}
           clickHandler={fetchQuizMeaning}
         />

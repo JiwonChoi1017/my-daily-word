@@ -101,12 +101,16 @@ ul {
   margin-bottom: 15px !important;
 }
 
+.marginBottom20 {
+  margin-bottom: 20px !important;
+}
+
 .displayInlineBlock {
   display: inline;
 }
 
 .alignItemsCenter {
-  display: flex;
+  display: flex !important;
   align-items: center;
 }
 
