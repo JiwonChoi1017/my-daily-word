@@ -2,7 +2,7 @@ import { ERROR_STATUS } from "@/constants/constants";
 import { ErrorInfo } from "@/types/Error";
 import React from "react";
 import Card from "../ui/Card";
-import classes from "../../components/ui/Button.module.css";
+import classes from "../../styles/Button.module.css";
 import { Button } from "../ui/Button";
 import { useRouter } from "next/router";
 
@@ -25,7 +25,7 @@ const NotFound: React.FC<{ errorInfo: ErrorInfo }> = ({ errorInfo }) => {
     status === ERROR_STATUS.NOT_FOUND_BOOK ? (
       <div className={classes.button__wrap}>
         <Button
-          className={`${classes.button} marginTop20`}
+          className="button"
           text={"単語帳を追加"}
           clickHandler={moveToVocabularyBookForm}
         />
@@ -42,7 +42,7 @@ const NotFound: React.FC<{ errorInfo: ErrorInfo }> = ({ errorInfo }) => {
     status === ERROR_STATUS.NOT_FOUND_WORD ? (
       <div className={classes.button__wrap}>
         <Button
-          className={`${classes.button} marginTop20`}
+          className="button"
           text={"単語帳リストへ移動"}
           clickHandler={moveToVocabularyBookList}
         />
@@ -53,7 +53,10 @@ const NotFound: React.FC<{ errorInfo: ErrorInfo }> = ({ errorInfo }) => {
 
   return (
     <Card isError={true}>
-      <div dangerouslySetInnerHTML={{ __html: message }}></div>
+      <div
+        className="marginBottom20"
+        dangerouslySetInnerHTML={{ __html: message }}
+      ></div>
       {bookFormButton}
       {bookListButton}
     </Card>

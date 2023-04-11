@@ -35,7 +35,7 @@ const VocabularyBookFormPage = ({ referer }: Props) => {
     const { href } = location;
     // 遷移元と現在のURLが一致しない場合、trueをセット
     setShowCancelButton(referer !== href);
-  }, []);
+  }, [referer]);
 
   // 単語帳追加イベント
   const addBook = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
@@ -57,7 +57,8 @@ const VocabularyBookFormPage = ({ referer }: Props) => {
     });
   };
   // 前のページへ戻る
-  const goBackPreviousPage = () => {
+  const goBackPreviousPage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     router.back();
   };
 

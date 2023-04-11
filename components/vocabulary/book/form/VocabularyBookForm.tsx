@@ -1,7 +1,7 @@
 import { Button, DoubleButton } from "@/components/ui/Button";
 import InputForm from "@/components/ui/InputForm";
 import { Book } from "@/types/Vocabulary";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import classes from "../../../../styles/InputForm.module.css";
 
 /**
@@ -15,13 +15,15 @@ import classes from "../../../../styles/InputForm.module.css";
 const VocabularyBookForm: React.FC<{
   addBook: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
   showCancelButton: boolean;
-  onClickCancelButton: () => void;
+  onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }> = ({ addBook, showCancelButton, onClickCancelButton }) => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const wordRef = useRef<HTMLSelectElement>(null);
   const meaningRef = useRef<HTMLSelectElement>(null);
+  // 活性/非活性状態
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   // 送信イベントハンドラ
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +58,23 @@ const VocabularyBookForm: React.FC<{
       isFavorite: false,
     });
   };
+  // 入力変更イベントハンドラ
+  const onChangeInputHandler = () => {
+    if (
+      !titleRef.current ||
+      !descriptionRef.current ||
+      !wordRef.current ||
+      !meaningRef.current
+    ) {
+      return;
+    }
+    const title = titleRef.current.value;
+    const description = descriptionRef.current.value;
+    const word = wordRef.current.value;
+    const meaning = meaningRef.current.value;
+    // 活性/非活性状態を更新
+    setIsDisabled(!title || !description || !word || !meaning);
+  };
   // ボタン要素
   const buttonElement = showCancelButton ? (
     <DoubleButton
@@ -69,11 +88,17 @@ const VocabularyBookForm: React.FC<{
           className: "first__double",
           text: "単語帳を追加",
           isSubmit: true,
+          isDisabled,
         },
       }}
     />
   ) : (
-    <Button text="単語帳を追加" className="first" isSubmit={true} />
+    <Button
+      className="first"
+      text="単語帳を追加"
+      isSubmit={true}
+      isDisabled={isDisabled}
+    />
   );
 
   return (
@@ -91,13 +116,14 @@ const VocabularyBookForm: React.FC<{
               type="text"
               id="title"
               maxLength={100}
-              required
+              onChange={onChangeInputHandler}
             />
           </div>
           <div>
             <label htmlFor="word">原文の言語</label>
             <div className={classes.selectbox}>
-              <select ref={wordRef} id="word" required>
+              <select ref={wordRef} id="word" onChange={onChangeInputHandler}>
+                <option value="">選択してください</option>
                 <option value="japanese">日本語</option>
                 <option value="korean">韓国語</option>
               </select>
@@ -106,7 +132,12 @@ const VocabularyBookForm: React.FC<{
           <div>
             <label htmlFor="meaning">訳文の言語</label>
             <div className={classes.selectbox}>
-              <select ref={meaningRef} id="meaning" required>
+              <select
+                ref={meaningRef}
+                id="meaning"
+                onChange={onChangeInputHandler}
+              >
+                <option value="">選択してください</option>
                 <option value="japanese">日本語</option>
                 <option value="korean">韓国語</option>
               </select>
@@ -119,7 +150,7 @@ const VocabularyBookForm: React.FC<{
               id="description"
               rows={10}
               maxLength={1000}
-              required
+              onChange={onChangeInputHandler}
             />
           </div>
           {buttonElement}

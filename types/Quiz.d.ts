@@ -1,4 +1,4 @@
-import { QUIZ_KIND } from "@/constants/quizConstans";
+import { QUIZ_KIND } from "@/constants/quizConstants";
 
 /** クイズ種別. */
 export type QuizKind = keyof typeof QUIZ_KIND;

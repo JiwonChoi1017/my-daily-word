@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Button.module.css";
+import classes from "../../styles/Button.module.css";
 
 /** Props. */
 interface Props {
@@ -9,8 +9,10 @@ interface Props {
   className: string;
   /** (任意)送信ボタンか. */
   isSubmit?: boolean;
+  /** (任意)非活性状態か. */
+  isDisabled?: boolean;
   /** （任意）クリックイベントハンドラ. */
-  clickHandler?: () => void;
+  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 /**
@@ -28,7 +30,7 @@ export const Button: React.FC<{
   text: string;
   isSubmit?: boolean;
   isDisabled?: boolean;
-  clickHandler?: () => void;
+  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }> = ({
   className,
   text,
@@ -38,11 +40,17 @@ export const Button: React.FC<{
 }) => {
   // ボタン
   const button = isSubmit ? (
-    <button type="submit" className={className} disabled={isDisabled}>
+    <button type="submit" className={classes[className]} disabled={isDisabled}>
       {text}
     </button>
   ) : (
-    <button className={className} onClick={clickHandler}>
+    <button
+      className={classes[className]}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        if (!clickHandler) return;
+        clickHandler(e);
+      }}
+    >
       {text}
     </button>
   );
@@ -68,15 +76,17 @@ export const DoubleButton: React.FC<{
   return (
     <div className={classes.button__wrap}>
       <Button
-        className={classes[first.className]}
+        className={first.className}
         text={first.text}
         isSubmit={first.isSubmit}
+        isDisabled={first.isDisabled}
         clickHandler={first.clickHandler}
       />
       <Button
-        className={classes[second.className]}
+        className={second.className}
         text={second.text}
         isSubmit={second.isSubmit}
+        isDisabled={second.isDisabled}
         clickHandler={second.clickHandler}
       />
     </div>

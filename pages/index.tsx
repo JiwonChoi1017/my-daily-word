@@ -15,7 +15,7 @@ import { Book, Word } from "@/types/Vocabulary";
 import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/router";
-import classes from "@/components/ui/Button.module.css";
+import classes from "@/styles/Button.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";
@@ -182,12 +182,12 @@ export default function Home() {
           {!isLoading && (
             <div className={classes.button__wrap}>
               <Button
-                className={classes.button}
+                className="button"
                 text={`「${bookTitle}」単語帳へ`}
                 clickHandler={moveToVocabularyWordList}
               />
               <Button
-                className={classes.button}
+                className="button"
                 text={`単語帳リストへ`}
                 clickHandler={moveToVocabularyBookList}
               />

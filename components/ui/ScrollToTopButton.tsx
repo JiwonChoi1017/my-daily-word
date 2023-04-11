@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import classes from "./ScrollToTopButton.module.css";
+import classes from "../../styles/ScrollToTopButton.module.css";
 import { FaAngleUp } from "react-icons/fa";
 
 /**

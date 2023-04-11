@@ -8,7 +8,7 @@ import {
   FaTimes,
   FaAngleLeft,
 } from "react-icons/fa";
-import classes from "./Icon.module.css";
+import classes from "../../styles/Icon.module.css";
 
 /**
  * 暗記フラグ.
@@ -114,6 +114,15 @@ export const WordIcon: React.FC<{
       />
     </div>
   );
+};
+
+/**
+ * 任意アイコン.
+ *
+ * @returns {JSX.Element} 任意アイコン.
+ */
+export const OptionalIcon = () => {
+  return <span className={classes.optionalIcon}>任意</span>;
 };
 
 /**

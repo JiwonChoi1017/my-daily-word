@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+// TODO: 単語追加フォームと共通化する予定のため、このファイルにはしばらく手をつけない
 /**
  * 単語修正フォーム画面.
  *
