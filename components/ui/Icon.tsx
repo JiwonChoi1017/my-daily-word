@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AiOutlineMore, AiFillDelete } from "react-icons/ai";
 import {
   FaPen,
+  FaHeart,
+  FaRegHeart,
   FaBookmark,
   FaRegBookmark,
   FaCheck,
@@ -9,6 +11,30 @@ import {
   FaAngleLeft,
 } from "react-icons/fa";
 import classes from "../../styles/Icon.module.css";
+
+/**
+ * お気に入りアイコン.
+ *
+ * @param {boolean} isFavorite - お気に入りか.
+ * @param {function} onClickFavoriteIconHandler - お気に入りアイコンクリックイベントハンドラ.
+ * @returns {JSX.Element} お気に入りアイコン.
+ */
+export const FavoriteIcon: React.FC<{
+  isFavorite: boolean;
+  onClickFavoriteIconHandler: () => void;
+}> = ({ isFavorite, onClickFavoriteIconHandler }) => {
+  return isFavorite ? (
+    <FaHeart
+      className={classes.favoriteIcon}
+      onClick={onClickFavoriteIconHandler}
+    />
+  ) : (
+    <FaRegHeart
+      className={classes.favoriteIcon}
+      onClick={onClickFavoriteIconHandler}
+    />
+  );
+};
 
 /**
  * 暗記フラグ.
@@ -79,6 +105,40 @@ export const DropDownIcon: React.FC<{
         </ul>
       )}
     </>
+  );
+};
+
+/**
+ * 単語帳関連のアイコン.
+ *
+ * @param {boolean} isFavorite - お気に入りか.
+ * @param {function} onClickFavoriteIconHandler - お気に入りアイコンクリックイベントハンドラ.
+ * @param {function} onClickModifyLinkHandler - 修正リンククリックイベントハンドラ.
+ * @param {function} onClickDeleteLinkHandler - 削除リンククリックイベントハンドラ.
+ * @returns {JSX.Element} 単語帳連のアイコン.
+ */
+export const BookIcon: React.FC<{
+  isFavorite: boolean;
+  onClickFavoriteIconHandler: () => void;
+  onClickModifyLinkHandler: () => void;
+  onClickDeleteLinkHandler: () => void;
+}> = ({
+  isFavorite,
+  onClickFavoriteIconHandler,
+  onClickModifyLinkHandler,
+  onClickDeleteLinkHandler,
+}) => {
+  return (
+    <div className={`${classes.bookIconWrap} _ignoreClick`}>
+      <FavoriteIcon
+        isFavorite={isFavorite}
+        onClickFavoriteIconHandler={onClickFavoriteIconHandler}
+      />
+      <DropDownIcon
+        onClickModifyLinkHandler={onClickModifyLinkHandler}
+        onClickDeleteLinkHandler={onClickDeleteLinkHandler}
+      />
+    </div>
   );
 };
 

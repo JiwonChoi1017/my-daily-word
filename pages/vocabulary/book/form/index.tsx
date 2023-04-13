@@ -6,22 +6,39 @@ import { useRouter } from "next/router";
 import { Book } from "@/types/Vocabulary";
 import { AuthContext } from "@/context/auth/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
-import { ref, push } from "firebase/database";
+import { ref, push, get, update } from "firebase/database";
 import { GetServerSideProps } from "next";
+import { ParsedUrlQuery } from "querystring";
 
 /** Props. */
 interface Props {
   /** (任意)遷移元. */
   referer?: string;
+  /** (任意)クエリ. */
+  query?: ParsedUrlQuery;
 }
 
 /**
  * 単語帳フォーム画面.
  *
  * @param referer - (任意)遷移元.
+ * @param query - (任意)クエリ.
  * @returns {JSX.Element} 単語帳フォーム画面.
  */
-const VocabularyBookFormPage = ({ referer }: Props) => {
+const VocabularyBookFormPage = ({ referer, query }: Props) => {
+  // 単語帳id
+  const [bookId, setBookId] = useState<string>("");
+  // 単語帳
+  const [book, setBook] = useState<Book>({
+    id: "",
+    title: "",
+    word: "",
+    meaning: "",
+    description: "",
+    createdAt: "",
+    modifiedAt: "",
+    isFavorite: false,
+  });
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
   // 現在のユーザ
@@ -30,12 +47,55 @@ const VocabularyBookFormPage = ({ referer }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    const { location } = window;
+    if (!referer) {
+      return;
+    }
     // 現在のURL
-    const { href } = location;
+    const { origin, pathname } = location;
+    const currentUrl = `${origin}${pathname}`;
     // 遷移元と現在のURLが一致しない場合、trueをセット
-    setShowCancelButton(referer !== href);
-  }, [referer]);
+    setShowCancelButton(referer !== currentUrl);
+
+    if (!query) {
+      return;
+    }
+    // クエリから単語帳idを取得
+    const { bookId } = query;
+
+    if (!bookId || typeof bookId !== "string") {
+      return;
+    }
+
+    setBookId(bookId);
+
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
+      return;
+    }
+
+    const path = `users/${userId}/${bookId}`;
+    const bookRef = ref(db, path);
+    // 単語帳を取得
+    const fetchBook = async () => {
+      await get(bookRef)
+        .then((response) => {
+          return response.val();
+        })
+        .then((value) => {
+          setBook({
+            id: bookId,
+            ...value,
+          });
+        });
+      // TODO: 例外処理追加
+    };
+    fetchBook();
+  }, [currentUser]);
 
   // 単語帳追加イベント
   const addBook = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
@@ -56,6 +116,33 @@ const VocabularyBookFormPage = ({ referer }: Props) => {
       router.push("/vocabulary/list?page=1");
     });
   };
+  // 単語更新イベント
+  const updateBook = async (bookInfo: Book) => {
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
+      return;
+    }
+
+    const { title, description, word, meaning, modifiedAt } = bookInfo;
+    const path = `users/${userId}/${bookId}`;
+    const bookRef = ref(db, path);
+
+    await update(bookRef, {
+      title,
+      description,
+      word,
+      meaning,
+      modifiedAt,
+    }).then(() => {
+      router.push("/vocabulary/list?page=1");
+    });
+    // TODO: 例外処理追加
+  };
   // 前のページへ戻る
   const goBackPreviousPage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -65,7 +152,10 @@ const VocabularyBookFormPage = ({ referer }: Props) => {
   return (
     <MainLayout>
       <VocabularyBookForm
+        isModifyForm={!!bookId}
+        bookInfo={book}
         addBook={addBook}
+        updateBook={updateBook}
         showCancelButton={showCancelButton}
         onClickCancelButton={goBackPreviousPage}
       />
@@ -79,8 +169,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   // contextから遷移元の情報を取得
   const referer = context.req.headers.referer;
+  const query = context.query;
 
-  return { props: { referer } };
+  return { props: { referer, query } };
 };
 
 export default VocabularyBookFormPage;

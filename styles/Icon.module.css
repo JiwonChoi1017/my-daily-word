@@ -1,3 +1,9 @@
+.favoriteIcon {
+  font-size: 24px;
+  color: #f1456ab7;
+  cursor: pointer;
+}
+
 .bookmarkIcon {
   margin-left: 20px;
   color: #2831d9b7;
@@ -10,6 +16,7 @@
   cursor: pointer;
 }
 
+.bookIconWrap,
 .wordIconWrap {
   font-size: 24px;
   float: right;

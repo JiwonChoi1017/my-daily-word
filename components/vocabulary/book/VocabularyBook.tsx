@@ -1,10 +1,9 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Card from "@/components/ui/Card";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { Book } from "@/types/Vocabulary";
+import { BookIcon } from "@/components/ui/Icon";
 
-// TODO: 修正・削除機能も実装
 /**
  * 単語帳.
  *
@@ -29,15 +28,13 @@ const VocabularyBook: React.FC<{
   const onClickFavoriteIconHandler = () => {
     toggleFavoriteState({ ...bookInfo, isFavorite: !isFavorite });
   };
-  // お気に入りアイコン
-  const favoriteIcon = (
-    <div
-      className="favoriteIcon _ignoreClick"
-      onClick={onClickFavoriteIconHandler}
-    >
-      {isFavorite ? <FaHeart /> : <FaRegHeart />}
-    </div>
-  );
+  // 単語帳修正フォームへ遷移
+  const moveToBookModifyForm = () => {
+    router.push({
+      pathname: "/vocabulary/book/form/",
+      query: { bookId: id },
+    });
+  };
 
   return (
     <Card clickHandler={clickBookHandler}>
@@ -50,7 +47,15 @@ const VocabularyBook: React.FC<{
         <div className="title__wrap">
           <span className="title">{title}</span>
         </div>
-        {favoriteIcon}
+        <BookIcon
+          isFavorite={isFavorite}
+          onClickFavoriteIconHandler={onClickFavoriteIconHandler}
+          onClickModifyLinkHandler={moveToBookModifyForm}
+          // TODO: 削除機能も実装
+          onClickDeleteLinkHandler={() => {
+            return;
+          }}
+        />
         <p className="description">{description}</p>
       </div>
     </Card>
