@@ -5,21 +5,36 @@ import VocabularyBook from "./VocabularyBook";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
 import NotFoundList from "@/components/error/NotFoundList";
+import InfiniteScroll from "react-infinite-scroller";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
+import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 
 /**
  * 単語帳リスト.
  *
+ * @param {number} currentPage - 現在のページ.
+ * @param {boolean} hasMore - 次に読み込むデータが存在するか.
  * @param {Book[]} bookList - 単語帳リスト.
  * @param {boolean} isLoading - ローディング中か.
+ * @param {function} fetchBookList - 単語帳データを取得.
  * @param {function} toggleFavoriteState - お気に入り状態更新イベント.
  * @returns {JSX.Element} 単語帳リスト.
  */
 const VocabularyBookList: React.FC<{
+  currentPage: number;
+  hasMore: boolean;
   bookList: Book[];
   isLoading: boolean;
+  fetchBookList: (currentPage: number) => void;
   toggleFavoriteState: (bookInfo: Book) => void;
-}> = ({ bookList, isLoading, toggleFavoriteState }) => {
+}> = ({
+  currentPage,
+  hasMore,
+  bookList,
+  isLoading,
+  fetchBookList,
+  toggleFavoriteState,
+}) => {
   // ルーター
   const router = useRouter();
   // 単語帳フォームに遷移
@@ -41,18 +56,35 @@ const VocabularyBookList: React.FC<{
       ) : !bookList.length ? (
         <NotFoundList />
       ) : (
-        <>
-          {bookList.map((book) => {
+        <InfiniteScroll
+          pageStart={currentPage}
+          loadMore={() => {
+            fetchBookList(
+              Math.floor(bookList.length / VOCABULARY_LIST_RESULTS) + 1
+            );
+          }}
+          loader={<Loader key={currentPage} />}
+          hasMore={hasMore}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          scrollabletarget="scrollableDiv"
+        >
+          {bookList.map((book, index) => {
             return (
-              <VocabularyBook
-                key={book.id}
-                bookInfo={book}
-                toggleFavoriteState={toggleFavoriteState}
-              />
+              <div key={book.id}>
+                <VocabularyBook
+                  key={book.id}
+                  bookInfo={book}
+                  toggleFavoriteState={toggleFavoriteState}
+                />
+                {hasMore && index === bookList.length - 1 && (
+                  <div id="scrollableDiv" />
+                )}
+              </div>
             );
           })}
           <ScrollToTopButton />
-        </>
+        </InfiniteScroll>
       )}
     </>
   );
