@@ -6,6 +6,7 @@ import { AuthContext } from "@/context/auth/AuthProvider";
 import { Word } from "@/types/Vocabulary";
 import { db } from "@/firebase-config";
 import {
+  endBefore,
   get,
   limitToLast,
   orderByChild,
@@ -25,9 +26,17 @@ const VocabularyWordListPage = () => {
   // ルーター
   const router = useRouter();
   const { id, page } = router.query;
+  // 現在のページ
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  // 次に読み込むデータが存在するか
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  // 最後のデータ
+  const [endValue, setEndValue] = useState<{ createdAt: string; key: string }>({
+    createdAt: "",
+    key: "",
+  });
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [end, setEnd] = useState<number>(VOCABULARY_LIST_RESULTS);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
   // 現在のユーザ
@@ -45,7 +54,7 @@ const VocabularyWordListPage = () => {
       return;
     }
 
-    const path = `users/${userId}/${id}/words`;
+    const path = `users/${userId}/${bookId}/words`;
     const wordsRef = ref(db, path);
     // TODO: APIを叩く処理を共通化したい
     const fetchWordList = async () => {
@@ -70,6 +79,7 @@ const VocabularyWordListPage = () => {
     };
     fetchWordList();
   };
+
   // 暗記状態を更新
   const toggleMemorizedState = async (wordInfo: Word) => {
     if (!localStorage.getItem("uuid")) {
@@ -78,10 +88,10 @@ const VocabularyWordListPage = () => {
     const localStorageUuid = localStorage.getItem("uuid");
     const userId = currentUser?.uid ?? localStorageUuid;
 
-    if (!userId || typeof id !== "string") return;
+    if (!userId) return;
 
     const { isMemorized } = wordInfo;
-    const path = `users/${userId}/${id}/words/${wordInfo.id}`;
+    const path = `users/${userId}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
@@ -94,8 +104,90 @@ const VocabularyWordListPage = () => {
     });
   };
 
+  // 単語リストを取得
+  const fetchWordist = async (page: number) => {
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
+      return;
+    }
+
+    setHasMore(false);
+    setCurrentPage(page);
+
+    if (!bookId) {
+      setWordList([]);
+      setHasMore(false);
+      setCurrentPage(0);
+      setIsLoading(false);
+      return;
+    }
+
+    const path = `users/${userId}/${bookId}/words`;
+    const wordsRef = ref(db, path);
+    const fetchWordQuery =
+      endValue.createdAt && endValue.key
+        ? query(
+            wordsRef,
+            orderByChild("createdAt"),
+            endBefore(endValue.createdAt, endValue.key),
+            limitToLast(VOCABULARY_LIST_RESULTS)
+          )
+        : query(
+            wordsRef,
+            orderByChild("createdAt"),
+            limitToLast(VOCABULARY_LIST_RESULTS)
+          );
+
+    await get(fetchWordQuery)
+      .then((response) => {
+        return response.val();
+      })
+      .then((value) => {
+        const result: Word[] = [];
+        // ゼロマッチ
+        if (!value) {
+          setWordList([...wordList]);
+          setHasMore(false);
+        } else {
+          for (const key of Object.keys(value).reverse()) {
+            const word: Word = {
+              id: key,
+              ...value[key],
+            };
+            result.push(word);
+          }
+          const { id, createdAt } = result[result.length - 1];
+          setWordList([...wordList, ...result]);
+          setHasMore(result.length >= VOCABULARY_LIST_RESULTS);
+          setEndValue({ createdAt, key: id });
+        }
+        setIsLoading(false);
+
+        router.replace(
+          {
+            pathname: `/vocabulary/list/${bookId}`,
+            query: { page },
+          },
+          undefined,
+          { scroll: false }
+        );
+      });
+  };
+
+  // TODO: 並び順も実装
   useEffect(() => {
-    if (!id) {
+    if (!localStorage.getItem("uuid")) {
+      localStorage.setItem("uuid", uuidv4());
+    }
+    const localStorageUuid = localStorage.getItem("uuid");
+    const userId = currentUser?.uid ?? localStorageUuid;
+
+    if (!userId) {
       return;
     }
 
@@ -107,61 +199,21 @@ const VocabularyWordListPage = () => {
       setBookId(id[0]);
     }
 
-    // TODO: 並び順も実装
-    const fetchWordist = async () => {
-      if (page) {
-        setEnd(VOCABULARY_LIST_RESULTS * +page);
-      }
-
-      if (!localStorage.getItem("uuid")) {
-        localStorage.setItem("uuid", uuidv4());
-      }
-      const localStorageUuid = localStorage.getItem("uuid");
-      const userId = currentUser?.uid ?? localStorageUuid;
-
-      if (!userId) {
-        return;
-      }
-
-      const path = `users/${userId}/${id}/words`;
-      const wordsRef = ref(db, path);
-
-      await get(query(wordsRef, orderByChild("createdAt"), limitToLast(end)))
-        .then((response) => {
-          return response.val();
-        })
-        .then((value) => {
-          const wordList: Word[] = [];
-          // ゼロマッチ
-          if (!value) {
-            setWordList([]);
-            setIsLoading(false);
-            return;
-          }
-          for (const key of Object.keys(value).reverse()) {
-            const word: Word = {
-              id: key,
-              ...value[key],
-            };
-            wordList.push(word);
-          }
-          setWordList(wordList);
-          setIsLoading(false);
-        });
-    };
-
-    fetchWordist();
-  }, [currentUser, id]);
+    fetchWordist(page ? +page : 1);
+  }, [currentUser, bookId, page]);
 
   return (
     <MainLayout showQuiz={true} showWordList={true} bookId={bookId}>
       {/* 単語リスト */}
       <VocabularyWordList
+        currentPage={currentPage}
+        hasMore={hasMore}
         bookId={bookId}
         wordList={wordList}
         filterWordList={filterWordList}
-        toggleMemorizedState={toggleMemorizedState}
         isLoading={isLoading}
+        fetchWordList={fetchWordist}
+        toggleMemorizedState={toggleMemorizedState}
       />
     </MainLayout>
   );
