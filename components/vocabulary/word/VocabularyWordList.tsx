@@ -6,28 +6,39 @@ import React, { useRef } from "react";
 import VocabularyWord from "./VocabularyWord";
 import NotFoundWord from "@/components/error/NotFoundWord";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
+import InfiniteScroll from "react-infinite-scroller";
+import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 
 /**
  * 単語リスト.
  *
- * @param {boolean} isLoading - ローディング中か.
+ * @param {number} currentPage - 現在のページ.
+ * @param {boolean} hasMore - 次に読み込むデータが存在するか.
  * @param {string} bookId - 単語帳id.
  * @param {Word} wordInfo - 単語情報.
  * @param {function} filterWordList - 単語リストをフィルター.
+ * @param {boolean} isLoading - ローディング中か.
+ * @param {function} fetchWordList - 単語データを取得.
  * @param {function} toggleMemorizedState - 暗記状態を更新.
  * @returns {JSX.Element} 単語リスト.
  */
 const VocabularyWordList: React.FC<{
-  isLoading: boolean;
+  currentPage: number;
+  hasMore: boolean;
   bookId: string;
   wordList: Word[];
   filterWordList: (keyword: string) => void;
+  isLoading: boolean;
+  fetchWordList: (currentPage: number) => void;
   toggleMemorizedState: (wordInfo: Word) => void;
 }> = ({
-  isLoading,
+  currentPage,
+  hasMore,
   bookId,
   wordList,
   filterWordList,
+  isLoading,
+  fetchWordList,
   toggleMemorizedState,
 }) => {
   // ルーター
@@ -70,19 +81,37 @@ const VocabularyWordList: React.FC<{
       ) : !wordList.length ? (
         <NotFoundWord />
       ) : (
-        <>
-          {wordList.map((word) => {
+        <InfiniteScroll
+          pageStart={currentPage}
+          loadMore={() => {
+            fetchWordList(
+              Math.floor(wordList.length / VOCABULARY_LIST_RESULTS) +
+                (wordList.length % 2)
+            );
+          }}
+          loader={<Loader key={currentPage} />}
+          hasMore={hasMore}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          scrollabletarget="scrollableDiv"
+        >
+          {wordList.map((word, index) => {
             return (
-              <VocabularyWord
-                key={word.id}
-                bookId={bookId}
-                wordInfo={word}
-                toggleMemorizedState={toggleMemorizedState}
-              />
+              <div key={word.id}>
+                <VocabularyWord
+                  key={word.id}
+                  bookId={bookId}
+                  wordInfo={word}
+                  toggleMemorizedState={toggleMemorizedState}
+                />
+                {hasMore && index === wordList.length - 1 && (
+                  <div id="scrollableDiv" />
+                )}
+              </div>
             );
           })}
           <ScrollToTopButton />
-        </>
+        </InfiniteScroll>
       )}
     </>
   );

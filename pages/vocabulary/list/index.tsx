@@ -144,7 +144,7 @@ const VocabularyBookListPage = () => {
     }
 
     fetchBookList(page ? +page : 1);
-  }, [currentUser]);
+  }, [currentUser, page]);
 
   return (
     <MainLayout showNavigation={false}>
