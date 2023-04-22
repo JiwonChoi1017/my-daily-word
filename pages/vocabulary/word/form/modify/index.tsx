@@ -6,7 +6,6 @@ import { Word } from "@/types/Vocabulary";
 import { get, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 // TODO: 単語追加フォームと共通化する予定のため、このファイルにはしばらく手をつけない
 /**
@@ -29,22 +28,17 @@ const VocabularyWordModifyFormPage = () => {
     createdAt: "",
     modifiedAt: "",
   });
-  // 現在のユーザ
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
   // 単語更新イベント
   const updateWord = async (wordInfo: Word) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
     const { word, pronunciation, meanings, modifiedAt } = wordInfo;
-    const path = `users/${userId}/${bookId as string}/words/${wordId}`;
+    const path = `users/${currentUserId}/${bookId as string}/words/${wordId}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { word, pronunciation, meanings, modifiedAt }).then(
@@ -56,17 +50,12 @@ const VocabularyWordModifyFormPage = () => {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
-    const path = `users/${userId}/${bookId}/words/${wordId}`;
+    const path = `users/${currentUserId}/${bookId}/words/${wordId}`;
     const wordRef = ref(db, path);
     // 単語を取得
     const fetchWord = async () => {
@@ -83,7 +72,7 @@ const VocabularyWordModifyFormPage = () => {
       // TODO: 例外処理追加
     };
     fetchWord();
-  }, [currentUser, bookId, wordId]);
+  }, [currentUserId, bookId, wordId]);
 
   return (
     <MainLayout showQuiz={true} showWordList={true} bookId={bookId}>

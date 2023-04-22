@@ -4,7 +4,6 @@ import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWord
 import { useRouter } from "next/router";
 import { Word } from "@/types/Vocabulary";
 import { AuthContext } from "@/context/auth/AuthProvider";
-import { v4 as uuidv4 } from "uuid";
 import { push, ref } from "firebase/database";
 import { db } from "@/firebase-config";
 import { GetServerSideProps } from "next";
@@ -24,8 +23,8 @@ interface Props {
 const VocabularyWordFormPage = ({ referer }: Props) => {
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
-  // 現在のユーザ
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
   // ルーター
   const router = useRouter();
   // 単語帳id
@@ -41,17 +40,12 @@ const VocabularyWordFormPage = ({ referer }: Props) => {
 
   // 単語追加イベント
   const addWord = async (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
-    const wordPath = `users/${userId}/${bookId}/words`;
+    const wordPath = `users/${currentUserId}/${bookId}/words`;
     const userRef = ref(db, wordPath);
 
     await push(userRef, wordInfo)

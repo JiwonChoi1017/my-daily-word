@@ -16,7 +16,6 @@ import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/router";
 import classes from "@/styles/Button.module.css";
-import { v4 as uuidv4 } from "uuid";
 import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";
 import NotFound from "@/components/error/NotFound";
@@ -46,28 +45,16 @@ export default function Home() {
     message: "",
   });
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUserId } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
     // idが存在しない場合、早期リターン
-    if (!userId) {
-      setErrorInfo({
-        status: ERROR_STATUS.NOT_FOUND_USER,
-        code: "not-exist-user",
-        message: "ユーザーが見つかりませんでした。",
-      });
-      setIsLoading(false);
+    if (!currentUserId) {
       return;
     }
 
     const fetchRandomWord = async () => {
-      const booksPath = `users/${userId}`;
+      const booksPath = `users/${currentUserId}`;
       const booksRef = ref(db, booksPath);
 
       const bookId = await get(
@@ -96,7 +83,7 @@ export default function Home() {
         return;
       }
 
-      const wordsPath = `users/${userId}/${bookId}/words`;
+      const wordsPath = `users/${currentUserId}/${bookId}/words`;
       const wordsRef = ref(db, wordsPath);
 
       await get(query(wordsRef, orderByChild("isMemorized"), limitToFirst(10)))
@@ -130,22 +117,12 @@ export default function Home() {
     };
 
     fetchRandomWord();
-  }, [currentUser]);
+  }, [currentUserId]);
 
   // 暗記状態をトーグル
   const toggleMemorizedState = async (wordInfo: Word) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
-      return;
-    }
-
     const { isMemorized } = wordInfo;
-    const path = `users/${userId}/${bookId}/words/${wordInfo.id}`;
+    const path = `users/${currentUserId}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {

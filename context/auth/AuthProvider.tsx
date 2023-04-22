@@ -4,10 +4,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  User,
 } from "firebase/auth";
 import { authService } from "firebase-config";
 import { ErrorInfo } from "../../types/Error";
+import { v4 as uuidv4 } from "uuid";
 
 // ユーザー情報
 type UserInfo = {
@@ -19,7 +19,7 @@ type UserInfoContext = {
   signInHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
   signUpHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
   signOutHandler: () => void;
-  currentUser: User | null;
+  currentUserId: string | undefined;
 };
 
 export const AuthContext = createContext<UserInfoContext>(
@@ -29,8 +29,10 @@ export const AuthContext = createContext<UserInfoContext>(
 export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
-  // 現在のユーザー
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // 現在のユーザーid
+  const [currentUserId, setCurrentUserId] = useState<string | undefined>(
+    undefined
+  );
   // ログインイベントハンドラ
   const signInHandler = async (userInfo: UserInfo) => {
     const { email, password } = userInfo;
@@ -129,15 +131,23 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   // ログアウトイベントハンドラ
   const signOutHandler = async () => {
     await signOut(authService).then(() => {
-      setCurrentUser(null);
+      setCurrentUserId(undefined);
     });
   };
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
+      // ユーザー情報が存在する場合
       if (user) {
-        setCurrentUser(user);
+        setCurrentUserId(user.uid);
+        return;
       }
+
+      if (!localStorage.getItem("uuid")) {
+        localStorage.setItem("uuid", uuidv4());
+      }
+      const localStorageUuid = localStorage.getItem("uuid") ?? undefined;
+      setCurrentUserId(localStorageUuid);
     });
   }, []);
 
@@ -147,7 +157,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
         signInHandler,
         signUpHandler,
         signOutHandler,
-        currentUser,
+        currentUserId,
       }}
     >
       {children}

@@ -15,7 +15,6 @@ import {
 import { db } from "@/firebase-config";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import { useRouter } from "next/router";
-import { v4 as uuidv4 } from "uuid";
 
 /**
  * 単語帳リスト画面.
@@ -38,20 +37,17 @@ const VocabularyBookListPage = () => {
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [bookList, setBookList] = useState<Book[]>([]);
-  // 現在のユーザ
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
   // お気に入り状態更新イベント
   const toggleFavoriteState = async (bookInfo: Book) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
     }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) return;
 
     const { id, isFavorite } = bookInfo;
-    const path = `users/${userId}/${id}`;
+    const path = `users/${currentUserId}/${id}`;
     const bookRef = ref(db, path);
 
     await update(bookRef, { isFavorite }).then(() => {
@@ -66,20 +62,15 @@ const VocabularyBookListPage = () => {
 
   // 単語帳リストを取得
   const fetchBookList = async (page: number) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
     setHasMore(false);
     setCurrentPage(page);
 
-    const path = `users/${userId}`;
+    const path = `users/${currentUserId}`;
     const booksRef = ref(db, path);
     const fetchBookQuery =
       endValue.createdAt && endValue.key
@@ -133,18 +124,13 @@ const VocabularyBookListPage = () => {
 
   // TODO: 並び順も実装
   useEffect(() => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
     fetchBookList(page ? +page : 1);
-  }, [currentUser, page]);
+  }, [currentUserId, page]);
 
   return (
     <MainLayout showNavigation={false}>
