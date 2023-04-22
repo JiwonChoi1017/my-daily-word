@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createContext } from "react";
 import {
   AuthErrorCodes,
+  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -19,6 +20,7 @@ type UserInfoContext = {
   signInHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
   signUpHandler: (userInfo: UserInfo) => Promise<ErrorInfo>;
   signOutHandler: () => void;
+  currentUser: User | undefined;
   currentUserId: string | undefined;
 };
 
@@ -29,6 +31,8 @@ export const AuthContext = createContext<UserInfoContext>(
 export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
+  // 現在のユーザー
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   // 現在のユーザーid
   const [currentUserId, setCurrentUserId] = useState<string | undefined>(
     undefined
@@ -38,7 +42,11 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
     const { email, password } = userInfo;
 
     return await signInWithEmailAndPassword(authService, email, password)
-      .then(() => {
+      .then((userCredential) => {
+        return userCredential.user;
+      })
+      .then((user) => {
+        setCurrentUser(user);
         return {
           status: "success",
           code: "",
@@ -80,6 +88,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
     const { email, password } = userInfo;
     return await createUserWithEmailAndPassword(authService, email, password)
       .then(() => {
+        setCurrentUser(undefined);
         return {
           status: "success",
           code: "",
@@ -131,7 +140,13 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   // ログアウトイベントハンドラ
   const signOutHandler = async () => {
     await signOut(authService).then(() => {
-      setCurrentUserId(undefined);
+      setCurrentUser(undefined);
+
+      if (!localStorage.getItem("uuid")) {
+        localStorage.setItem("uuid", uuidv4());
+      }
+      const localStorageUuid = localStorage.getItem("uuid") ?? undefined;
+      setCurrentUserId(localStorageUuid);
     });
   };
 
@@ -139,6 +154,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
     authService.onAuthStateChanged((user) => {
       // ユーザー情報が存在する場合
       if (user) {
+        setCurrentUser(user);
         setCurrentUserId(user.uid);
         return;
       }
@@ -157,6 +173,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
         signInHandler,
         signUpHandler,
         signOutHandler,
+        currentUser,
         currentUserId,
       }}
     >
