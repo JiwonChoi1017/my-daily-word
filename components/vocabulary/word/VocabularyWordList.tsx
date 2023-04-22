@@ -1,6 +1,5 @@
 import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
-import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import VocabularyWord from "./VocabularyWord";
@@ -8,6 +7,7 @@ import NotFoundWord from "@/components/error/NotFoundWord";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import InfiniteScroll from "react-infinite-scroller";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
+import { AddIcon } from "@/components/icon/Icon";
 
 /**
  * 単語リスト.
@@ -62,9 +62,7 @@ const VocabularyWordList: React.FC<{
   );
   // 単語追加アイコン
   const addWordIcon = (
-    <div className="addIcon alignRight" onClick={moveToVocabularyWordForm}>
-      <FaPlus />
-    </div>
+    <AddIcon onClickAddIconHandler={moveToVocabularyWordForm} />
   );
   const wordTopModule = (
     <div className="wordTopModule">

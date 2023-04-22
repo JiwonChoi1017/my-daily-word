@@ -1,5 +1,5 @@
 import { Button, DoubleButton } from "@/components/ui/Button";
-import { OptionalIcon } from "@/components/icon/Icon";
+import { AddInputIcon, OptionalIcon } from "@/components/icon/Icon";
 import InputForm from "@/components/ui/InputForm";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
@@ -112,6 +112,7 @@ const VocabularyWordForm: React.FC<{
     const examplesInput = item.examples.map((example, example_idx) => {
       return (
         <li key={`example_${idx}_${example_idx}`}>
+          <p>({example_idx + 1})</p>
           <input
             ref={(el) => {
               if (!el) {
@@ -128,30 +129,25 @@ const VocabularyWordForm: React.FC<{
         </li>
       );
     });
-    // 例文追加リンク
-    const addExampleInputLink = (
-      <div
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-          onAddExampleHanlder(e);
-        }}
-        style={{ cursor: "pointer" }}
-        data-meaning-index={`${idx}`}
-      >
-        例文を追加
-      </div>
-    );
 
     return (
       <div key={idx}>
-        <label>意味</label>
+        <label className="alignItemsCenter">
+          意味
+          {idx === meanings.length - 1 && (
+            <AddInputIcon onClickAddInputIconHandler={onAddMeaningHandler} />
+          )}
+        </label>
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
         <label className="alignItemsCenter">
           例文
           <OptionalIcon />
+          <AddInputIcon
+            index={idx}
+            onClickAddInputIconHandler={onAddExampleHanlder}
+          />
         </label>
-        <ul key={`examples_${idx}`}>
-          {examplesInput} {addExampleInputLink}
-        </ul>
+        <ul key={`examples_${idx}`}>{examplesInput}</ul>
       </div>
     );
   });
@@ -253,12 +249,7 @@ const VocabularyWordForm: React.FC<{
             onChange={onChangeInputHandler}
           />
         </div>
-        <div>
-          {meaningsInput}
-          <div onClick={onAddMeaningHandler} style={{ cursor: "pointer" }}>
-            意味を追加
-          </div>
-        </div>
+        {meaningsInput}
         {buttonElement}
       </form>
     </InputForm>

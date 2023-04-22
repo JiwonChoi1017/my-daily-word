@@ -63,13 +63,6 @@ ul {
   margin-top: 20px;
 }
 
-.favoriteIcon {
-  font-size: 24px;
-  color: #f1456ab7;
-  float: right;
-  cursor: pointer;
-}
-
 .bookmark {
   font-size: 24px;
   color: #2831d9b7;
@@ -81,12 +74,6 @@ ul {
   margin: 0;
   display: flex;
   align-items: center;
-}
-
-.addIcon {
-  font-size: 24px;
-  text-align: right;
-  cursor: pointer;
 }
 
 .marginTop10 {
@@ -112,10 +99,6 @@ ul {
 .alignItemsCenter {
   display: flex !important;
   align-items: center;
-}
-
-.alignRight {
-  margin: 0 0 0 auto;
 }
 
 .textAlignCenter {

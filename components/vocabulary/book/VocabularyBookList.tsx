@@ -2,12 +2,12 @@ import Loader from "@/components/layout/Loader";
 import { Book } from "@/types/Vocabulary";
 import React from "react";
 import VocabularyBook from "./VocabularyBook";
-import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/router";
 import NotFoundList from "@/components/error/NotFoundList";
 import InfiniteScroll from "react-infinite-scroller";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
+import { AddIcon } from "@/components/icon/Icon";
 
 /**
  * 単語帳リスト.
@@ -43,9 +43,7 @@ const VocabularyBookList: React.FC<{
   };
   // 単語帳追加アイコン
   const addBookIcon = (
-    <div className="addIcon" onClick={moveToVocabularyBookForm}>
-      <FaPlus />
-    </div>
+    <AddIcon onClickAddIconHandler={moveToVocabularyBookForm} />
   );
   // 単語帳リスト要素
   const bookListElement = (

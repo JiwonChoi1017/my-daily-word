@@ -9,6 +9,7 @@ import {
   FaCheck,
   FaTimes,
   FaAngleLeft,
+  FaPlus,
 } from "react-icons/fa";
 import classes from "../../styles/Icon.module.css";
 
@@ -109,6 +110,22 @@ export const DropDownIcon: React.FC<{
 };
 
 /**
+ * 追加アイコン.
+ *
+ * @param {function} onClickAddIconHandler - 追加アイコンクリックイベントハンドラ.
+ * @returns {JSX.Element} 追加アイコン.
+ */
+export const AddIcon: React.FC<{ onClickAddIconHandler: () => void }> = ({
+  onClickAddIconHandler,
+}) => {
+  return (
+    <div className={classes.addIcon} onClick={onClickAddIconHandler}>
+      <FaPlus />
+    </div>
+  );
+};
+
+/**
  * 単語帳関連のアイコン.
  *
  * @param {boolean} isFavorite - お気に入りか.
@@ -183,6 +200,28 @@ export const WordIcon: React.FC<{
  */
 export const OptionalIcon = () => {
   return <span className={classes.optionalIcon}>任意</span>;
+};
+
+/**
+ * 入力欄追加アイコン.
+ *
+ * @param {number} index - （任意）インデックス.
+ * @param {function} onClickAddInputIconHandler - 入力欄追加アイコンクリックイベントハンドラ.
+ * @returns {JSX.Element} 入力欄追加アイコン.
+ */
+export const AddInputIcon: React.FC<{
+  index?: number;
+  onClickAddInputIconHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+}> = ({ index, onClickAddInputIconHandler }) => {
+  return (
+    <div
+      className={`${classes.addInputIconWrap} alignItemsCenter`}
+      onClick={onClickAddInputIconHandler}
+      data-meaning-index={`${index}`}
+    >
+      <FaPlus className={classes.addInputIcon} />
+    </div>
+  );
 };
 
 /**
