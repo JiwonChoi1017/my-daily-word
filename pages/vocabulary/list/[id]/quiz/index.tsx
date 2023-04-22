@@ -13,7 +13,6 @@ import { Answer, QuizKind } from "@/types/Quiz";
 import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";
 import NotEnoughWord from "@/components/error/NotEnoughWord";
-import { v4 as uuidv4 } from "uuid";
 
 /**
  * クイズ画面.
@@ -39,8 +38,8 @@ const VocabularyQuizPage = () => {
   const [answersList, setAnswersList] = useState<string[][]>([]);
   // 正解リストの状態
   const [correctAnswerList, setCorrectAnswerList] = useState<Answer[]>([]);
-  // 現在のユーザー
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
 
   const moveToWordListPage = () => {
     router.push(`/vocabulary/list/${id}/?page=1`);
@@ -180,15 +179,12 @@ const VocabularyQuizPage = () => {
   };
   // 全ての単語を取得
   const fetchAllWords = async () => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
     }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
 
-    if (!userId) return;
-
-    const path = `users/${userId}/${id}/words`;
+    const path = `users/${currentUserId}/${id}/words`;
     const wordsRef = ref(db, path);
     const wordList: Word[] = [];
 
@@ -216,19 +212,17 @@ const VocabularyQuizPage = () => {
     return array;
   };
 
+  // 回答をチェック
   const checkAnswer = async (answer: string) => {
     const correctAnswer = correctAnswerList[currentQuizIndex];
     const { word, meaning } = correctAnswer;
 
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
     }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
 
-    if (!userId) return;
-
-    const path = `users/${userId}/${id}/words/${correctAnswer.id}`;
+    const path = `users/${currentUserId}/${id}/words/${correctAnswer.id}`;
     const wordRef = ref(db, path);
     const isCorrect =
       quizKind === QUIZ_KIND.word ? answer === word : answer === meaning;

@@ -1,5 +1,5 @@
 import Card from "@/components/ui/Card";
-import { CheckAnswerIcon } from "@/components/ui/Icon";
+import { CheckAnswerIcon } from "@/components/icon/Icon";
 import { QUIZ_KIND } from "@/constants/quizConstants";
 import { Answer, QuizKind } from "@/types/Quiz";
 import React, { useState } from "react";

@@ -15,7 +15,6 @@ import {
   update,
 } from "firebase/database";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
-import { v4 as uuidv4 } from "uuid";
 
 /**
  * 単語リスト画面.
@@ -39,22 +38,17 @@ const VocabularyWordListPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
-  // 現在のユーザ
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
   // 単語を絞り込む
   const filterWordList = (keyword: string) => {
     setIsLoading(true);
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
-    const path = `users/${userId}/${bookId}/words`;
+    const path = `users/${currentUserId}/${bookId}/words`;
     const wordsRef = ref(db, path);
     // TODO: APIを叩く処理を共通化したい
     const fetchWordList = async () => {
@@ -82,16 +76,13 @@ const VocabularyWordListPage = () => {
 
   // 暗記状態を更新
   const toggleMemorizedState = async (wordInfo: Word) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
     }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) return;
 
     const { isMemorized } = wordInfo;
-    const path = `users/${userId}/${bookId}/words/${wordInfo.id}`;
+    const path = `users/${currentUserId}/${bookId}/words/${wordInfo.id}`;
     const wordRef = ref(db, path);
 
     await update(wordRef, { isMemorized }).then(() => {
@@ -106,13 +97,8 @@ const VocabularyWordListPage = () => {
 
   // 単語リストを取得
   const fetchWordist = async (page: number) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
@@ -127,7 +113,7 @@ const VocabularyWordListPage = () => {
       return;
     }
 
-    const path = `users/${userId}/${bookId}/words`;
+    const path = `users/${currentUserId}/${bookId}/words`;
     const wordsRef = ref(db, path);
     const fetchWordQuery =
       endValue.createdAt && endValue.key
@@ -181,13 +167,8 @@ const VocabularyWordListPage = () => {
 
   // TODO: 並び順も実装
   useEffect(() => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
@@ -200,7 +181,7 @@ const VocabularyWordListPage = () => {
     }
 
     fetchWordist(page ? +page : 1);
-  }, [currentUser, bookId, page]);
+  }, [currentUserId, bookId, page]);
 
   return (
     <MainLayout showQuiz={true} showWordList={true} bookId={bookId}>

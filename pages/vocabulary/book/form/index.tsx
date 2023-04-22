@@ -5,7 +5,6 @@ import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 import { Book } from "@/types/Vocabulary";
 import { AuthContext } from "@/context/auth/AuthProvider";
-import { v4 as uuidv4 } from "uuid";
 import { ref, push, get, update } from "firebase/database";
 import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
@@ -41,8 +40,8 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   });
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
-  // 現在のユーザ
-  const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーid
+  const { currentUserId } = useContext(AuthContext);
   // ルーター
   const router = useRouter();
 
@@ -68,17 +67,12 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
 
     setBookId(bookId);
 
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
-    const path = `users/${userId}/${bookId}`;
+    const path = `users/${currentUserId}/${bookId}`;
     const bookRef = ref(db, path);
     // 単語帳を取得
     const fetchBook = async () => {
@@ -95,21 +89,16 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
       // TODO: 例外処理追加
     };
     fetchBook();
-  }, [currentUser]);
+  }, [currentUserId]);
 
   // 単語帳追加イベント
   const addBook = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
-    const userPath = `users/${userId}`;
+    const userPath = `users/${currentUserId}`;
     const userRef = ref(db, userPath);
 
     await push(userRef, bookInfo).then(() => {
@@ -118,18 +107,13 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   };
   // 単語更新イベント
   const updateBook = async (bookInfo: Book) => {
-    if (!localStorage.getItem("uuid")) {
-      localStorage.setItem("uuid", uuidv4());
-    }
-    const localStorageUuid = localStorage.getItem("uuid");
-    const userId = currentUser?.uid ?? localStorageUuid;
-
-    if (!userId) {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
       return;
     }
 
     const { title, description, word, meaning, modifiedAt } = bookInfo;
-    const path = `users/${userId}/${bookId}`;
+    const path = `users/${currentUserId}/${bookId}`;
     const bookRef = ref(db, path);
 
     await update(bookRef, {
