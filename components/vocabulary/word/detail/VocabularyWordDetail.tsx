@@ -2,7 +2,7 @@ import Card from "@/components/ui/Card";
 import Loader from "@/components/layout/Loader";
 import { Word } from "@/types/Vocabulary";
 import React from "react";
-import { GoBackIcon, WordIcon } from "@/components/ui/Icon";
+import { GoBackIcon, WordIcon } from "@/components/icon/Icon";
 import { useRouter } from "next/router";
 import Link from "next/link";
 

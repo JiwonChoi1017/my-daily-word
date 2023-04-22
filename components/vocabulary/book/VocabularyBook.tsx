@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import Card from "@/components/ui/Card";
 import { Book } from "@/types/Vocabulary";
-import { BookIcon } from "@/components/ui/Icon";
+import { BookIcon } from "@/components/icon/Icon";
 
 /**
  * 単語帳.

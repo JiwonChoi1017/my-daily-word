@@ -1,5 +1,5 @@
 import { Button, DoubleButton } from "@/components/ui/Button";
-import { OptionalIcon } from "@/components/ui/Icon";
+import { OptionalIcon } from "@/components/icon/Icon";
 import InputForm from "@/components/ui/InputForm";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
