@@ -58,13 +58,33 @@ export default function Home() {
       const booksRef = ref(db, booksPath);
 
       const bookId = await get(
-        query(booksRef, orderByChild("isFavorite"), limitToLast(1))
+        query(booksRef, orderByChild("isFavorite"), limitToLast(10))
       )
         .then((response) => {
           return response.val();
         })
         .then((value) => {
-          const firstBookKey = Object.keys(value)[0];
+          const bookList = { ...value };
+          const bookIdList: string[] = Object.keys(bookList);
+          // 単語が存在する単語帳idのみ取得し、新しい配列を生成
+          const filteredBookIdList = bookIdList.filter((key) => {
+            const wordList = bookList[key].words
+              ? Object.keys(bookList[key].words)
+              : [];
+            return !!wordList.length;
+          });
+
+          if (!filteredBookIdList.length) {
+            setIsLoading(false);
+            setErrorInfo({
+              status: ERROR_STATUS.NOT_FOUND_WORD,
+              code: "not-exist-vocabulary-word",
+              message:
+                "単語が見つかりませんでした。<br/>新しい単語を追加してください。",
+            });
+            return;
+          }
+          const firstBookKey = filteredBookIdList[0];
           const firstBook: Book = value[firstBookKey];
           setBookTitle(firstBook.title);
           return firstBookKey;
