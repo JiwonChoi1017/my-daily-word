@@ -24,9 +24,9 @@ const NotEnoughWord: React.FC<{ errorInfo: ErrorInfo; bookId: string }> = ({
   };
   // 単語フォームボタン
   const wordFormButton = (
-    <div className={classes.button__wrap}>
+    <div className={`${classes.button__wrap} marginTop20`}>
       <Button
-        className={`${classes.button} marginTop20`}
+        className="button"
         text={"単語を追加"}
         clickHandler={moveToVocabularyWordForm}
       />
