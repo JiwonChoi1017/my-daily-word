@@ -46,14 +46,13 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!referer) {
-      return;
+    if (referer) {
+      // 現在のURL
+      const { origin, pathname } = location;
+      const currentUrl = `${origin}${pathname}`;
+      // 遷移元と現在のURLが一致しない場合、trueをセット
+      setShowCancelButton(referer !== currentUrl);
     }
-    // 現在のURL
-    const { origin, pathname } = location;
-    const currentUrl = `${origin}${pathname}`;
-    // 遷移元と現在のURLが一致しない場合、trueをセット
-    setShowCancelButton(referer !== currentUrl);
 
     if (!query) {
       return;
@@ -152,7 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {} };
   }
   // contextから遷移元の情報を取得
-  const referer = context.req.headers.referer;
+  const referer = context.req.headers.referer ?? null;
   const query = context.query;
 
   return { props: { referer, query } };

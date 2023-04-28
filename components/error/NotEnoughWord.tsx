@@ -20,7 +20,7 @@ const NotEnoughWord: React.FC<{ errorInfo: ErrorInfo; bookId: string }> = ({
   const router = useRouter();
   // 単語フォームに遷移
   const moveToVocabularyWordForm = () => {
-    router.push(`/vocabulary/word/form?book_id=${bookId}`);
+    router.push(`/vocabulary/word/form?bookId=${bookId}`);
   };
   // 単語フォームボタン
   const wordFormButton = (

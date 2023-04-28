@@ -33,9 +33,7 @@ const VocabularyWordDetail: React.FC<{
   const router = useRouter();
   // 修正リンククリックイベントハンドラ
   const onClickModifyLinkHandler = () => {
-    router.push(
-      `/vocabulary/word/form/modify?book_id=${bookId}&word_id=${wordInfo.id}`
-    );
+    router.push(`/vocabulary/word/form?bookId=${bookId}&wordId=${wordInfo.id}`);
   };
   // 削除リンククリックイベントハンドラ
   const onClickDeleteLinkHandler = () => {

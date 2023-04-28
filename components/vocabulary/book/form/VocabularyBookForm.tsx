@@ -11,6 +11,7 @@ import { useEffect } from "react";
  * @param {boolean} isModifyForm - 修正フォームか.
  * @param {Book} bookInfo - 単語帳情報.
  * @param {function} addBook - 単語帳追加イベント.
+ * @param {function} updateBook - 単語帳更新イベント.
  * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
  * @param {function} onClickCancelButton - 前のページへ戻るイベント.
  * @returns {JSX.Element} 単語帳フォーム.
