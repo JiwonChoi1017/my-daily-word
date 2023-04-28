@@ -54,7 +54,7 @@ const VocabularyWordList: React.FC<{
   };
   // 単語フォームに遷移
   const moveToVocabularyWordForm = () => {
-    router.push(`/vocabulary/word/form?book_id=${bookId}`);
+    router.push(`/vocabulary/word/form?bookId=${bookId}`);
   };
   // 検索窓
   const searchBox = (

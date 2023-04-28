@@ -7,16 +7,29 @@ import React, { useEffect, useRef, useState } from "react";
 /**
  * 単語フォーム.
  *
+ * @param {boolean} isModifyForm - 修正フォームか.
+ * @param {Word} wordInfo - 単語情報.
  * @param {function} addWord - 単語追加イベント.
+ * @param {function} updateWord - 単語更新イベント.
  * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
  * @param {function} onClickCancelButton - 前のページへ戻るイベント.
  * @returns {JSX.Element} 単語フォーム.
  */
 const VocabularyWordForm: React.FC<{
+  isModifyForm: boolean;
+  wordInfo: Word;
   addWord: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
+  updateWord: (wordInfo: Word) => void;
   showCancelButton: boolean;
   onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({ addWord, showCancelButton, onClickCancelButton }) => {
+}> = ({
+  isModifyForm,
+  wordInfo,
+  addWord,
+  updateWord,
+  showCancelButton,
+  onClickCancelButton,
+}) => {
   // 各入力項目のref
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningsRef = useRef<HTMLInputElement[]>([]);
@@ -32,6 +45,20 @@ const VocabularyWordForm: React.FC<{
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
+    const { word, pronunciation } = wordInfo;
+
+    const newMeaningList = wordInfo.meanings.reduce(
+      (acc: Meaning[], meaning) => {
+        // 例文が存在しない場合、空文字を入れた配列を返す
+        if (!meaning.examples || !meaning.examples.length) {
+          return [...acc, { meaning: meaning.meaning, examples: [""] }];
+        }
+        return [...acc, meaning];
+      },
+      []
+    );
+
+    setMeanings(newMeaningList);
     meaningsRef.current = meaningsRef.current.slice(0, meanings.length);
 
     const examples: string[] = [];
@@ -41,7 +68,10 @@ const VocabularyWordForm: React.FC<{
       });
     });
     examplesRef.current = examplesRef.current.slice(0, examples.length);
-  }, [meanings]);
+
+    // 活性/非活性状態を更新
+    setIsDisabled(!word || !pronunciation || !meanings.length);
+  }, [wordInfo]);
   // 意味追加イベントハンドラ
   const onAddMeaningHandler = () => {
     setMeanings((prevState) => {
@@ -104,12 +134,25 @@ const VocabularyWordForm: React.FC<{
           id={`meaning_${idx}`}
           type="text"
           maxLength={300}
+          defaultValue={item.meaning}
           onChange={onChangeInputHandler}
         />
       </li>
     );
     // 例文入力欄
     const examplesInput = item.examples.map((example, example_idx) => {
+      const prevExampleList: string[] = [];
+      for (let i = 0; i <= idx; i++) {
+        const prevMeaning = meanings[i];
+        prevMeaning.examples.map((prevExample, prev_example_idx) => {
+          if (i < idx || (i === idx && example_idx > prev_example_idx)) {
+            prevExampleList.push(prevExample);
+          }
+        });
+      }
+      const currentExampleIndex = isModifyForm
+        ? prevExampleList.length
+        : exampleRefIndex;
       return (
         <li key={`example_${idx}_${example_idx}`}>
           <p>({example_idx + 1})</p>
@@ -118,11 +161,12 @@ const VocabularyWordForm: React.FC<{
               if (!el) {
                 return;
               }
-              examplesRef.current[exampleRefIndex] = el;
+              examplesRef.current[currentExampleIndex] = el;
             }}
             id={`example_${idx}_${example_idx}`}
             type="text"
             maxLength={300}
+            defaultValue={example}
             onChange={onChangeInputHandler}
             data-meaning-index={`${idx}`}
           />
@@ -193,6 +237,16 @@ const VocabularyWordForm: React.FC<{
       .join("")
       .padStart(6, "0");
 
+    if (isModifyForm) {
+      return updateWord({
+        ...wordInfo,
+        word: wordRef.current.value,
+        meanings,
+        pronunciation: pronunciationRef.current.value,
+        modifiedAt: `${currentDateString}${currentTimeString}`,
+      });
+    }
+
     addWord({
       word: wordRef.current.value,
       meanings,
@@ -212,14 +266,18 @@ const VocabularyWordForm: React.FC<{
         },
         second: {
           className: "first__double",
-          text: "単語を追加",
+          text: isModifyForm ? "修正" : "単語を追加",
           isSubmit: true,
           isDisabled: isDisabled,
         },
       }}
     />
   ) : (
-    <Button text="単語を追加" className="first" isSubmit={true} />
+    <Button
+      text={isModifyForm ? "修正" : "単語を追加"}
+      className="first"
+      isSubmit={true}
+    />
   );
 
   return (
@@ -236,6 +294,7 @@ const VocabularyWordForm: React.FC<{
             type="text"
             id="word"
             maxLength={50}
+            defaultValue={wordInfo.word}
             onChange={onChangeInputHandler}
           />
         </div>
@@ -246,6 +305,7 @@ const VocabularyWordForm: React.FC<{
             type="text"
             id="pronunciation"
             maxLength={100}
+            defaultValue={wordInfo.pronunciation}
             onChange={onChangeInputHandler}
           />
         </div>
