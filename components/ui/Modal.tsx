@@ -3,7 +3,7 @@ import classes from "../../styles/Modal.module.css";
 import { DoubleButton } from "./Button";
 
 /** Props. */
-export type Props = {
+interface Props {
   /** 表示するか. */
   show: boolean;
   /** テキスト. */
@@ -16,7 +16,7 @@ export type Props = {
   onClickConfirm: () => void;
   /** キャンセルのクリックイベント. */
   onClickCancel: () => void;
-};
+}
 
 /**
  * モーダル.
