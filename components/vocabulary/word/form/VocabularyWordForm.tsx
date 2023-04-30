@@ -3,6 +3,7 @@ import { AddInputIcon, OptionalIcon } from "@/components/icon/Icon";
 import InputForm from "@/components/ui/InputForm";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
+import classes from "../../../../styles/InputForm.module.css";
 
 /**
  * 単語フォーム.
@@ -124,6 +125,7 @@ const VocabularyWordForm: React.FC<{
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
       <li key={`meaning_${idx}`}>
+        <p className="margin0">{idx + 1}.</p>
         <input
           ref={(el) => {
             if (!el) {
@@ -155,7 +157,7 @@ const VocabularyWordForm: React.FC<{
         : exampleRefIndex;
       return (
         <li key={`example_${idx}_${example_idx}`}>
-          <p>({example_idx + 1})</p>
+          <p className="margin0">{example_idx + 1})</p>
           <input
             ref={(el) => {
               if (!el) {
@@ -182,7 +184,9 @@ const VocabularyWordForm: React.FC<{
             <AddInputIcon onClickAddInputIconHandler={onAddMeaningHandler} />
           )}
         </label>
-        <ul key={`meaning_${idx}`}>{meaningInput}</ul>
+        <ul key={`meaning_${idx}`} className="margin0">
+          {meaningInput}
+        </ul>
         <label className="alignItemsCenter">
           例文
           <OptionalIcon />
@@ -191,7 +195,9 @@ const VocabularyWordForm: React.FC<{
             onClickAddInputIconHandler={onAddExampleHanlder}
           />
         </label>
-        <ul key={`examples_${idx}`}>{examplesInput}</ul>
+        <ul key={`examples_${idx}`} className="margin0">
+          {examplesInput}
+        </ul>
       </div>
     );
   });
@@ -255,6 +261,34 @@ const VocabularyWordForm: React.FC<{
       createdAt: `${currentDateString}${currentTimeString}`,
     });
   };
+  // 入力欄要素
+  const inputFieldsElement = (
+    <div className={classes.inputfields}>
+      <div>
+        <label htmlFor="word">単語</label>
+        <input
+          ref={wordRef}
+          type="text"
+          id="word"
+          maxLength={50}
+          defaultValue={wordInfo.word}
+          onChange={onChangeInputHandler}
+        />
+      </div>
+      <div>
+        <label htmlFor="pronunciation">発音</label>
+        <input
+          ref={pronunciationRef}
+          type="text"
+          id="pronunciation"
+          maxLength={100}
+          defaultValue={wordInfo.pronunciation}
+          onChange={onChangeInputHandler}
+        />
+      </div>
+      {meaningsInput}
+    </div>
+  );
   // ボタン要素
   const buttonElement = showCancelButton ? (
     <DoubleButton
@@ -287,29 +321,7 @@ const VocabularyWordForm: React.FC<{
           onSubmitHandler(e);
         }}
       >
-        <div>
-          <label htmlFor="word">単語</label>
-          <input
-            ref={wordRef}
-            type="text"
-            id="word"
-            maxLength={50}
-            defaultValue={wordInfo.word}
-            onChange={onChangeInputHandler}
-          />
-        </div>
-        <div>
-          <label htmlFor="pronunciation">発音</label>
-          <input
-            ref={pronunciationRef}
-            type="text"
-            id="pronunciation"
-            maxLength={100}
-            defaultValue={wordInfo.pronunciation}
-            onChange={onChangeInputHandler}
-          />
-        </div>
-        {meaningsInput}
+        {inputFieldsElement}
         {buttonElement}
       </form>
     </InputForm>
