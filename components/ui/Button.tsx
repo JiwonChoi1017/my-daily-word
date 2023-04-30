@@ -92,3 +92,21 @@ export const DoubleButton: React.FC<{
     </div>
   );
 };
+
+/**
+ * エラーページのボタン.
+ *
+ * @param {string} text - テキスト.
+ * @param {function} clickHandler - クリックイベントハンドラ.
+ * @returns {JSX.Element} エラーページのボタン.
+ */
+export const ErrorPageButton: React.FC<{
+  text: string;
+  clickHandler: () => void;
+}> = ({ text, clickHandler }) => {
+  return (
+    <div className={`${classes.button__wrap} marginTop20`}>
+      <Button className="button" text={text} clickHandler={clickHandler} />
+    </div>
+  );
+};

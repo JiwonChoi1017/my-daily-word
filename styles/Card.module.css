@@ -12,6 +12,6 @@
 .card__error {
   margin: 20px 0;
   padding: 40px 50px;
-  border: 2px double;
+  border: 2.5px double #938e8d;
   text-align: center;
 }
