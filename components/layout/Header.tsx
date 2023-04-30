@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import classes from "../../styles/Header.module.css";
 import { FaUser } from "react-icons/fa";
+import Modal from "../ui/Modal";
 
 /**
  * ヘッダー.
@@ -22,6 +23,8 @@ const Header: React.FC<{
 }> = ({ showNavigation, showWordList, showQuiz, bookId }) => {
   const [currentDate, setCurrentDate] = useState<string>("");
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  // ログアウトモーダルを表示するか
+  const [showSignOutModal, setShowSignOutModal] = useState<boolean>(false);
 
   const { signOutHandler, currentUser } = useContext(AuthContext);
   // ルーター
@@ -46,9 +49,16 @@ const Header: React.FC<{
   const moveToSignInPage = () => {
     router.push("/sign-in");
   };
-  // ログアウトイベントハンドラ
-  const onSignOutHandler = async () => {
+  // ログアウトモーダルをトーグル
+  const toggleSignOutModal = () => {
+    setShowSignOutModal((prevState) => {
+      return !prevState;
+    });
+  };
+  // ログアウト
+  const signOut = async () => {
     await signOutHandler();
+    toggleSignOutModal();
     setIsSignIn(!!currentUser);
     onClickLogoHandler();
   };
@@ -56,7 +66,7 @@ const Header: React.FC<{
   const userIcon = (
     <div
       className={classes.userIcon}
-      onClick={isSignIn ? onSignOutHandler : moveToSignInPage}
+      onClick={isSignIn ? toggleSignOutModal : moveToSignInPage}
     >
       <FaUser />
       <p>{isSignIn ? "ログアウト" : "ログイン"}</p>
@@ -95,6 +105,14 @@ const Header: React.FC<{
         <div className={classes.header__border__box}>{userIcon}</div>
       </div>
       {navigation}
+      <Modal
+        show={showSignOutModal}
+        text="ログアウトしますか？"
+        confirmText="ログアウト"
+        cancelText="キャンセル"
+        onClickConfirm={signOut}
+        onClickCancel={toggleSignOutModal}
+      />
     </header>
   );
 };
