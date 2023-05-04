@@ -1,7 +1,7 @@
 .header {
   width: 85%;
   margin: auto;
-  font-family: cursive;
+  font-family: "Times New Roman", Times, serif;
 }
 
 @media screen and (max-width: 480px) {
@@ -55,7 +55,7 @@
 .userIcon p {
   margin: 0;
   font-size: 14px;
-  font-family: cursive;
+  font-family: "Times New Roman", Times, serif;
 }
 
 @media screen and (max-width: 480px) {
@@ -84,6 +84,6 @@
   color: white;
   text-align: center;
   padding: 10px 15px;
-  font-family: Georgia, serif;
+  font-family: "Times New Roman", Times, serif;
   text-decoration: none;
 }
