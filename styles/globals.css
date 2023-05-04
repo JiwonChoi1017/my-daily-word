@@ -1,7 +1,7 @@
 body {
   background-color: #faf2e8;
   color: #322a27;
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Noto Serif JP", serif;
 }
 
 @media screen and (min-width: 481px) {
@@ -37,7 +37,7 @@ ul {
 }
 
 ::placeholder {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Noto Serif JP", serif;
 }
 
 .title__wrap {

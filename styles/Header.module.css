@@ -55,7 +55,7 @@
 .userIcon p {
   margin: 0;
   font-size: 14px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Noto Serif JP", serif;
 }
 
 @media screen and (max-width: 480px) {
@@ -84,6 +84,6 @@
   color: white;
   text-align: center;
   padding: 10px 15px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Noto Serif JP", serif;
   text-decoration: none;
 }
