@@ -4,29 +4,31 @@ body {
   font-family: Georgia, serif;
 }
 
-html:before,
-html:after,
-body:before {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  border: 1.5px solid #322a27;
-}
+@media screen and (min-width: 481px) {
+  html:before,
+  html:after,
+  body:before {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 1.5px solid #322a27;
+  }
 
-html:after {
-  z-index: 10;
-  top: auto;
-  border-width: 0 0 1px;
-}
+  html:after {
+    z-index: 10;
+    top: auto;
+    border-width: 0 0 1px;
+  }
 
-body:before {
-  z-index: 10;
-  bottom: auto;
-  border-width: 1px 0 0;
+  body:before {
+    z-index: 10;
+    bottom: auto;
+    border-width: 1px 0 0;
+  }
 }
 
 ul {
@@ -45,14 +47,33 @@ ul {
   margin-bottom: 30px;
 }
 
+@media screen and (max-width: 480px) {
+  .title__wrap {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}
+
 .title {
   font-weight: bold;
   margin-right: 10px;
 }
 
+@media screen and (max-width: 480px) {
+  .title {
+    margin-right: 5px;
+  }
+}
+
 .description {
   margin-bottom: 0;
   font-size: 18px;
+}
+
+@media screen and (max-width: 480px) {
+  .description {
+    font-size: 16px;
+  }
 }
 
 .description li {
@@ -68,6 +89,12 @@ ul {
   color: #2831d9b7;
   float: right;
   cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .bookmark {
+    font-size: 20px;
+  }
 }
 
 .wordTopModule {
@@ -86,6 +113,10 @@ ul {
 
 .marginTop20 {
   margin-top: 20px !important;
+}
+
+.marginTop30 {
+  margin-top: 30px !important;
 }
 
 .marginBottom15 {

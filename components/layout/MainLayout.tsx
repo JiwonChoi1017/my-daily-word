@@ -1,6 +1,7 @@
 import Header from "./Header";
 import React from "react";
 import classes from "../../styles/MainLayout.module.css";
+import { Helmet } from "react-helmet";
 
 /**
  * メインレイアウト.
@@ -34,6 +35,9 @@ const MainLayout: React.FC<{
         showQuiz={showQuiz}
         bookId={bookId}
       />
+      <Helmet>
+        <title>Daily Word</title>
+      </Helmet>
       <main>
         <div className={classes.main}>{children}</div>
       </main>
