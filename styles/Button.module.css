@@ -4,6 +4,12 @@
   justify-content: center;
 }
 
+@media screen and (max-width: 480px) {
+  .button__wrap {
+    display: block;
+  }
+}
+
 .button {
   width: 49.9%;
   font: inherit;
@@ -15,6 +21,14 @@
   margin: 0 0.25rem;
 }
 
+@media screen and (max-width: 480px) {
+  .button {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+}
+
 .first__double {
   width: 65%;
   font: inherit;
@@ -24,6 +38,13 @@
   color: white;
   border: 2.5px solid #322a27;
   margin: 0 0.25rem;
+}
+
+@media screen and (max-width: 480px) {
+  .first__double {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 .first__double__modal {
@@ -80,6 +101,14 @@
   color: #322a27;
   border: 2.5px double #938e8d;
   margin: 0 0.25rem;
+}
+
+@media screen and (max-width: 480px) {
+  .second__double {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 10px;
+  }
 }
 
 .second__double__modal {

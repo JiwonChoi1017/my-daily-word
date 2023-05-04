@@ -5,6 +5,17 @@
   padding: 40px 50px;
 }
 
+@media screen and (max-width: 480px) {
+  .inputform {
+    width: 100%;
+    padding: 0;
+  }
+
+  .inputform form {
+    padding: 30px;
+  }
+}
+
 .inputfields {
   margin-bottom: 20px;
 }

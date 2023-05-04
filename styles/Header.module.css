@@ -4,6 +4,12 @@
   font-family: cursive;
 }
 
+@media screen and (max-width: 480px) {
+  .header {
+    width: 90%;
+  }
+}
+
 .header__inner {
   height: 85px;
   padding-top: 30px;
@@ -14,11 +20,24 @@
   border-bottom: 2.5px double #938e8d;
 }
 
+@media screen and (max-width: 480px) {
+  .header__inner {
+    height: 45px;
+  }
+}
+
 .header__logo {
-  width: 30%;
+  width: 50%;
   cursor: pointer;
   text-align: center;
   font-size: 40px;
+}
+
+@media screen and (max-width: 480px) {
+  .header__logo {
+    width: 50%;
+    font-size: 30px;
+  }
 }
 
 .userIcon {
@@ -27,10 +46,22 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 480px) {
+  .userIcon {
+    font-size: 16px;
+  }
+}
+
 .userIcon p {
   margin: 0;
   font-size: 14px;
   font-family: cursive;
+}
+
+@media screen and (max-width: 480px) {
+  .userIcon p {
+    font-size: 12px;
+  }
 }
 
 .navigation {

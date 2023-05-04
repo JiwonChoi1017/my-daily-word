@@ -80,6 +80,7 @@ const VocabularyWordList: React.FC<{
         <NotFoundWord />
       ) : (
         <InfiniteScroll
+          className="marginTop30"
           pageStart={currentPage}
           loadMore={() => {
             fetchWordList(
