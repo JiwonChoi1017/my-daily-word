@@ -37,6 +37,13 @@ const MainLayout: React.FC<{
       />
       <Helmet>
         <title>Daily Word</title>
+        {/* フォント */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap"
+          rel="stylesheet"
+        />
       </Helmet>
       <main>
         <div className={classes.main}>{children}</div>
