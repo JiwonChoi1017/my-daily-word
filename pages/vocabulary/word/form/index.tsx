@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
-import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
-import { useRouter } from "next/router";
-import { Word } from "@/types/Vocabulary";
-import { AuthContext } from "@/context/auth/AuthProvider";
 import { get, push, ref, update } from "firebase/database";
-import { db } from "@/firebase-config";
+
+import { AuthContext } from "@/context/auth/AuthContext";
 import { GetServerSideProps } from "next";
+import MainLayout from "@/components/layout/MainLayout";
 import { ParsedUrlQuery } from "querystring";
+import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
+import { Word } from "@/types/Vocabulary";
+import { db } from "@/firebase-config";
+import { useRouter } from "next/router";
 
 /** Props. */
 interface Props {

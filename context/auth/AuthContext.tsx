@@ -1,4 +1,3 @@
-import React, { useEffect, useState, createContext } from "react";
 import {
   AuthErrorCodes,
   User,
@@ -6,8 +5,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { authService } from "firebase-config";
+import React, { createContext, useEffect, useState } from "react";
+
 import { ErrorInfo } from "../../types/Error";
+import { authService } from "firebase-config";
 import { v4 as uuidv4 } from "uuid";
 
 // ユーザー情報
@@ -126,7 +127,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
           return {
             status: "error",
             code: errorCode,
-            message: "6文字以上の文字を入力してください。",
+            message: "10文字以上の文字を入力してください。",
           };
         }
 

@@ -1,10 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
-import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
-import { useRouter } from "next/router";
-import { AuthContext } from "@/context/auth/AuthProvider";
-import { Word } from "@/types/Vocabulary";
-import { db } from "@/firebase-config";
 import {
   endBefore,
   get,
@@ -14,7 +8,14 @@ import {
   ref,
   update,
 } from "firebase/database";
+
+import { AuthContext } from "@/context/auth/AuthContext";
+import MainLayout from "@/components/layout/MainLayout";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
+import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
+import { Word } from "@/types/Vocabulary";
+import { db } from "@/firebase-config";
+import { useRouter } from "next/router";
 
 /**
  * 単語リスト画面.

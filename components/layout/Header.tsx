@@ -1,10 +1,11 @@
-import { AuthContext } from "@/context/auth/AuthProvider";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import classes from "../../styles/Header.module.css";
+
+import { AuthContext } from "@/context/auth/AuthContext";
 import { FaUser } from "react-icons/fa";
+import Link from "next/link";
 import Modal from "../ui/Modal";
+import classes from "../../styles/Header.module.css";
+import { useRouter } from "next/router";
 
 /**
  * ヘッダー.
@@ -42,7 +43,8 @@ const Header: React.FC<{
     setCurrentDate(currentDateString);
   }, [currentUser]);
 
-  const onClickLogoHandler = () => {
+  // トップ画面に遷移
+  const moveToTopPage = () => {
     router.push("/");
   };
   // ログイン画面に遷移
@@ -55,12 +57,18 @@ const Header: React.FC<{
       return !prevState;
     });
   };
-  // ログアウト
-  const signOut = async () => {
+  // ロゴクリックイベントハンドラ
+  const onClickLogoHandler = () => {
+    moveToTopPage();
+  };
+  // 確認ボタンクリックイベントハンドラ
+  const onClickConfirmButtonHandler = async () => {
     await signOutHandler();
     toggleSignOutModal();
     setIsSignIn(!!currentUser);
-    onClickLogoHandler();
+    // トップ画面に遷移してから画面をリロード
+    moveToTopPage();
+    router.reload();
   };
   // ユーザアイコン
   const userIcon = (
@@ -110,7 +118,7 @@ const Header: React.FC<{
         text="ログアウトしますか？"
         confirmText="ログアウト"
         cancelText="キャンセル"
-        onClickConfirm={signOut}
+        onClickConfirm={onClickConfirmButtonHandler}
         onClickCancel={toggleSignOutModal}
       />
     </header>
