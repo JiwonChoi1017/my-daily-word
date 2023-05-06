@@ -4,7 +4,12 @@
   cursor: pointer;
 }
 
+.searchIcon {
+  font-size: 18px;
+}
+
 .bookmarkIcon {
+  font-size: 24px;
   margin-left: 20px;
   color: #2831d9b7;
   cursor: pointer;

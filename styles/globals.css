@@ -51,6 +51,10 @@ ul {
   .title__wrap {
     font-size: 24px;
     margin-bottom: 20px;
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -82,19 +86,6 @@ ul {
 
 .description .example {
   margin-top: 20px;
-}
-
-.bookmark {
-  font-size: 24px;
-  color: #2831d9b7;
-  float: right;
-  cursor: pointer;
-}
-
-@media screen and (max-width: 480px) {
-  .bookmark {
-    font-size: 20px;
-  }
 }
 
 .wordTopModule {
@@ -138,6 +129,10 @@ ul {
 
 .textAlignCenter {
   text-align: center;
+}
+
+.floatRight {
+  float: right;
 }
 
 .link {

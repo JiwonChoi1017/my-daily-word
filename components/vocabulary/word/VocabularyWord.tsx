@@ -1,25 +1,41 @@
+import { BookmarkIcon, WordIcon } from "@/components/icon/Icon";
+
 import Card from "@/components/ui/Card";
 import Loader from "@/components/layout/Loader";
+import React from "react";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
-import React from "react";
-import { FaRegBookmark, FaBookmark } from "react-icons/fa";
+
+/** Props. */
+interface Props {
+  /** (任意)ローディング中か. */
+  isLoading?: boolean;
+  /** (任意)ドロップダウンアイコンを表示するか. */
+  showDropDownIcon?: boolean;
+  /** 単語帳id. */
+  bookId: string;
+  /** 単語情報. */
+  wordInfo: Word;
+  /** 暗記状態を更新. */
+  toggleMemorizedState: (wordInfo: Word) => void;
+  /** (任意)単語削除イベントハンドラ. */
+  deleteWordHandler?: (wordId: string) => void;
+}
 
 /**
  * 単語.
  *
- * @param {boolean} isLoading - (任意)ローディング中か.
- * @param {string} bookId - 単語帳id.
- * @param {Word} wordInfo - 単語情報.
- * @param {function} toggleMemorizedState - 暗記状態を更新.
+ * @param {Props} props
  * @returns {JSX.Element} 単語.
  */
-const VocabularyWord: React.FC<{
-  isLoading?: boolean;
-  bookId: string;
-  wordInfo: Word;
-  toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({ isLoading, bookId, wordInfo, toggleMemorizedState }) => {
+const VocabularyWord = ({
+  isLoading,
+  showDropDownIcon = false,
+  bookId,
+  wordInfo,
+  toggleMemorizedState,
+  deleteWordHandler,
+}: Props) => {
   const { id, word, pronunciation, isMemorized, meanings } = wordInfo;
   // ルーター
   const router = useRouter();
@@ -35,15 +51,20 @@ const VocabularyWord: React.FC<{
     router.push(`/vocabulary/detail/${bookId}/${id}`);
   };
   // 暗記フラグクリックイベントハンドラ
-  const onClickBookmarkHandler = () => {
+  const onClickBookmarkIconHandler = () => {
     toggleMemorizedState({ ...wordInfo, isMemorized: !isMemorized });
   };
-  // 暗記フラグ
-  const bookmark = (
-    <div className="bookmark _ignoreClick" onClick={onClickBookmarkHandler}>
-      {isMemorized ? <FaBookmark /> : <FaRegBookmark />}
-    </div>
-  );
+  // 修正リンククリックイベントハンドラ
+  const onClickModifyLinkHandler = () => {
+    router.push(`/vocabulary/word/form?bookId=${bookId}&wordId=${wordInfo.id}`);
+  };
+  // 削除リンククリックイベントハンドラ
+  const onClickDeleteLinkHandler = () => {
+    if (!deleteWordHandler) {
+      return;
+    }
+    deleteWordHandler(wordInfo.id);
+  };
   // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
     return (
@@ -68,7 +89,22 @@ const VocabularyWord: React.FC<{
             <span className="title">{word}</span>
             <span>[{pronunciation}]</span>
           </div>
-          {bookmark}
+          {/* アイコン */}
+          <div className="floatRight _ignoreClick">
+            {showDropDownIcon ? (
+              <WordIcon
+                isMemorized={isMemorized}
+                onClickBookmarkIconHandler={onClickBookmarkIconHandler}
+                onClickModifyLinkHandler={onClickModifyLinkHandler}
+                onClickDeleteLinkHandler={onClickDeleteLinkHandler}
+              />
+            ) : (
+              <BookmarkIcon
+                isMemorized={isMemorized}
+                onClickBookmarkIconHandler={onClickBookmarkIconHandler}
+              />
+            )}
+          </div>
           <ul className="description">{meaningList}</ul>
         </div>
       )}

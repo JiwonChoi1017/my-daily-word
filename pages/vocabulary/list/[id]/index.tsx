@@ -6,6 +6,7 @@ import {
   orderByChild,
   query,
   ref,
+  remove,
   update,
 } from "firebase/database";
 
@@ -28,6 +29,8 @@ const VocabularyWordListPage = () => {
   const { id, page } = router.query;
   // 現在のページ
   const [currentPage, setCurrentPage] = useState<number>(1);
+  // キーワードに一致する単語が見つかったか
+  const [isFoundFilteredWord, setisFoundFilteredWord] = useState<boolean>(true);
   // 次に読み込むデータが存在するか
   const [hasMore, setHasMore] = useState<boolean>(false);
   // 最後のデータ
@@ -69,6 +72,7 @@ const VocabularyWordListPage = () => {
             }
           }
           setWordList(wordList);
+          setisFoundFilteredWord(!!wordList.length);
           setIsLoading(false);
         });
     };
@@ -165,6 +169,22 @@ const VocabularyWordListPage = () => {
         );
       });
   };
+  // 単語削除イベントハンドラ
+  const deleteWordHandler = async (wordId: string) => {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
+    }
+
+    const path = `users/${currentUserId}/${bookId}/words/${wordId}`;
+    const wordRef = ref(db, path);
+
+    await remove(wordRef).then(() => {
+      // 画面をリロード
+      router.reload();
+    });
+    // TODO: 例外処理追加
+  };
 
   // TODO: 並び順も実装
   useEffect(() => {
@@ -189,6 +209,7 @@ const VocabularyWordListPage = () => {
       {/* 単語リスト */}
       <VocabularyWordList
         currentPage={currentPage}
+        isFoundFilteredWord={isFoundFilteredWord}
         hasMore={hasMore}
         bookId={bookId}
         wordList={wordList}
@@ -196,6 +217,7 @@ const VocabularyWordListPage = () => {
         isLoading={isLoading}
         fetchWordList={fetchWordist}
         toggleMemorizedState={toggleMemorizedState}
+        deleteWordHandler={deleteWordHandler}
       />
     </MainLayout>
   );
