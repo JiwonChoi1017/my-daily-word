@@ -1,38 +1,49 @@
-import Loader from "@/components/layout/Loader";
-import { Word } from "@/types/Vocabulary";
-import { useRouter } from "next/router";
 import React, { useRef } from "react";
-import VocabularyWord from "./VocabularyWord";
+
+import { AddIcon } from "@/components/icon/Icon";
+import InfiniteScroll from "react-infinite-scroller";
+import Loader from "@/components/layout/Loader";
 import NotFoundWord from "@/components/error/NotFoundWord";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
-import InfiniteScroll from "react-infinite-scroller";
+import SearchBox from "@/components/ui/SearchBox";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
-import { AddIcon } from "@/components/icon/Icon";
+import VocabularyWord from "./VocabularyWord";
+import { Word } from "@/types/Vocabulary";
+import { useRouter } from "next/router";
+
+/** Props. */
+interface Props {
+  /** 現在のページ. */
+  currentPage: number;
+  /** キーワードに一致する単語が見つかったか. */
+  isFoundFilteredWord: boolean;
+  /** 次に読み込むデータが存在するか. */
+  hasMore: boolean;
+  /** 単語帳id. */
+  bookId: string;
+  /** 単語情報. */
+  wordList: Word[];
+  /** 単語リストをフィルター. */
+  filterWordList: (keyword: string) => void;
+  /** ローディング中か. */
+  isLoading: boolean;
+  /** 単語データを取得. */
+  fetchWordList: (currentPage: number) => void;
+  /** 暗記状態を更新. */
+  toggleMemorizedState: (wordInfo: Word) => void;
+  /** 単語削除イベントハンドラ. */
+  deleteWordHandler: (wordId: string) => void;
+}
 
 /**
  * 単語リスト.
  *
- * @param {number} currentPage - 現在のページ.
- * @param {boolean} hasMore - 次に読み込むデータが存在するか.
- * @param {string} bookId - 単語帳id.
- * @param {Word} wordInfo - 単語情報.
- * @param {function} filterWordList - 単語リストをフィルター.
- * @param {boolean} isLoading - ローディング中か.
- * @param {function} fetchWordList - 単語データを取得.
- * @param {function} toggleMemorizedState - 暗記状態を更新.
+ * @param {Props} props
  * @returns {JSX.Element} 単語リスト.
  */
-const VocabularyWordList: React.FC<{
-  currentPage: number;
-  hasMore: boolean;
-  bookId: string;
-  wordList: Word[];
-  filterWordList: (keyword: string) => void;
-  isLoading: boolean;
-  fetchWordList: (currentPage: number) => void;
-  toggleMemorizedState: (wordInfo: Word) => void;
-}> = ({
+const VocabularyWordList = ({
   currentPage,
+  isFoundFilteredWord,
   hasMore,
   bookId,
   wordList,
@@ -40,7 +51,8 @@ const VocabularyWordList: React.FC<{
   isLoading,
   fetchWordList,
   toggleMemorizedState,
-}) => {
+  deleteWordHandler,
+}: Props) => {
   // ルーター
   const router = useRouter();
   // キーワードのref
@@ -56,65 +68,87 @@ const VocabularyWordList: React.FC<{
   const moveToVocabularyWordForm = () => {
     router.push(`/vocabulary/word/form?bookId=${bookId}`);
   };
-  // 検索窓
-  const searchBox = (
-    <input ref={keywordRef} type="text" onChange={onChangeKeywordHandler} />
-  );
   // 単語追加アイコン
   const addWordIcon = (
     <AddIcon onClickAddIconHandler={moveToVocabularyWordForm} />
   );
+  // 単語関連の上部モジュール
   const wordTopModule = (
     <div className="wordTopModule">
-      {searchBox}
+      <SearchBox
+        keywordRef={keywordRef}
+        onChangeHandler={onChangeKeywordHandler}
+      />
       {addWordIcon}
     </div>
   );
-  // 単語リスト要素
-  const wordListElement = (
+  // 単語リストを生成
+  const createWordList = () => {
+    // キーワード検索結果が0件
+    if (!isFoundFilteredWord) {
+      return (
+        <NotFoundWord
+          message={`${keywordRef.current?.value}に一致する単語が見つかりませんでした。
+      <br />
+      キーワードを変えて検索してみてください。`}
+        />
+      );
+    }
+    // 初期表示時の検索結果が0件
+    if (!wordList.length) {
+      return (
+        <NotFoundWord
+          message="単語が見つかりませんでした。
+      <br />
+      新しい単語を追加してください。"
+        />
+      );
+    }
+
+    return (
+      <InfiniteScroll
+        className="marginTop30"
+        pageStart={currentPage}
+        loadMore={() => {
+          fetchWordList(
+            Math.floor(wordList.length / VOCABULARY_LIST_RESULTS) +
+              (wordList.length % 2)
+          );
+        }}
+        loader={<Loader key={currentPage} />}
+        hasMore={hasMore}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        scrollabletarget="scrollableDiv"
+      >
+        {wordList.map((word, index) => {
+          return (
+            <div key={word.id}>
+              <VocabularyWord
+                key={word.id}
+                showDropDownIcon={true}
+                bookId={bookId}
+                wordInfo={word}
+                toggleMemorizedState={toggleMemorizedState}
+                deleteWordHandler={deleteWordHandler}
+              />
+              {hasMore && index === wordList.length - 1 && (
+                <div id="scrollableDiv" />
+              )}
+            </div>
+          );
+        })}
+        <ScrollToTopButton />
+      </InfiniteScroll>
+    );
+  };
+
+  return (
     <>
       {wordTopModule}
-      {isLoading ? (
-        <Loader />
-      ) : !wordList.length ? (
-        <NotFoundWord />
-      ) : (
-        <InfiniteScroll
-          className="marginTop30"
-          pageStart={currentPage}
-          loadMore={() => {
-            fetchWordList(
-              Math.floor(wordList.length / VOCABULARY_LIST_RESULTS) +
-                (wordList.length % 2)
-            );
-          }}
-          loader={<Loader key={currentPage} />}
-          hasMore={hasMore}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          scrollabletarget="scrollableDiv"
-        >
-          {wordList.map((word, index) => {
-            return (
-              <div key={word.id}>
-                <VocabularyWord
-                  key={word.id}
-                  bookId={bookId}
-                  wordInfo={word}
-                  toggleMemorizedState={toggleMemorizedState}
-                />
-                {hasMore && index === wordList.length - 1 && (
-                  <div id="scrollableDiv" />
-                )}
-              </div>
-            );
-          })}
-          <ScrollToTopButton />
-        </InfiniteScroll>
-      )}
+      {isLoading ? <Loader /> : createWordList()}
     </>
   );
-  return wordListElement;
 };
 
 export default VocabularyWordList;

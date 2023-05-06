@@ -1,19 +1,22 @@
-import React from "react";
 import Card from "../ui/Card";
+import React from "react";
+
+/** Props. */
+interface Props {
+  /** メッセージ. */
+  message: string;
+}
 
 /**
- * Not Found Word.
+ * 単語が存在しない.
  *
- * @returns {JSX.Element} Not Found Word.
+ * @param {Props} props
+ * @returns {JSX.Element} 単語が存在しない.
  */
-const NotFoundWord = () => {
+const NotFoundWord = ({ message }: Props) => {
   return (
     <Card isError={true}>
-      <div>
-        単語が見つかりませんでした。
-        <br />
-        新しい単語を追加してください。
-      </div>
+      <div dangerouslySetInnerHTML={{ __html: message }} />
     </Card>
   );
 };

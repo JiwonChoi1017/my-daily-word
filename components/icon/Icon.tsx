@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { AiOutlineMore, AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiOutlineMore } from "react-icons/ai";
 import {
-  FaPen,
-  FaHeart,
-  FaRegHeart,
-  FaBookmark,
-  FaRegBookmark,
-  FaCheck,
-  FaTimes,
   FaAngleLeft,
+  FaBookmark,
+  FaCheck,
+  FaHeart,
+  FaPen,
   FaPlus,
+  FaRegBookmark,
+  FaRegHeart,
+  FaSearch,
+  FaTimes,
 } from "react-icons/fa";
+import React, { useState } from "react";
+
 import classes from "../../styles/Icon.module.css";
 
 /**
@@ -35,6 +37,15 @@ export const FavoriteIcon: React.FC<{
       onClick={onClickFavoriteIconHandler}
     />
   );
+};
+
+/**
+ * 検索アイコン.
+ *
+ * @returns {JSX.Element} 検索アイコン.
+ */
+export const SearchIcon = () => {
+  return <FaSearch className={classes.searchIcon} />;
 };
 
 /**
