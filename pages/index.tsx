@@ -1,6 +1,5 @@
+import { Book, Word } from "@/types/Vocabulary";
 import React, { useContext, useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
-import { AuthContext } from "@/context/auth/AuthProvider";
 import {
   get,
   limitToFirst,
@@ -10,15 +9,17 @@ import {
   ref,
   update,
 } from "firebase/database";
-import { db } from "@/firebase-config";
-import { Book, Word } from "@/types/Vocabulary";
-import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
+
+import { AuthContext } from "@/context/auth/AuthContext";
 import { Button } from "@/components/ui/Button";
-import { useRouter } from "next/router";
-import classes from "@/styles/Button.module.css";
-import { ErrorInfo } from "@/types/Error";
 import { ERROR_STATUS } from "@/constants/constants";
+import { ErrorInfo } from "@/types/Error";
+import MainLayout from "@/components/layout/MainLayout";
 import NotFound from "@/components/error/NotFound";
+import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
+import classes from "@/styles/Button.module.css";
+import { db } from "@/firebase-config";
+import { useRouter } from "next/router";
 
 /**
  * ホーム画面.

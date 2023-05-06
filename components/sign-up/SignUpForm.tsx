@@ -1,9 +1,10 @@
 import React, { useContext, useRef, useState } from "react";
-import { AuthContext } from "@/context/auth/AuthProvider";
-import { useRouter } from "next/router";
-import { Button } from "../ui/Button";
+
+import { AuthContext } from "@/context/auth/AuthContext";
 import { AuthErrorCodes } from "firebase/auth";
+import { Button } from "../ui/Button";
 import { ErrorInfo } from "@/types/Error";
+import { useRouter } from "next/router";
 
 /**
  * ユーザー登録フォーム.

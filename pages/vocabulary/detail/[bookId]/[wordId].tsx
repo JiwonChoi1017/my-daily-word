@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
-import { useRouter } from "next/router";
-import { AuthContext } from "@/context/auth/AuthProvider";
-import { Word } from "@/types/Vocabulary";
-import VocabularyWordDetail from "@/components/vocabulary/word/detail/VocabularyWordDetail";
 import { get, ref, remove, update } from "firebase/database";
+
+import { AuthContext } from "@/context/auth/AuthContext";
+import MainLayout from "@/components/layout/MainLayout";
+import VocabularyWordDetail from "@/components/vocabulary/word/detail/VocabularyWordDetail";
+import { Word } from "@/types/Vocabulary";
 import { db } from "@/firebase-config";
+import { useRouter } from "next/router";
 
 /**
  * 単語詳細画面.
