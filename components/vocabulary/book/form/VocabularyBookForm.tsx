@@ -1,7 +1,8 @@
 import { Button, DoubleButton } from "@/components/ui/Button";
-import InputForm from "@/components/ui/InputForm";
-import { Book } from "@/types/Vocabulary";
 import React, { useRef, useState } from "react";
+
+import { Book } from "@/types/Vocabulary";
+import InputForm from "@/components/ui/InputForm";
 import classes from "../../../../styles/InputForm.module.css";
 import { useEffect } from "react";
 
@@ -19,7 +20,7 @@ import { useEffect } from "react";
 const VocabularyBookForm: React.FC<{
   isModifyForm: boolean;
   bookInfo: Book;
-  addBook: (bookInfo: Omit<Book, "id" | "modifiedAt">) => void;
+  addBook: (bookInfo: Omit<Book, "id" | "updatedAt">) => void;
   updateBook: (bookInfo: Book) => void;
   showCancelButton: boolean;
   onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -34,12 +35,12 @@ const VocabularyBookForm: React.FC<{
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const wordRef = useRef<HTMLSelectElement>(null);
-  const meaningRef = useRef<HTMLSelectElement>(null);
-  // 選択された原文の言語
-  const [selectedWord, setSelectedWord] = useState<string>("");
-  // 選択された訳文の言語
-  const [selectedMeaning, setSelectedMeaning] = useState<string>("");
+  const entryRef = useRef<HTMLSelectElement>(null);
+  const bodyRef = useRef<HTMLSelectElement>(null);
+  // 選択された見出し語
+  const [selectedEntry, setSelectedEntry] = useState<string>("");
+  // 選択された本文
+  const [selectedBody, setSelectedBody] = useState<string>("");
   // 活性/非活性状態
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   // 送信イベントハンドラ
@@ -49,8 +50,8 @@ const VocabularyBookForm: React.FC<{
     if (
       !titleRef.current ||
       !descriptionRef.current ||
-      !wordRef.current ||
-      !meaningRef.current
+      !entryRef.current ||
+      !bodyRef.current
     ) {
       return;
     }
@@ -72,17 +73,17 @@ const VocabularyBookForm: React.FC<{
         ...bookInfo,
         title: titleRef.current.value,
         description: descriptionRef.current.value,
-        word: wordRef.current.value,
-        meaning: meaningRef.current.value,
-        modifiedAt: `${currentDateString}${currentTimeString}`,
+        entry: entryRef.current.value,
+        body: bodyRef.current.value,
+        updatedAt: `${currentDateString}${currentTimeString}`,
       });
     }
 
     addBook({
       title: titleRef.current.value,
       description: descriptionRef.current.value,
-      word: wordRef.current.value,
-      meaning: meaningRef.current.value,
+      entry: entryRef.current.value,
+      body: bodyRef.current.value,
       createdAt: `${currentDateString}${currentTimeString}`,
       isFavorite: false,
     });
@@ -92,29 +93,29 @@ const VocabularyBookForm: React.FC<{
     if (
       !titleRef.current ||
       !descriptionRef.current ||
-      !wordRef.current ||
-      !meaningRef.current
+      !entryRef.current ||
+      !bodyRef.current
     ) {
       return;
     }
     const title = titleRef.current.value;
     const description = descriptionRef.current.value;
-    const word = wordRef.current.value;
-    const meaning = meaningRef.current.value;
+    const entry = entryRef.current.value;
+    const body = bodyRef.current.value;
     // 各言語状態を更新
-    setSelectedWord(word);
-    setSelectedMeaning(meaning);
+    setSelectedEntry(entry);
+    setSelectedBody(body);
     // 活性/非活性状態を更新
-    setIsDisabled(!title || !description || !word || !meaning);
+    setIsDisabled(!title || !description || !entry || !body);
   };
 
   useEffect(() => {
-    const { title, description, word, meaning } = bookInfo;
+    const { title, description, entry, body } = bookInfo;
     // 各言語状態を更新
-    setSelectedWord(word);
-    setSelectedMeaning(meaning);
+    setSelectedEntry(entry);
+    setSelectedBody(body);
     // 活性/非活性状態を更新
-    setIsDisabled(!title || !description || !word || !meaning);
+    setIsDisabled(!title || !description || !entry || !body);
   }, [bookInfo]);
 
   // ボタン要素
@@ -163,12 +164,12 @@ const VocabularyBookForm: React.FC<{
             />
           </div>
           <div>
-            <label htmlFor="word">原文の言語</label>
+            <label htmlFor="entry">見出し語</label>
             <div className={classes.selectbox}>
               <select
-                ref={wordRef}
-                id="word"
-                value={selectedWord}
+                ref={entryRef}
+                id="entry"
+                value={selectedEntry}
                 onChange={onChangeInputHandler}
               >
                 <option value="">選択してください</option>
@@ -178,12 +179,12 @@ const VocabularyBookForm: React.FC<{
             </div>
           </div>
           <div>
-            <label htmlFor="meaning">訳文の言語</label>
+            <label htmlFor="body">本文</label>
             <div className={classes.selectbox}>
               <select
-                ref={meaningRef}
-                id="meaning"
-                value={selectedMeaning}
+                ref={bodyRef}
+                id="body"
+                value={selectedBody}
                 onChange={onChangeInputHandler}
               >
                 <option value="">選択してください</option>
@@ -193,7 +194,7 @@ const VocabularyBookForm: React.FC<{
             </div>
           </div>
           <div>
-            <label htmlFor="description">詳細</label>
+            <label htmlFor="description">説明文</label>
             <textarea
               ref={descriptionRef}
               id="description"

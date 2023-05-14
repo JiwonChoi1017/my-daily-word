@@ -32,11 +32,11 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   const [book, setBook] = useState<Book>({
     id: "",
     title: "",
-    word: "",
-    meaning: "",
+    entry: "",
+    body: "",
     description: "",
     createdAt: "",
-    modifiedAt: "",
+    updatedAt: "",
     isFavorite: false,
   });
   // キャンセルボタンの表示状態
@@ -92,7 +92,7 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   }, [currentUserId]);
 
   // 単語帳追加イベント
-  const addBook = async (bookInfo: Omit<Book, "id" | "modifiedAt">) => {
+  const addBook = async (bookInfo: Omit<Book, "id" | "updatedAt">) => {
     // idが存在しない場合、早期リターン
     if (!currentUserId) {
       return;
@@ -112,16 +112,16 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
       return;
     }
 
-    const { title, description, word, meaning, modifiedAt } = bookInfo;
+    const { title, description, entry, body, updatedAt } = bookInfo;
     const path = `users/${currentUserId}/${bookId}`;
     const bookRef = ref(db, path);
 
     await update(bookRef, {
       title,
       description,
-      word,
-      meaning,
-      modifiedAt,
+      entry,
+      body,
+      updatedAt,
     }).then(() => {
       router.push("/vocabulary/list?page=1");
     });
