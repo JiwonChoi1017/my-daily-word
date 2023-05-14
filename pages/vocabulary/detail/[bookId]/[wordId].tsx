@@ -27,7 +27,7 @@ const VocabularyWordDetailPage = () => {
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",
-    modifiedAt: "",
+    updatedAt: "",
   });
   // TODO: 暗記フラグ機能を共通化したい
   // 暗記状態更新イベント

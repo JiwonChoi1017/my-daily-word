@@ -1,8 +1,9 @@
-import { Button, DoubleButton } from "@/components/ui/Button";
 import { AddInputIcon, OptionalIcon } from "@/components/icon/Icon";
-import InputForm from "@/components/ui/InputForm";
+import { Button, DoubleButton } from "@/components/ui/Button";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
+
+import InputForm from "@/components/ui/InputForm";
 import classes from "../../../../styles/InputForm.module.css";
 
 /**
@@ -19,7 +20,7 @@ import classes from "../../../../styles/InputForm.module.css";
 const VocabularyWordForm: React.FC<{
   isModifyForm: boolean;
   wordInfo: Word;
-  addWord: (wordInfo: Omit<Word, "id" | "modifiedAt">) => void;
+  addWord: (wordInfo: Omit<Word, "id" | "updatedAt">) => void;
   updateWord: (wordInfo: Word) => void;
   showCancelButton: boolean;
   onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -166,6 +167,7 @@ const VocabularyWordForm: React.FC<{
               examplesRef.current[currentExampleIndex] = el;
             }}
             id={`example_${idx}_${example_idx}`}
+            className="marginBottom20"
             type="text"
             maxLength={300}
             defaultValue={example}
@@ -178,7 +180,7 @@ const VocabularyWordForm: React.FC<{
 
     return (
       <div key={idx}>
-        <label className="alignItemsCenter">
+        <label className="alignItemsCenter marginBottom20">
           意味
           {idx === meanings.length - 1 && (
             <AddInputIcon onClickAddInputIconHandler={onAddMeaningHandler} />
@@ -187,7 +189,7 @@ const VocabularyWordForm: React.FC<{
         <ul key={`meaning_${idx}`} className="margin0">
           {meaningInput}
         </ul>
-        <label className="alignItemsCenter">
+        <label className="alignItemsCenter marginBottom20">
           例文
           <OptionalIcon />
           <AddInputIcon
@@ -249,7 +251,7 @@ const VocabularyWordForm: React.FC<{
         word: wordRef.current.value,
         meanings,
         pronunciation: pronunciationRef.current.value,
-        modifiedAt: `${currentDateString}${currentTimeString}`,
+        updatedAt: `${currentDateString}${currentTimeString}`,
       });
     }
 

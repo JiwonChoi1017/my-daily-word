@@ -38,7 +38,7 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",
-    modifiedAt: "",
+    updatedAt: "",
   });
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
@@ -97,7 +97,7 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   }, [currentUserId]);
 
   // 単語追加イベント
-  const addWord = async (wordInfo: Omit<Word, "id" | "modifiedAt">) => {
+  const addWord = async (wordInfo: Omit<Word, "id" | "updatedAt">) => {
     // idが存在しない場合、早期リターン
     if (!currentUserId) {
       return;
@@ -119,11 +119,11 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
       return;
     }
 
-    const { word, pronunciation, meanings, modifiedAt } = wordInfo;
+    const { word, pronunciation, meanings, updatedAt } = wordInfo;
     const path = `users/${currentUserId}/${bookId}/words/${wordId}`;
     const wordRef = ref(db, path);
 
-    await update(wordRef, { word, pronunciation, meanings, modifiedAt }).then(
+    await update(wordRef, { word, pronunciation, meanings, updatedAt }).then(
       () => {
         router.push(`/vocabulary/detail/${bookId}/${wordId}`);
       }

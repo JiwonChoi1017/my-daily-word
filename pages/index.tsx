@@ -38,7 +38,7 @@ export default function Home() {
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",
-    modifiedAt: "",
+    updatedAt: "",
   });
   const [errorInfo, setErrorInfo] = useState<ErrorInfo>({
     status: ERROR_STATUS.SUCCESS,
