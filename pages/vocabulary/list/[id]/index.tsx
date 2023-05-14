@@ -60,12 +60,12 @@ const VocabularyWordListPage = () => {
         .then((response) => {
           return response.val();
         })
-        .then((data) => {
+        .then((value) => {
           const wordList = [];
-          for (const key in data) {
+          for (const key of Object.keys(value).reverse()) {
             const word: Word = {
               id: key,
-              ...data[key],
+              ...value[key],
             };
             if (
               !keyword ||
