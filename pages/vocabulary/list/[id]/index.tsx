@@ -67,7 +67,11 @@ const VocabularyWordListPage = () => {
               id: key,
               ...data[key],
             };
-            if (!keyword || word.word.startsWith(keyword)) {
+            if (
+              !keyword ||
+              word.word.startsWith(keyword) ||
+              word.pronunciation.startsWith(keyword)
+            ) {
               wordList.push(word);
             }
           }
