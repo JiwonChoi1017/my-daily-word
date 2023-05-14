@@ -49,7 +49,7 @@ ul {
 
 @media screen and (max-width: 480px) {
   .title__wrap {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
     width: 65%;
     white-space: nowrap;
@@ -76,7 +76,7 @@ ul {
 
 @media screen and (max-width: 480px) {
   .description {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 

@@ -26,6 +26,12 @@
   }
 }
 
+@media screen and (max-width: 480px) {
+  .header__text {
+    font-size: 13px;
+  }
+}
+
 .header__logo {
   width: 50%;
   cursor: pointer;
@@ -35,8 +41,8 @@
 
 @media screen and (max-width: 480px) {
   .header__logo {
-    width: 50%;
-    font-size: 30px;
+    width: 62%;
+    font-size: 28px;
   }
 }
 
@@ -86,4 +92,10 @@
   padding: 10px 15px;
   font-family: "Noto Serif JP", serif;
   text-decoration: none;
+}
+
+@media screen and (max-width: 480px) {
+  .navigation ul li a {
+    font-size: 14px;
+  }
 }

@@ -77,7 +77,9 @@ const Header: React.FC<{
       onClick={isSignIn ? toggleSignOutModal : moveToSignInPage}
     >
       <FaUser />
-      <p>{isSignIn ? "ログアウト" : "ログイン"}</p>
+      <p className={classes.header__text}>
+        {isSignIn ? "ログアウト" : "ログイン"}
+      </p>
     </div>
   );
   // ナビゲーション
@@ -105,10 +107,10 @@ const Header: React.FC<{
     <header className={classes.header}>
       <div className={classes.header__inner}>
         <div>
-          <p>{currentDate}</p>
+          <p className={classes.header__text}>{currentDate}</p>
         </div>
         <h1 className={classes.header__logo} onClick={onClickLogoHandler}>
-          Daily Word
+          My Daily Word
         </h1>
         <div className={classes.header__border__box}>{userIcon}</div>
       </div>
