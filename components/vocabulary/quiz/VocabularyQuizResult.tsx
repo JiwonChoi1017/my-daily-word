@@ -1,9 +1,9 @@
-import Card from "@/components/ui/Card";
-import WordList from "@/components/word/WordList";
 import { Answer } from "@/types/Quiz";
-import React from "react";
-import classes from "../../../styles/Button.module.css";
 import { Button } from "../../ui/Button";
+import Card from "@/components/ui/Card";
+import React from "react";
+import WordList from "@/components/vocabulary/quiz/WordList";
+import classes from "../../../styles/Button.module.css";
 
 /**
  * 単語クイズ結果.

@@ -1,6 +1,6 @@
 import { Answer } from "@/types/Quiz";
 import React from "react";
-import classes from "../../styles/WordList.module.css";
+import classes from "@/styles/WordList.module.css";
 
 /**
  * 単語リスト.
