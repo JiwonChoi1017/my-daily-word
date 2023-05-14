@@ -37,6 +37,12 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 480px) {
+  .modifyIcon {
+    margin-left: 10px;
+  }
+}
+
 .bookIconWrap,
 .wordIconWrap {
   font-size: 24px;
