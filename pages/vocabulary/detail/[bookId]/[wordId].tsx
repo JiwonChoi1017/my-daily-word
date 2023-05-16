@@ -22,8 +22,8 @@ const VocabularyWordDetailPage = () => {
   // 単語状態
   const [word, setWord] = useState<Word>({
     id: "",
-    word: "",
-    pronunciation: "",
+    words: [],
+    pronunciations: [],
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",
