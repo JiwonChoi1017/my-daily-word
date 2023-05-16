@@ -41,7 +41,7 @@ const VocabularyQuizPage = () => {
   const [correctAnswerList, setCorrectAnswerList] = useState<Answer[]>([]);
   // 現在のユーザーid
   const { currentUserId } = useContext(AuthContext);
-
+  // 単語リストページへ遷移
   const moveToWordListPage = () => {
     router.push(`/vocabulary/list/${id}/?page=1`);
   };
@@ -77,18 +77,27 @@ const VocabularyQuizPage = () => {
 
     while (questionCount < VOCABULARY_QUIZ_COUNT) {
       const answerIndexList: number[] = [];
-      const tempAnswerList = [];
+      const tempAnswerList: string[] = [];
 
       const randomWordIndex = Math.floor(Math.random() * wordList.length);
       if (questionIndexList.includes(randomWordIndex)) continue;
-      const { id, word, pronunciation, meanings } = wordList[randomWordIndex];
+      const { id, words, pronunciations, meanings } = wordList[randomWordIndex];
       const randomMeaningIndex = Math.floor(Math.random() * meanings.length);
       const { meaning } = meanings[randomMeaningIndex];
 
       questionIndexList.push(randomWordIndex);
       answerIndexList.push(randomWordIndex);
-      tempAnswerList.push(word);
-      correctAnswerList.push({ id, word, pronunciation, meaning });
+
+      const wordsString = words.join(" / ");
+      const pronunciationsString = pronunciations.join(" / ");
+
+      tempAnswerList.push(wordsString);
+      correctAnswerList.push({
+        id,
+        word: wordsString,
+        pronunciation: pronunciationsString,
+        meaning,
+      });
 
       questionCount++;
 
@@ -96,10 +105,10 @@ const VocabularyQuizPage = () => {
       while (answerCount < 3) {
         const randomWordIndex = Math.floor(Math.random() * wordList.length);
         if (answerIndexList.includes(randomWordIndex)) continue;
-        const { word } = wordList[randomWordIndex];
+        const { words } = wordList[randomWordIndex];
 
         answerIndexList.push(randomWordIndex);
-        tempAnswerList.push(word);
+        tempAnswerList.push(words.join(" / "));
 
         answerCount++;
       }
@@ -145,14 +154,23 @@ const VocabularyQuizPage = () => {
 
       const randomWordIndex = Math.floor(Math.random() * wordList.length);
       if (questionIndexList.includes(randomWordIndex)) continue;
-      const { id, word, pronunciation, meanings } = wordList[randomWordIndex];
+      const { id, words, pronunciations, meanings } = wordList[randomWordIndex];
       const randomMeaningIndex = Math.floor(Math.random() * meanings.length);
       const { meaning } = meanings[randomMeaningIndex];
 
       questionIndexList.push(randomWordIndex);
       answerIndexList.push(randomWordIndex);
+
+      const wordsString = words.join(" / ");
+      const pronunciationsString = pronunciations.join(" / ");
+
       tempAnswerList.push(meaning);
-      correctAnswerList.push({ id, word, pronunciation, meaning });
+      correctAnswerList.push({
+        id,
+        word: wordsString,
+        pronunciation: pronunciationsString,
+        meaning,
+      });
 
       questionCount++;
 

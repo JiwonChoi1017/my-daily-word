@@ -22,11 +22,11 @@ export type Book = {
 export type Word = {
   /** id. */
   id: string;
-  /** 単語. */
-  word: string;
-  /** 発音. */
-  pronunciation: string;
-  /** 意味. */
+  /** 単語リスト. */
+  words: string[];
+  /** 発音リスト. */
+  pronunciations: string[];
+  /** 意味リスト. */
   meanings: Meaning[];
   /** 作成日時. */
   createdAt: string;
@@ -40,6 +40,6 @@ export type Word = {
 export type Meaning = {
   /** 意味. */
   meaning: string;
-  /** 例文. */
+  /** 例文リスト. */
   examples: string[];
 };

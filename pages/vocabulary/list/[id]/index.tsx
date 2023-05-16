@@ -69,8 +69,8 @@ const VocabularyWordListPage = () => {
             };
             if (
               !keyword ||
-              word.word.startsWith(keyword) ||
-              word.pronunciation.startsWith(keyword)
+              containsKeyword(word.words, keyword) ||
+              containsKeyword(word.pronunciations, keyword)
             ) {
               wordList.push(word);
             }
@@ -81,6 +81,12 @@ const VocabularyWordListPage = () => {
         });
     };
     fetchWordList();
+  };
+
+  // キーワードを含めているか
+  const containsKeyword = (items: string[], keyword: string) => {
+    const filteredList = items.filter((item) => item.startsWith(keyword));
+    return !!filteredList.length;
   };
 
   // 暗記状態を更新

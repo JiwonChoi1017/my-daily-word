@@ -36,7 +36,7 @@ const VocabularyWord = ({
   toggleMemorizedState,
   deleteWordHandler,
 }: Props) => {
-  const { id, word, pronunciation, isMemorized, meanings } = wordInfo;
+  const { id, words, pronunciations, isMemorized, meanings } = wordInfo;
   // ルーター
   const router = useRouter();
   // 詳細ページへ移動
@@ -86,8 +86,8 @@ const VocabularyWord = ({
           }}
         >
           <div className="title__wrap">
-            <span className="title">{word}</span>
-            <span>[{pronunciation}]</span>
+            <span className="title">{words.join(" / ")}</span>
+            <span>[{pronunciations.join(" / ")}]</span>
           </div>
           {/* アイコン */}
           <div className="floatRight _ignoreClick">
