@@ -33,10 +33,14 @@ const VocabularyWordForm: React.FC<{
   onClickCancelButton,
 }) => {
   // 各入力項目のref
-  const wordRef = useRef<HTMLInputElement>(null);
+  const wordsRef = useRef<HTMLInputElement[]>([]);
+  const pronunciationsRef = useRef<HTMLInputElement[]>([]);
   const meaningsRef = useRef<HTMLInputElement[]>([]);
-  const pronunciationRef = useRef<HTMLInputElement>(null);
   const examplesRef = useRef<HTMLInputElement[]>([]);
+  // 単語状態
+  const [words, setWords] = useState<string[]>([]);
+  // 発音状態
+  const [pronunciations, setPronunciations] = useState<string[]>([]);
   // 意味状態
   const [meanings, setMeanings] = useState<Meaning[]>([
     { meaning: "", examples: [""] },
@@ -47,19 +51,24 @@ const VocabularyWordForm: React.FC<{
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    const { word, pronunciation } = wordInfo;
+    const { words, pronunciations, meanings } = wordInfo;
 
-    const newMeaningList = wordInfo.meanings.reduce(
-      (acc: Meaning[], meaning) => {
-        // 例文が存在しない場合、空文字を入れた配列を返す
-        if (!meaning.examples || !meaning.examples.length) {
-          return [...acc, { meaning: meaning.meaning, examples: [""] }];
-        }
-        return [...acc, meaning];
-      },
-      []
+    wordsRef.current = wordsRef.current.slice(0, words.length);
+    setWords(words.length ? words : [""]);
+
+    pronunciationsRef.current = pronunciationsRef.current.slice(
+      0,
+      pronunciations.length
     );
+    setPronunciations(pronunciations.length ? pronunciations : [""]);
 
+    const newMeaningList = meanings.reduce((acc: Meaning[], meaning) => {
+      // 例文が存在しない場合、空文字を入れた配列を返す
+      if (!meaning.examples || !meaning.examples.length) {
+        return [...acc, { meaning: meaning.meaning, examples: [""] }];
+      }
+      return [...acc, meaning];
+    }, []);
     setMeanings(newMeaningList);
     meaningsRef.current = meaningsRef.current.slice(0, meanings.length);
 
@@ -72,8 +81,20 @@ const VocabularyWordForm: React.FC<{
     examplesRef.current = examplesRef.current.slice(0, examples.length);
 
     // 活性/非活性状態を更新
-    setIsDisabled(!word || !pronunciation || !meanings.length);
+    setIsDisabled(!words.length || !pronunciations.length || !meanings.length);
   }, [wordInfo]);
+  // 単語追加イベントハンドラ
+  const onAddWordHanlder = () => {
+    setWords((prevState) => {
+      return [...prevState, ""];
+    });
+  };
+  // 発音追加イベントハンドラ
+  const onAddPronunciationHandler = () => {
+    setPronunciations((prevState) => {
+      return [...prevState, ""];
+    });
+  };
   // 意味追加イベントハンドラ
   const onAddMeaningHandler = () => {
     setMeanings((prevState) => {
@@ -108,11 +129,28 @@ const VocabularyWordForm: React.FC<{
   };
   // 入力変更イベントハンドラ
   const onChangeInputHandler = () => {
-    if (!wordRef.current || !pronunciationRef.current || !meaningsRef.current) {
+    if (
+      !wordsRef.current ||
+      !pronunciationsRef.current ||
+      !meaningsRef.current
+    ) {
       return;
     }
-    const word = wordRef.current.value;
-    const pronunciation = pronunciationRef.current.value;
+    const words = wordsRef.current.reduce((acc: string[], word) => {
+      if (!word.value) {
+        return acc;
+      }
+      return [...acc, word.value];
+    }, []);
+    const pronunciations = pronunciationsRef.current.reduce(
+      (acc: string[], pronunciation) => {
+        if (!pronunciation.value) {
+          return acc;
+        }
+        return [...acc, pronunciation.value];
+      },
+      []
+    );
     const meanings = meaningsRef.current.reduce((acc: string[], meaning) => {
       if (!meaning.value) {
         return acc;
@@ -120,8 +158,58 @@ const VocabularyWordForm: React.FC<{
       return [...acc, meaning.value];
     }, []);
     // 活性/非活性状態を更新
-    setIsDisabled(!word || !pronunciation || !meanings.length);
+    setIsDisabled(!words.length || !pronunciations.length || !meanings.length);
   };
+  // 単語入力欄
+  const wordsInput = (
+    <ul className="margin0">
+      {words.map((item, idx) => {
+        return (
+          <li key={`word_${idx}`}>
+            <p className="margin0">{idx + 1}.</p>
+            <input
+              ref={(el) => {
+                if (!el) {
+                  return;
+                }
+                wordsRef.current[idx] = el;
+              }}
+              type="text"
+              id="word"
+              maxLength={50}
+              defaultValue={item}
+              onChange={onChangeInputHandler}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+  // 発音入力欄
+  const pronunciationsInput = (
+    <ul className="margin0">
+      {pronunciations.map((item, idx) => {
+        return (
+          <li key={`pronunciation_${idx}`}>
+            <p className="margin0">{idx + 1}.</p>
+            <input
+              ref={(el) => {
+                if (!el) {
+                  return;
+                }
+                pronunciationsRef.current[idx] = el;
+              }}
+              type="text"
+              id="pronunciation"
+              maxLength={100}
+              defaultValue={item}
+              onChange={onChangeInputHandler}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
   // 意味入力欄
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
@@ -208,14 +296,29 @@ const VocabularyWordForm: React.FC<{
     e.preventDefault();
 
     if (
-      !wordRef.current ||
+      !wordsRef.current ||
+      !pronunciationsRef.current ||
       !meaningsRef.current ||
-      !pronunciationRef.current ||
       !examplesRef.current
     ) {
       return;
     }
 
+    const words = wordsRef.current.reduce((acc: string[], word) => {
+      if (!word.value) {
+        return acc;
+      }
+      return [...acc, word.value];
+    }, []);
+    const pronunciations = pronunciationsRef.current.reduce(
+      (acc: string[], pronunciation) => {
+        if (!pronunciation.value) {
+          return acc;
+        }
+        return [...acc, pronunciation.value];
+      },
+      []
+    );
     const meanings: Meaning[] = [];
     meaningsRef.current.map((meaning) => {
       meanings.push({ meaning: meaning.value, examples: [] });
@@ -248,17 +351,17 @@ const VocabularyWordForm: React.FC<{
     if (isModifyForm) {
       return updateWord({
         ...wordInfo,
-        word: wordRef.current.value,
+        words,
+        pronunciations,
         meanings,
-        pronunciation: pronunciationRef.current.value,
         updatedAt: `${currentDateString}${currentTimeString}`,
       });
     }
 
     addWord({
-      word: wordRef.current.value,
+      words,
+      pronunciations,
       meanings,
-      pronunciation: pronunciationRef.current.value,
       isMemorized: false,
       createdAt: `${currentDateString}${currentTimeString}`,
     });
@@ -267,26 +370,23 @@ const VocabularyWordForm: React.FC<{
   const inputFieldsElement = (
     <div className={classes.inputfields}>
       <div>
-        <label htmlFor="word">単語</label>
-        <input
-          ref={wordRef}
-          type="text"
-          id="word"
-          maxLength={50}
-          defaultValue={wordInfo.word}
-          onChange={onChangeInputHandler}
-        />
+        <label className="alignItemsCenter marginBottom20" htmlFor="word">
+          単語
+          <AddInputIcon onClickAddInputIconHandler={onAddWordHanlder} />
+        </label>
+        {wordsInput}
       </div>
       <div>
-        <label htmlFor="pronunciation">発音</label>
-        <input
-          ref={pronunciationRef}
-          type="text"
-          id="pronunciation"
-          maxLength={100}
-          defaultValue={wordInfo.pronunciation}
-          onChange={onChangeInputHandler}
-        />
+        <label
+          className="alignItemsCenter marginBottom20"
+          htmlFor="pronunciation"
+        >
+          発音
+          <AddInputIcon
+            onClickAddInputIconHandler={onAddPronunciationHandler}
+          />
+        </label>
+        {pronunciationsInput}
       </div>
       {meaningsInput}
     </div>

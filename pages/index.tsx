@@ -33,8 +33,8 @@ export default function Home() {
   const [bookTitle, setBookTitle] = useState<string>("");
   const [randomWord, setRandomWord] = useState<Word>({
     id: "",
-    word: "",
-    pronunciation: "",
+    words: [],
+    pronunciations: [],
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",

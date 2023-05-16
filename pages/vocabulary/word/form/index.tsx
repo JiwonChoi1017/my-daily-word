@@ -33,8 +33,8 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   // 単語状態
   const [word, setWord] = useState<Word>({
     id: "",
-    word: "",
-    pronunciation: "",
+    words: [],
+    pronunciations: [],
     meanings: [{ meaning: "", examples: [] }],
     isMemorized: false,
     createdAt: "",
@@ -119,11 +119,11 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
       return;
     }
 
-    const { word, pronunciation, meanings, updatedAt } = wordInfo;
+    const { words, pronunciations, meanings, updatedAt } = wordInfo;
     const path = `users/${currentUserId}/${bookId}/words/${wordId}`;
     const wordRef = ref(db, path);
 
-    await update(wordRef, { word, pronunciation, meanings, updatedAt }).then(
+    await update(wordRef, { words, pronunciations, meanings, updatedAt }).then(
       () => {
         router.push(`/vocabulary/detail/${bookId}/${wordId}`);
       }

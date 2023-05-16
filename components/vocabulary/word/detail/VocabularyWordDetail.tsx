@@ -1,10 +1,11 @@
-import Card from "@/components/ui/Card";
-import Loader from "@/components/layout/Loader";
-import { Word } from "@/types/Vocabulary";
-import React from "react";
 import { GoBackIcon, WordIcon } from "@/components/icon/Icon";
-import { useRouter } from "next/router";
+
+import Card from "@/components/ui/Card";
 import Link from "next/link";
+import Loader from "@/components/layout/Loader";
+import React from "react";
+import { Word } from "@/types/Vocabulary";
+import { useRouter } from "next/router";
 
 /**
  * 単語詳細.
@@ -75,8 +76,8 @@ const VocabularyWordDetail: React.FC<{
         ) : (
           <div>
             <div className="title__wrap">
-              <span className="title">{wordInfo.word}</span>
-              <span>[{wordInfo.pronunciation}]</span>
+              <span className="title">{wordInfo.words.join(" / ")}</span>
+              <span>[{wordInfo.pronunciations.join(" / ")}]</span>
             </div>
             {/* アイコン */}
             <WordIcon
