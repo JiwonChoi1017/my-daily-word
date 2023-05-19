@@ -31,6 +31,7 @@
   margin: 20px 0 30px 0;
   border: none;
   border-bottom: 1.2px solid #322a27;
+  font-family: inherit;
 }
 
 .inputform input:focus {
@@ -80,6 +81,7 @@
   margin-bottom: 10px;
   border: 1.2px solid #322a27;
   resize: vertical;
+  font-family: inherit;
 }
 
 .inputform textarea:focus {

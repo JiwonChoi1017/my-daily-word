@@ -17,6 +17,7 @@
   margin-top: 20px;
   border: none;
   border-bottom: 1.2px solid #322a27;
+  font-family: inherit;
 }
 
 .userform input[class="error"] {
