@@ -8,7 +8,7 @@
 .userform label {
   display: block;
   margin-top: 20px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .userform input {

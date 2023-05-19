@@ -3,6 +3,7 @@ import { BookmarkIcon, WordIcon } from "@/components/icon/Icon";
 import Card from "@/components/ui/Card";
 import Loader from "@/components/layout/Loader";
 import React from "react";
+import Title from "@/components/ui/Title";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
 
@@ -85,10 +86,10 @@ const VocabularyWord = ({
             moveToDetailPage(e);
           }}
         >
-          <div className="title__wrap">
-            <span className="title">{words.join(" / ")}</span>
-            <span>[{pronunciations.join(" / ")}]</span>
-          </div>
+          <Title
+            title={words.join(" / ")}
+            subtitle={`【${pronunciations.join(" / ")}】`}
+          />
           {/* アイコン */}
           <div className="floatRight _ignoreClick">
             {showDropDownIcon ? (

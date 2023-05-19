@@ -40,35 +40,6 @@ ul {
   font-family: "Noto Serif JP", serif;
 }
 
-.title__wrap {
-  display: inline-block;
-  justify-content: space-between;
-  font-size: 30px;
-  margin-bottom: 30px;
-}
-
-@media screen and (max-width: 480px) {
-  .title__wrap {
-    font-size: 20px;
-    margin-bottom: 20px;
-    width: 65%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.title {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-@media screen and (max-width: 480px) {
-  .title {
-    margin-right: 5px;
-  }
-}
-
 .description {
   margin-bottom: 0;
   font-size: 18px;
@@ -82,10 +53,6 @@ ul {
 
 .description li {
   margin-bottom: 5px;
-}
-
-.description .example {
-  margin-top: 20px;
 }
 
 .wordTopModule {
