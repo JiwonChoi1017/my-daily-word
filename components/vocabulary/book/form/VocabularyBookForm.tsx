@@ -44,7 +44,7 @@ const VocabularyBookForm: React.FC<{
   // 活性/非活性状態
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   // 送信イベントハンドラ
-  const onSubmitHandler = (e: React.FormEvent) => {
+  const onSubmitHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (
@@ -130,8 +130,8 @@ const VocabularyBookForm: React.FC<{
         second: {
           className: "first__double",
           text: isModifyForm ? "修正" : "単語帳を追加",
-          isSubmit: true,
           isDisabled,
+          clickHandler: onSubmitHandler,
         },
       }}
     />
@@ -139,73 +139,67 @@ const VocabularyBookForm: React.FC<{
     <Button
       className="first"
       text={isModifyForm ? "修正" : "単語帳を追加"}
-      isSubmit={true}
       isDisabled={isDisabled}
+      clickHandler={onSubmitHandler}
     />
   );
 
   return (
     <InputForm>
       <div className={classes.inputform__inner}>
-        <form
-          onSubmit={(e: React.FormEvent) => {
-            onSubmitHandler(e);
-          }}
-        >
-          <div>
-            <label htmlFor="title">タイトル</label>
-            <input
-              ref={titleRef}
-              type="text"
-              id="title"
-              maxLength={100}
-              defaultValue={bookInfo.title}
+        <div>
+          <label htmlFor="title">タイトル</label>
+          <input
+            ref={titleRef}
+            type="text"
+            id="title"
+            maxLength={100}
+            defaultValue={bookInfo.title}
+            onChange={onChangeInputHandler}
+          />
+        </div>
+        <div>
+          <label htmlFor="entry">見出し語</label>
+          <div className={classes.selectbox}>
+            <select
+              ref={entryRef}
+              id="entry"
+              value={selectedEntry}
               onChange={onChangeInputHandler}
-            />
+            >
+              <option value="">選択してください</option>
+              <option value="japanese">日本語</option>
+              <option value="korean">韓国語</option>
+            </select>
           </div>
-          <div>
-            <label htmlFor="entry">見出し語</label>
-            <div className={classes.selectbox}>
-              <select
-                ref={entryRef}
-                id="entry"
-                value={selectedEntry}
-                onChange={onChangeInputHandler}
-              >
-                <option value="">選択してください</option>
-                <option value="japanese">日本語</option>
-                <option value="korean">韓国語</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="body">本文</label>
-            <div className={classes.selectbox}>
-              <select
-                ref={bodyRef}
-                id="body"
-                value={selectedBody}
-                onChange={onChangeInputHandler}
-              >
-                <option value="">選択してください</option>
-                <option value="japanese">日本語</option>
-                <option value="korean">韓国語</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="description">説明文</label>
-            <textarea
-              ref={descriptionRef}
-              id="description"
-              rows={10}
-              maxLength={1000}
-              defaultValue={bookInfo.description}
+        </div>
+        <div>
+          <label htmlFor="body">本文</label>
+          <div className={classes.selectbox}>
+            <select
+              ref={bodyRef}
+              id="body"
+              value={selectedBody}
               onChange={onChangeInputHandler}
-            />
+            >
+              <option value="">選択してください</option>
+              <option value="japanese">日本語</option>
+              <option value="korean">韓国語</option>
+            </select>
           </div>
-          {buttonElement}
-        </form>
+        </div>
+        <div>
+          <label htmlFor="description">説明文</label>
+          <textarea
+            ref={descriptionRef}
+            id="description"
+            rows={10}
+            maxLength={1000}
+            defaultValue={bookInfo.description}
+            onChange={onChangeInputHandler}
+          />
+        </div>
+        {buttonElement}
       </div>
     </InputForm>
   );

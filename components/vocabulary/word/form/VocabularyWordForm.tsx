@@ -292,7 +292,7 @@ const VocabularyWordForm: React.FC<{
     );
   });
   // 送信イベントハンドラ
-  const onSubmitHandler = (e: React.FormEvent) => {
+  const onSubmitHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (
@@ -403,8 +403,8 @@ const VocabularyWordForm: React.FC<{
         second: {
           className: "first__double",
           text: isModifyForm ? "修正" : "単語を追加",
-          isSubmit: true,
           isDisabled: isDisabled,
+          clickHandler: onSubmitHandler,
         },
       }}
     />
@@ -412,20 +412,15 @@ const VocabularyWordForm: React.FC<{
     <Button
       text={isModifyForm ? "修正" : "単語を追加"}
       className="first"
-      isSubmit={true}
+      isDisabled={isDisabled}
+      clickHandler={onSubmitHandler}
     />
   );
 
   return (
     <InputForm>
-      <form
-        onSubmit={(e: React.FormEvent) => {
-          onSubmitHandler(e);
-        }}
-      >
-        {inputFieldsElement}
-        {buttonElement}
-      </form>
+      {inputFieldsElement}
+      {buttonElement}
     </InputForm>
   );
 };

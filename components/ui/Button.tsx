@@ -7,8 +7,6 @@ interface Props {
   text: string;
   /** クラス名. */
   className: string;
-  /** (任意)送信ボタンか. */
-  isSubmit?: boolean;
   /** (任意)非活性状態か. */
   isDisabled?: boolean;
   /** （任意）クリックイベントハンドラ. */
@@ -20,7 +18,6 @@ interface Props {
  *
  * @param {string} className - クラス名.
  * @param {string} text - テキスト.
- * @param {boolean} isSubmit - (任意)送信ボタンか.
  * @param {boolean} isDisabled - (任意)非活性状態か.
  * @param {string} clickHandler - (任意)クリックイベントハンドラ.
  * @returns {JSX.Element} ボタン.
@@ -28,24 +25,15 @@ interface Props {
 export const Button: React.FC<{
   className: string;
   text: string;
-  isSubmit?: boolean;
   isDisabled?: boolean;
   clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({
-  className,
-  text,
-  isSubmit = false,
-  isDisabled = false,
-  clickHandler,
-}) => {
+}> = ({ className, text, isDisabled = false, clickHandler }) => {
   // ボタン
-  const button = isSubmit ? (
-    <button type="submit" className={classes[className]} disabled={isDisabled}>
-      {text}
-    </button>
-  ) : (
+  const button = (
     <button
+      type="button"
       className={classes[className]}
+      disabled={isDisabled}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         if (!clickHandler) return;
         clickHandler(e);
@@ -78,14 +66,12 @@ export const DoubleButton: React.FC<{
       <Button
         className={first.className}
         text={first.text}
-        isSubmit={first.isSubmit}
         isDisabled={first.isDisabled}
         clickHandler={first.clickHandler}
       />
       <Button
         className={second.className}
         text={second.text}
-        isSubmit={second.isSubmit}
         isDisabled={second.isDisabled}
         clickHandler={second.clickHandler}
       />

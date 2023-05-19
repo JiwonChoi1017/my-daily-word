@@ -24,7 +24,7 @@ const SignUpForm = () => {
   // ユーザー登録ハンドラ
   const { signUpHandler } = useContext(AuthContext);
   // 送信イベント
-  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!emailRef.current || !passwordRef.current) {
       return;
@@ -75,11 +75,7 @@ const SignUpForm = () => {
   );
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-        onSubmitHandler(e);
-      }}
-    >
+    <>
       <div>
         {/* htmlFor: htmlタグの属性forのこと. */}
         {/* labelに付与することで、同じ内容のid属性を持つ要素を関連付けられる. */}
@@ -112,15 +108,15 @@ const SignUpForm = () => {
       <Button
         text="登録する"
         className="first"
-        isSubmit={true}
         isDisabled={isDisabled}
+        clickHandler={onSubmitHandler}
       />
       <Button
         text="キャンセル"
         className="second"
         clickHandler={onCancelHandler}
       />
-    </form>
+    </>
   );
 };
 

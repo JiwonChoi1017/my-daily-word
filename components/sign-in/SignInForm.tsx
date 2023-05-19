@@ -23,7 +23,7 @@ const SignInForm = () => {
   // ログインイベントハンドラ
   const { signInHandler } = useContext(AuthContext);
   // 送信イベント
-  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     // e.preventDefault(): submitイベントの発生元であるフォームが持つデフォルトの動作をキャンセルするメソッド.
     // フォームが持つデフォルトの動作とは、フォームの内容を指定したURLへ送信するという動作のことをいう.
     // 現在のURLに対してフォームの送信が行われると、結果的にページがリロードされてしまう.
@@ -63,11 +63,7 @@ const SignInForm = () => {
   );
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-        onSubmitHandler(e);
-      }}
-    >
+    <>
       {errorMsg}
       <div>
         <label htmlFor="email">メールアドレス</label>
@@ -95,15 +91,15 @@ const SignInForm = () => {
       <Button
         text="ログイン"
         className="first"
-        isSubmit={true}
         isDisabled={isDisabled}
+        clickHandler={onSubmitHandler}
       />
       <Button
         text="新規登録"
         className="second"
         clickHandler={onClickSignUpButtonHandler}
       />
-    </form>
+    </>
   );
 };
 
