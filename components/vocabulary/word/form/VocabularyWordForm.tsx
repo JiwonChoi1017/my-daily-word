@@ -4,7 +4,7 @@ import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
 import InputForm from "@/components/ui/InputForm";
-import classes from "../../../../styles/InputForm.module.css";
+import classes from "@/styles/InputForm.module.css";
 
 /**
  * 単語フォーム.
@@ -166,7 +166,7 @@ const VocabularyWordForm: React.FC<{
       {words.map((item, idx) => {
         return (
           <li key={`word_${idx}`}>
-            <p className="margin0">{idx + 1}.</p>
+            <p className={classes.number}>{idx + 1}.</p>
             <input
               ref={(el) => {
                 if (!el) {
@@ -191,7 +191,7 @@ const VocabularyWordForm: React.FC<{
       {pronunciations.map((item, idx) => {
         return (
           <li key={`pronunciation_${idx}`}>
-            <p className="margin0">{idx + 1}.</p>
+            <p className={classes.number}>{idx + 1}.</p>
             <input
               ref={(el) => {
                 if (!el) {
@@ -214,7 +214,7 @@ const VocabularyWordForm: React.FC<{
   const meaningsInput = meanings.map((item, idx) => {
     const meaningInput = (
       <li key={`meaning_${idx}`}>
-        <p className="margin0">{idx + 1}.</p>
+        <p className={classes.number}>{idx + 1}.</p>
         <input
           ref={(el) => {
             if (!el) {
@@ -246,7 +246,7 @@ const VocabularyWordForm: React.FC<{
         : exampleRefIndex;
       return (
         <li key={`example_${idx}_${example_idx}`}>
-          <p className="margin0">{example_idx + 1})</p>
+          <p className={classes.number}>{example_idx + 1})</p>
           <input
             ref={(el) => {
               if (!el) {
