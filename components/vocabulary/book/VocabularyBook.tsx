@@ -1,8 +1,9 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Card from "@/components/ui/Card";
 import { Book } from "@/types/Vocabulary";
 import { BookIcon } from "@/components/icon/Icon";
+import Card from "@/components/ui/Card";
+import React from "react";
+import Title from "@/components/ui/Title";
+import { useRouter } from "next/router";
 
 /**
  * 単語帳.
@@ -44,9 +45,7 @@ const VocabularyBook: React.FC<{
           clickBookHandler(e);
         }}
       >
-        <div className="title__wrap">
-          <span className="title">{title}</span>
-        </div>
+        <Title title={title} />
         <BookIcon
           isFavorite={isFavorite}
           onClickFavoriteIconHandler={onClickFavoriteIconHandler}
