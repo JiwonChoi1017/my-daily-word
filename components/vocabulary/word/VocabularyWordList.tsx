@@ -110,10 +110,7 @@ const VocabularyWordList = ({
         className="marginTop30"
         pageStart={currentPage}
         loadMore={() => {
-          fetchWordList(
-            Math.floor(wordList.length / VOCABULARY_LIST_RESULTS) +
-              (wordList.length % 2)
-          );
+          fetchWordList(currentPage + 1);
         }}
         loader={<Loader key={currentPage} />}
         hasMore={hasMore}
