@@ -1,22 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  endBefore,
-  get,
-  limitToLast,
-  orderByChild,
-  query,
-  ref,
-  remove,
-  update,
-} from "firebase/database";
+import { get, ref, remove, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
 import { Word } from "@/types/Vocabulary";
+import { WordHelper } from "@/helpers/word-helper";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
+
+/** 単語関連ヘルパー. */
+const wordHelper = new WordHelper();
 
 /**
  * 単語リスト画面.
@@ -128,23 +123,8 @@ const VocabularyWordListPage = () => {
       return;
     }
 
-    const path = `users/${currentUserId}/${bookId}/words`;
-    const wordsRef = ref(db, path);
-    const fetchWordQuery =
-      endValue.createdAt && endValue.key
-        ? query(
-            wordsRef,
-            orderByChild("createdAt"),
-            endBefore(endValue.createdAt, endValue.key),
-            limitToLast(VOCABULARY_LIST_RESULTS)
-          )
-        : query(
-            wordsRef,
-            orderByChild("createdAt"),
-            limitToLast(VOCABULARY_LIST_RESULTS)
-          );
-
-    await get(fetchWordQuery)
+    await wordHelper
+      .fetchWordList(currentUserId, bookId, endValue)
       .then((response) => {
         return response.val();
       })
