@@ -57,6 +57,13 @@
   margin: 0 0.25rem;
 }
 
+@media screen and (max-width: 480px) {
+  .first__double__modal {
+    width: 100%;
+    padding: 5px;
+  }
+}
+
 .first__double:disabled {
   cursor: default;
   background-color: #9b9390;
@@ -119,4 +126,12 @@
   color: #322a27;
   border: 2.5px double #938e8d;
   margin: 0 0.25rem;
+}
+
+@media screen and (max-width: 480px) {
+  .second__double__modal {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+  }
 }

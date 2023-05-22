@@ -1,6 +1,6 @@
-import React from "react";
-import classes from "../../styles/Modal.module.css";
 import { DoubleButton } from "./Button";
+import React from "react";
+import classes from "@/styles/Modal.module.css";
 
 /** Props. */
 interface Props {
