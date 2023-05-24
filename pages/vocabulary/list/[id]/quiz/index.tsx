@@ -212,6 +212,10 @@ const VocabularyQuizPage = () => {
         return response.val();
       })
       .then((value) => {
+        // レスポンスが存在しない場合、そのままリターン
+        if (!value) {
+          return;
+        }
         for (const key of Object.keys(value)) {
           const word: Word = {
             id: key,

@@ -4,6 +4,12 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 480px) {
+  .favoriteIcon {
+    font-size: 22px;
+  }
+}
+
 .searchIcon {
   font-size: 18px;
 }
@@ -13,6 +19,12 @@
   margin-left: 20px;
   color: #2831d9b7;
   cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .bookmarkIcon {
+    font-size: 22px;
+  }
 }
 
 .addInputIconWrap {
@@ -31,6 +43,12 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 480px) {
+  .addIcon {
+    font-size: 22px;
+  }
+}
+
 .modifyIcon {
   margin-left: 20px;
   color: #9b9390;
@@ -47,6 +65,15 @@
 .wordIconWrap {
   font-size: 24px;
   float: right;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 480px) {
+  .bookIconWrap,
+  .wordIconWrap {
+    font-size: 22px;
+  }
 }
 
 .dropdown__lists {
