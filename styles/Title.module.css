@@ -7,12 +7,9 @@
 
 @media screen and (max-width: 480px) {
   .title__wrap {
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 20px;
-    width: 65%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 70%;
   }
 }
 

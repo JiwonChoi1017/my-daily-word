@@ -6,7 +6,6 @@ const Document = () => {
   return (
     <Html>
       <Head>
-        <title>My Daily Word</title>
         {/* フォント */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
