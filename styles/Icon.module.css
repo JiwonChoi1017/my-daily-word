@@ -107,6 +107,12 @@
   margin-right: 10px;
 }
 
+@media screen and (max-width: 480px) {
+  .goBackIcon {
+    font-size: 18px;
+  }
+}
+
 .correctAnswerIcon {
   margin-left: 10px;
   color: #28d97eeb;

@@ -1,12 +1,11 @@
-import { GoBackIcon, WordIcon } from "@/components/icon/Icon";
-
 import Card from "@/components/ui/Card";
 import Examples from "./Examples";
-import Link from "next/link";
+import GoBackLink from "./GoBackLink";
 import Loader from "@/components/layout/Loader";
 import React from "react";
 import Title from "@/components/ui/Title";
 import { Word } from "@/types/Vocabulary";
+import { WordIcon } from "@/components/icon/Icon";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -52,16 +51,6 @@ const VocabularyWordDetail = ({
   const onClickDeleteLinkHandler = () => {
     deleteWord();
   };
-  // 前のページへ戻るリンク要素
-  const goBackLinkElement = !isLoading && (
-    <Link
-      href={`/vocabulary/list/${bookId}?page=1`}
-      className="alignItemsCenter link"
-    >
-      <GoBackIcon />
-      単語リストへ戻る
-    </Link>
-  );
   // 意味リスト
   const meaningList = meanings.map((meaning, index) => {
     return (
@@ -74,7 +63,11 @@ const VocabularyWordDetail = ({
 
   return (
     <>
-      {goBackLinkElement}
+      {/* 一覧画面へ戻るリンク */}
+      <GoBackLink
+        isLoading={isLoading}
+        url={`/vocabulary/list/${bookId}?page=1`}
+      />
       <Card>
         {isLoading ? (
           <Loader />
