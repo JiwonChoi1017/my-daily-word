@@ -1,37 +1,51 @@
 import { AddInputIcon, OptionalIcon } from "@/components/icon/Icon";
-import { Button, DoubleButton } from "@/components/ui/Button";
+import {
+  Button,
+  DoubleButton,
+  DuplicateCheckButton,
+} from "@/components/ui/Button";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
 import InputForm from "@/components/ui/InputForm";
-import classes from "@/styles/InputForm.module.css";
+import classes from "@/styles/VocabularyWordForm.module.css";
+
+/** Props. */
+interface Props {
+  /** 修正フォームか. */
+  isModifyForm: boolean;
+  /** 単語情報. */
+  wordInfo: Word;
+  /** 重複する単語リスト. */
+  duplicateWordList: Word[];
+  /** 重複する単語を取得. */
+  findDuplicateWords: (keyword: string) => void;
+  /** 単語追加イベント. */
+  addWord: (wordInfo: Omit<Word, "id" | "updatedAt">) => void;
+  /** 単語更新イベント. */
+  updateWord: (wordInfo: Word) => void;
+  /** 前のページへ戻るイベント. */
+  showCancelButton: boolean;
+  /** Props. */
+  onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
 /**
  * 単語フォーム.
  *
- * @param {boolean} isModifyForm - 修正フォームか.
- * @param {Word} wordInfo - 単語情報.
- * @param {function} addWord - 単語追加イベント.
- * @param {function} updateWord - 単語更新イベント.
- * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
- * @param {function} onClickCancelButton - 前のページへ戻るイベント.
+ * @param {Props} props
  * @returns {JSX.Element} 単語フォーム.
  */
-const VocabularyWordForm: React.FC<{
-  isModifyForm: boolean;
-  wordInfo: Word;
-  addWord: (wordInfo: Omit<Word, "id" | "updatedAt">) => void;
-  updateWord: (wordInfo: Word) => void;
-  showCancelButton: boolean;
-  onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({
+const VocabularyWordForm = ({
   isModifyForm,
   wordInfo,
+  duplicateWordList,
+  findDuplicateWords,
   addWord,
   updateWord,
   showCancelButton,
   onClickCancelButton,
-}) => {
+}: Props) => {
   // 各入力項目のref
   const wordsRef = useRef<HTMLInputElement[]>([]);
   const pronunciationsRef = useRef<HTMLInputElement[]>([]);
@@ -49,6 +63,11 @@ const VocabularyWordForm: React.FC<{
   const [exampleRefIndex, setExampleRefIndex] = useState<number>(0);
   // 活性/非活性状態
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  // キーワード
+  const [keyword, setKeyword] = useState<string>("");
+  // 重複する単語リストを表示するか
+  const [showDuplicateWordList, setShowDuplicatedWordList] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const { words, pronunciations, meanings } = wordInfo;
@@ -83,11 +102,22 @@ const VocabularyWordForm: React.FC<{
     // 活性/非活性状態を更新
     setIsDisabled(!words.length || !pronunciations.length || !meanings.length);
   }, [wordInfo]);
+
+  // 重複チェッククリックイベントハンドラ
+  const onClickDuplicateCheckButtonHandler = async () => {
+    if (!wordsRef.current) {
+      return;
+    }
+
+    await findDuplicateWords(keyword);
+    setShowDuplicatedWordList(true);
+  };
   // 単語追加イベントハンドラ
   const onAddWordHanlder = () => {
     setWords((prevState) => {
       return [...prevState, ""];
     });
+    setShowDuplicatedWordList(false);
   };
   // 発音追加イベントハンドラ
   const onAddPronunciationHandler = () => {
@@ -159,10 +189,14 @@ const VocabularyWordForm: React.FC<{
     }, []);
     // 活性/非活性状態を更新
     setIsDisabled(!words.length || !pronunciations.length || !meanings.length);
+
+    // キーワードを更新
+    const keyword = wordsRef.current[wordsRef.current.length - 1].value;
+    setKeyword(keyword);
   };
   // 単語入力欄
   const wordsInput = (
-    <ul className="margin0">
+    <ul>
       {words.map((item, idx) => {
         return (
           <li key={`word_${idx}`}>
@@ -174,12 +208,51 @@ const VocabularyWordForm: React.FC<{
                 }
                 wordsRef.current[idx] = el;
               }}
+              className={idx === words.length - 1 ? classes.wordInput : ""}
               type="text"
               id="word"
               maxLength={50}
               defaultValue={item}
-              onChange={onChangeInputHandler}
+              onChange={() => {
+                onChangeInputHandler();
+                setShowDuplicatedWordList(false);
+              }}
             />
+            {idx === words.length - 1 && (
+              <>
+                <DuplicateCheckButton
+                  isDisabled={!keyword}
+                  clickHandler={onClickDuplicateCheckButtonHandler}
+                />
+                {showDuplicateWordList && duplicateWordList.length > 0 && (
+                  <>
+                    <p>
+                      既に{duplicateWordList.length}件の単語が登録済みです。
+                      <br />
+                      登録された単語を確認してください。
+                    </p>
+                    <ul>
+                      {duplicateWordList.map((word) => {
+                        const { id, words, pronunciations, meanings } = word;
+                        return (
+                          <li key={id}>
+                            {words.join(" / ")}【{pronunciations.join(" / ")}】
+                            <ul>
+                              {meanings.map((meaning) => (
+                                <li key={id}>{meaning.meaning}</li>
+                              ))}
+                            </ul>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                )}
+                {showDuplicateWordList && !duplicateWordList.length && (
+                  <p>登録済みの単語が存在しません。</p>
+                )}
+              </>
+            )}
           </li>
         );
       })}
@@ -187,7 +260,7 @@ const VocabularyWordForm: React.FC<{
   );
   // 発音入力欄
   const pronunciationsInput = (
-    <ul className="margin0">
+    <ul>
       {pronunciations.map((item, idx) => {
         return (
           <li key={`pronunciation_${idx}`}>
@@ -255,7 +328,7 @@ const VocabularyWordForm: React.FC<{
               examplesRef.current[currentExampleIndex] = el;
             }}
             id={`example_${idx}_${example_idx}`}
-            className="marginBottom20"
+            className={classes.exampleInput}
             type="text"
             maxLength={300}
             defaultValue={example}
@@ -268,16 +341,14 @@ const VocabularyWordForm: React.FC<{
 
     return (
       <div key={idx}>
-        <label className="alignItemsCenter marginBottom20">
+        <label>
           意味
           {idx === meanings.length - 1 && (
             <AddInputIcon onClickAddInputIconHandler={onAddMeaningHandler} />
           )}
         </label>
-        <ul key={`meaning_${idx}`} className="margin0">
-          {meaningInput}
-        </ul>
-        <label className="alignItemsCenter marginBottom20">
+        <ul key={`meaning_${idx}`}>{meaningInput}</ul>
+        <label>
           例文
           <OptionalIcon />
           <AddInputIcon
@@ -285,9 +356,7 @@ const VocabularyWordForm: React.FC<{
             onClickAddInputIconHandler={onAddExampleHanlder}
           />
         </label>
-        <ul key={`examples_${idx}`} className="margin0">
-          {examplesInput}
-        </ul>
+        <ul key={`examples_${idx}`}>{examplesInput}</ul>
       </div>
     );
   });
@@ -370,17 +439,14 @@ const VocabularyWordForm: React.FC<{
   const inputFieldsElement = (
     <div className={classes.inputfields}>
       <div>
-        <label className="alignItemsCenter marginBottom20" htmlFor="word">
+        <label htmlFor="word">
           単語
           <AddInputIcon onClickAddInputIconHandler={onAddWordHanlder} />
         </label>
         {wordsInput}
       </div>
       <div>
-        <label
-          className="alignItemsCenter marginBottom20"
-          htmlFor="pronunciation"
-        >
+        <label htmlFor="pronunciation">
           発音
           <AddInputIcon
             onClickAddInputIconHandler={onAddPronunciationHandler}
@@ -420,7 +486,7 @@ const VocabularyWordForm: React.FC<{
   return (
     <InputForm>
       {inputFieldsElement}
-      {buttonElement}
+      <div className={classes.buttonWrap}>{buttonElement}</div>
     </InputForm>
   );
 };

@@ -7,6 +7,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { ParsedUrlQuery } from "querystring";
 import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
 import { Word } from "@/types/Vocabulary";
+import { WordHelper } from "@/helpers/word-helper";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 
@@ -17,6 +18,9 @@ interface Props {
   /** (任意)クエリ. */
   query?: ParsedUrlQuery;
 }
+
+/** 単語関連ヘルパー. */
+const wordHelper = new WordHelper();
 
 /**
  * 単語フォーム画面.
@@ -42,6 +46,8 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   });
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
+  // 重複する単語リスト
+  const [duplicateWordList, setDuplicateWordList] = useState<Word[]>([]);
   // 現在のユーザーid
   const { currentUserId } = useContext(AuthContext);
   // ルーター
@@ -96,6 +102,37 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
     fetchWord();
   }, [currentUserId]);
 
+  // 重複する単語を取得
+  const findDuplicateWords = async (keyword: string) => {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
+    }
+
+    await wordHelper
+      .filterWordList(currentUserId, bookId)
+      .then((response) => {
+        return response.val();
+      })
+      .then((value) => {
+        const wordList = [];
+        for (const key of Object.keys(value).reverse()) {
+          const word: Word = {
+            id: key,
+            ...value[key],
+          };
+          if (
+            !keyword ||
+            wordHelper.containsKeyword(word.words, keyword) ||
+            wordHelper.containsKeyword(word.pronunciations, keyword)
+          ) {
+            wordList.push(word);
+          }
+        }
+        setDuplicateWordList(wordList);
+      });
+  };
+
   // 単語追加イベント
   const addWord = async (wordInfo: Omit<Word, "id" | "updatedAt">) => {
     // idが存在しない場合、早期リターン
@@ -141,6 +178,8 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
       <VocabularyWordForm
         isModifyForm={!!wordId}
         wordInfo={word}
+        duplicateWordList={duplicateWordList}
+        findDuplicateWords={findDuplicateWords}
         addWord={addWord}
         updateWord={updateWord}
         showCancelButton={showCancelButton}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { get, ref, remove, update } from "firebase/database";
+import { ref, remove, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
@@ -40,48 +40,37 @@ const VocabularyWordListPage = () => {
   // 現在のユーザーid
   const { currentUserId } = useContext(AuthContext);
   // 単語を絞り込む
-  const filterWordList = (keyword: string) => {
+  const filterWordList = async (keyword: string) => {
     setIsLoading(true);
     // idが存在しない場合、早期リターン
     if (!currentUserId) {
       return;
     }
 
-    const path = `users/${currentUserId}/${bookId}/words`;
-    const wordsRef = ref(db, path);
-    // TODO: APIを叩く処理を共通化したい
-    const fetchWordList = async () => {
-      await get(wordsRef)
-        .then((response) => {
-          return response.val();
-        })
-        .then((value) => {
-          const wordList = [];
-          for (const key of Object.keys(value).reverse()) {
-            const word: Word = {
-              id: key,
-              ...value[key],
-            };
-            if (
-              !keyword ||
-              containsKeyword(word.words, keyword) ||
-              containsKeyword(word.pronunciations, keyword)
-            ) {
-              wordList.push(word);
-            }
+    await wordHelper
+      .filterWordList(currentUserId, bookId)
+      .then((response) => {
+        return response.val();
+      })
+      .then((value) => {
+        const wordList = [];
+        for (const key of Object.keys(value).reverse()) {
+          const word: Word = {
+            id: key,
+            ...value[key],
+          };
+          if (
+            !keyword ||
+            wordHelper.containsKeyword(word.words, keyword) ||
+            wordHelper.containsKeyword(word.pronunciations, keyword)
+          ) {
+            wordList.push(word);
           }
-          setWordList(wordList);
-          setisFoundFilteredWord(!!wordList.length);
-          setIsLoading(false);
-        });
-    };
-    fetchWordList();
-  };
-
-  // キーワードを含めているか
-  const containsKeyword = (items: string[], keyword: string) => {
-    const filteredList = items.filter((item) => item.startsWith(keyword));
-    return !!filteredList.length;
+        }
+        setWordList(wordList);
+        setisFoundFilteredWord(!!wordList.length);
+        setIsLoading(false);
+      });
   };
 
   // 暗記状態を更新

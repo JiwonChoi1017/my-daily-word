@@ -1,0 +1,45 @@
+.inputfields {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 480px) {
+  .inputfields {
+    margin-bottom: 0;
+    padding: 20px;
+  }
+}
+
+.inputfields ul {
+  margin: 0;
+}
+
+.inputfields label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wordInput {
+  width: 70% !important;
+}
+
+@media screen and (max-width: 480px) {
+  .wordInput {
+    width: 62% !important;
+  }
+}
+
+.number {
+  font-size: 14px;
+  margin: 0;
+}
+
+.exampleInput {
+  margin-bottom: 20px !important;
+}
+
+@media screen and (max-width: 480px) {
+  .buttonWrap {
+    padding: 0 20px 20px 20px;
+  }
+}

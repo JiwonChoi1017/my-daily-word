@@ -14,7 +14,7 @@ interface Props {
 /**
  * 一覧画面へ戻るリンク.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} 一覧画面へ戻るリンク.
  */
 const GoBackLink = ({ isLoading, url }: Props) => {
