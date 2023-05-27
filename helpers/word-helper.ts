@@ -54,4 +54,33 @@ export class WordHelper {
 
     return await get(fetchWordQuery);
   }
+
+  /**
+   * 単語を絞り込む.
+   *
+   * @param {string} currentUserId - 現在のユーザーid
+   * @param {string} bookId - 単語帳id
+   * @returns {Promise<DataSnapshot>} 単語リストのスナップショット.
+   */
+  async filterWordList(
+    currentUserId: string,
+    bookId: string
+  ): Promise<DataSnapshot> {
+    const path = `users/${currentUserId}/${bookId}/words`;
+    const wordsRef = ref(db, path);
+
+    return await get(wordsRef);
+  }
+
+  /**
+   * キーワードを含めているか.
+   *
+   * @param {string} items - 単語リスト
+   * @param {string} keyword - キーワード
+   * @returns {boolean} キーワードを含めているか.
+   */
+  containsKeyword(items: string[], keyword: string): boolean {
+    const filteredList = items.filter((item) => item.startsWith(keyword));
+    return !!filteredList.length;
+  }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "../../styles/Button.module.css";
+import classes from "@/styles/Button.module.css";
 
 /** Props. */
 interface Props {
@@ -76,6 +76,27 @@ export const DoubleButton: React.FC<{
         clickHandler={second.clickHandler}
       />
     </div>
+  );
+};
+
+/**
+ * 重複チェックボタン.
+ *
+ * @param {boolean} isDisabled - 非活性状態か.
+ * @param {function} clickHandler - クリックイベントハンドラ.
+ * @returns {JSX.Element} 重複チェックボタン.
+ */
+export const DuplicateCheckButton: React.FC<{
+  isDisabled: boolean;
+  clickHandler: () => void;
+}> = ({ isDisabled, clickHandler }) => {
+  return (
+    <Button
+      className="duplicateCheckButton"
+      text="重複チェック"
+      isDisabled={isDisabled}
+      clickHandler={clickHandler}
+    />
   );
 };
 
