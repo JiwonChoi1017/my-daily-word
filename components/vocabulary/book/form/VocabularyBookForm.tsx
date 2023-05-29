@@ -2,36 +2,44 @@ import { Button, DoubleButton } from "@/components/ui/Button";
 import React, { useRef, useState } from "react";
 
 import { Book } from "@/types/Vocabulary";
+import { DateHelper } from "@/helpers/date-helper";
 import InputForm from "@/components/ui/InputForm";
 import classes from "../../../../styles/InputForm.module.css";
 import { useEffect } from "react";
 
+/** Props. */
+interface Props {
+  /** 修正フォームか. */
+  isModifyForm: boolean;
+  /** 単語帳情報. */
+  bookInfo: Book;
+  /** 単語帳追加イベント. */
+  addBook: (bookInfo: Omit<Book, "id" | "updatedAt">) => void;
+  /** 単語帳更新イベント. */
+  updateBook: (bookInfo: Book) => void;
+  /** キャンセルボタンの表示状態. */
+  showCancelButton: boolean;
+  /** 前のページへ戻るイベント. */
+  onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+/** 日付関連ヘルパー. */
+const dateHelper = new DateHelper();
+
 /**
  * 単語帳フォーム.
  *
- * @param {boolean} isModifyForm - 修正フォームか.
- * @param {Book} bookInfo - 単語帳情報.
- * @param {function} addBook - 単語帳追加イベント.
- * @param {function} updateBook - 単語帳更新イベント.
- * @param {boolean} showCancelButton - キャンセルボタンの表示状態.
- * @param {function} onClickCancelButton - 前のページへ戻るイベント.
+ * @param {Props} props
  * @returns {JSX.Element} 単語帳フォーム.
  */
-const VocabularyBookForm: React.FC<{
-  isModifyForm: boolean;
-  bookInfo: Book;
-  addBook: (bookInfo: Omit<Book, "id" | "updatedAt">) => void;
-  updateBook: (bookInfo: Book) => void;
-  showCancelButton: boolean;
-  onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({
+const VocabularyBookForm = ({
   isModifyForm,
   bookInfo,
   addBook,
   updateBook,
   showCancelButton,
   onClickCancelButton,
-}) => {
+}: Props) => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -57,16 +65,7 @@ const VocabularyBookForm: React.FC<{
     }
 
     const date = new Date();
-    const currentDateArray: string[] = date.toLocaleDateString().split("/");
-    // 日時に0をつけて文字列を結合
-    const currentDateString = currentDateArray
-      .map((date) => date.padStart(2, "0"))
-      .join("");
-    const currentTimeString = date
-      .toLocaleTimeString()
-      .split(":")
-      .join("")
-      .padStart(6, "0");
+    const dateTimeString = dateHelper.createDateTimeString(date);
 
     if (isModifyForm) {
       return updateBook({
@@ -75,7 +74,7 @@ const VocabularyBookForm: React.FC<{
         description: descriptionRef.current.value,
         entry: entryRef.current.value,
         body: bodyRef.current.value,
-        updatedAt: `${currentDateString}${currentTimeString}`,
+        updatedAt: dateTimeString,
       });
     }
 
@@ -84,7 +83,7 @@ const VocabularyBookForm: React.FC<{
       description: descriptionRef.current.value,
       entry: entryRef.current.value,
       body: bodyRef.current.value,
-      createdAt: `${currentDateString}${currentTimeString}`,
+      createdAt: dateTimeString,
       isFavorite: false,
     });
   };
