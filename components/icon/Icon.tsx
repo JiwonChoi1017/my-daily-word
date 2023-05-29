@@ -157,15 +157,17 @@ export const BookIcon: React.FC<{
   onClickDeleteLinkHandler,
 }) => {
   return (
-    <div className={`${classes.bookIconWrap} _ignoreClick`}>
-      <FavoriteIcon
-        isFavorite={isFavorite}
-        onClickFavoriteIconHandler={onClickFavoriteIconHandler}
-      />
-      <DropDownIcon
-        onClickModifyLinkHandler={onClickModifyLinkHandler}
-        onClickDeleteLinkHandler={onClickDeleteLinkHandler}
-      />
+    <div className="floatRight _ignoreClick">
+      <div className={classes.bookIconWrap}>
+        <FavoriteIcon
+          isFavorite={isFavorite}
+          onClickFavoriteIconHandler={onClickFavoriteIconHandler}
+        />
+        <DropDownIcon
+          onClickModifyLinkHandler={onClickModifyLinkHandler}
+          onClickDeleteLinkHandler={onClickDeleteLinkHandler}
+        />
+      </div>
     </div>
   );
 };

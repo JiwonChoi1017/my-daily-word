@@ -1,5 +1,6 @@
 .favoriteIcon {
   font-size: 24px;
+  margin-left: 20px;
   color: #f1456ab7;
   cursor: pointer;
 }
@@ -65,8 +66,6 @@
 .wordIconWrap {
   font-size: 24px;
   float: right;
-  display: flex;
-  align-items: center;
 }
 
 @media screen and (max-width: 480px) {
