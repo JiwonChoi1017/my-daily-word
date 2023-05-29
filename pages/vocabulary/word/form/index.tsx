@@ -115,7 +115,14 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
         return response.val();
       })
       .then((value) => {
+        // 検索でヒットしなかった場合、空配列をセットして早期リターン
+        if (!value) {
+          setDuplicateWordList([]);
+          return;
+        }
+
         const wordList = [];
+
         for (const key of Object.keys(value).reverse()) {
           const word: Word = {
             id: key,

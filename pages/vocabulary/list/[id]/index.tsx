@@ -54,6 +54,14 @@ const VocabularyWordListPage = () => {
       })
       .then((value) => {
         const wordList = [];
+        // 検索でヒットしなかった場合、空配列をセットして早期リターン
+        if (!value) {
+          setWordList([]);
+          setisFoundFilteredWord(false);
+          setIsLoading(false);
+          return;
+        }
+
         for (const key of Object.keys(value).reverse()) {
           const word: Word = {
             id: key,

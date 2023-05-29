@@ -1,27 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
+import { DateHelper } from "@/helpers/date-helper";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import Modal from "../ui/Modal";
 import classes from "../../styles/Header.module.css";
 import { useRouter } from "next/router";
 
+/** Props. */
+interface Props {
+  /** ナビゲーションを表示するか. */
+  showNavigation: boolean;
+  /** 単語リストを表示するか. */
+  showWordList: boolean;
+  /** クイズを表示するか. */
+  showQuiz: boolean;
+  /** 単語帳id. */
+  bookId: string;
+}
+
+/** 日付関連ヘルパー. */
+const dateHelper = new DateHelper();
+
 /**
  * ヘッダー.
  *
- * @param {boolean} showNavigation - ナビゲーションを表示するか.
- * @param {boolean} showWordList - 単語リストを表示するか.
- * @param {boolean} showQuiz - クイズを表示するか.
- * @param {string} bookId - 単語帳id.
+ * @param {Props} props
  * @returns {JSX.Element} ヘッダー.
  */
-const Header: React.FC<{
-  showNavigation: boolean;
-  showWordList: boolean;
-  showQuiz: boolean;
-  bookId: string;
-}> = ({ showNavigation, showWordList, showQuiz, bookId }) => {
+const Header = ({ showNavigation, showWordList, showQuiz, bookId }: Props) => {
   const [currentDate, setCurrentDate] = useState<string>("");
   const [isSignIn, setIsSignIn] = useState<boolean>(false);
   // ログアウトモーダルを表示するか
@@ -35,12 +43,9 @@ const Header: React.FC<{
     setIsSignIn(!!currentUser);
 
     const date = new Date();
-    const currentDateArray: string[] = date.toLocaleDateString().split("/");
-    // 日時に0をつけて文字列を結合
-    const currentDateString = currentDateArray
-      .map((date) => date.padStart(2, "0"))
-      .join(".");
-    setCurrentDate(currentDateString);
+    const dateString = dateHelper.convertDateToString(date, ".");
+
+    setCurrentDate(dateString);
   }, [currentUser]);
 
   // トップ画面に遷移

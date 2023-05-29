@@ -7,6 +7,7 @@ import {
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useEffect, useRef, useState } from "react";
 
+import { DateHelper } from "@/helpers/date-helper";
 import InputForm from "@/components/ui/InputForm";
 import classes from "@/styles/VocabularyWordForm.module.css";
 
@@ -24,11 +25,14 @@ interface Props {
   addWord: (wordInfo: Omit<Word, "id" | "updatedAt">) => void;
   /** 単語更新イベント. */
   updateWord: (wordInfo: Word) => void;
-  /** 前のページへ戻るイベント. */
+  /** キャンセルボタンを表示するか. */
   showCancelButton: boolean;
-  /** Props. */
+  /** キャンセルボタンクリックイベントハンドラ. */
   onClickCancelButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
+
+/** 日付関連ヘルパー. */
+const dateHelper = new DateHelper();
 
 /**
  * 単語フォーム.
@@ -406,16 +410,7 @@ const VocabularyWordForm = ({
     });
 
     const date = new Date();
-    const currentDateArray: string[] = date.toLocaleDateString().split("/");
-    // 日時に0をつけて文字列を結合
-    const currentDateString = currentDateArray
-      .map((date) => date.padStart(2, "0"))
-      .join("");
-    const currentTimeString = date
-      .toLocaleTimeString()
-      .split(":")
-      .join("")
-      .padStart(6, "0");
+    const dateTimeString = dateHelper.createDateTimeString(date);
 
     if (isModifyForm) {
       return updateWord({
@@ -423,7 +418,7 @@ const VocabularyWordForm = ({
         words,
         pronunciations,
         meanings,
-        updatedAt: `${currentDateString}${currentTimeString}`,
+        updatedAt: dateTimeString,
       });
     }
 
@@ -432,7 +427,7 @@ const VocabularyWordForm = ({
       pronunciations,
       meanings,
       isMemorized: false,
-      createdAt: `${currentDateString}${currentTimeString}`,
+      createdAt: dateTimeString,
     });
   };
   // 入力欄要素
