@@ -105,17 +105,19 @@ const SignUpForm = () => {
         />
         {passwordErrorMsg}
       </div>
-      <Button
-        text="登録する"
-        className="first"
-        isDisabled={isDisabled}
-        clickHandler={onSubmitHandler}
-      />
-      <Button
-        text="キャンセル"
-        className="second"
-        clickHandler={onCancelHandler}
-      />
+      <div className="buttonWrap">
+        <Button
+          text="登録する"
+          className="first"
+          isDisabled={isDisabled}
+          clickHandler={onSubmitHandler}
+        />
+        <Button
+          text="キャンセル"
+          className="second"
+          clickHandler={onCancelHandler}
+        />
+      </div>
     </>
   );
 };

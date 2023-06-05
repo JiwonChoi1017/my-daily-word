@@ -88,17 +88,19 @@ const SignInForm = () => {
           onChange={onChangeInputHandler}
         />
       </div>
-      <Button
-        text="ログイン"
-        className="first"
-        isDisabled={isDisabled}
-        clickHandler={onSubmitHandler}
-      />
-      <Button
-        text="新規登録"
-        className="second"
-        clickHandler={onClickSignUpButtonHandler}
-      />
+      <div className="buttonWrap">
+        <Button
+          text="ログイン"
+          className="first"
+          isDisabled={isDisabled}
+          clickHandler={onSubmitHandler}
+        />
+        <Button
+          text="新規登録"
+          className="second"
+          clickHandler={onClickSignUpButtonHandler}
+        />
+      </div>
     </>
   );
 };
