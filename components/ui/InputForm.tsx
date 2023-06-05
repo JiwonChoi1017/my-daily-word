@@ -1,14 +1,24 @@
 import React from "react";
-import classes from "../../styles/InputForm.module.css";
+import classes from "@/styles/InputForm.module.css";
+
+/** Props. */
+interface Props {
+  /** 子要素. */
+  children: React.ReactNode;
+}
 
 /**
  * 入力フォーム.
  *
- * @param {React.ReactNode} children - (任意)children.
+ * @param {Props} Props.
  * @returns {JSX.Element} 入力フォーム.
  */
-const InputForm: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className={classes.inputform}>{children}</div>;
+const InputForm = ({ children }: Props) => {
+  return (
+    <div className={classes.inputformWrap}>
+      <div className={classes.inputform}>{children}</div>
+    </div>
+  );
 };
 
 export default InputForm;

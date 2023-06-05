@@ -345,14 +345,14 @@ const VocabularyWordForm = ({
 
     return (
       <div key={idx}>
-        <label>
+        <label className={classes.label}>
           意味
           {idx === meanings.length - 1 && (
             <AddInputIcon onClickAddInputIconHandler={onAddMeaningHandler} />
           )}
         </label>
         <ul key={`meaning_${idx}`}>{meaningInput}</ul>
-        <label>
+        <label className={classes.label}>
           例文
           <OptionalIcon />
           <AddInputIcon
@@ -432,16 +432,16 @@ const VocabularyWordForm = ({
   };
   // 入力欄要素
   const inputFieldsElement = (
-    <div className={classes.inputfields}>
+    <div className="inputField">
       <div>
-        <label htmlFor="word">
+        <label className={classes.label} htmlFor="word">
           単語
           <AddInputIcon onClickAddInputIconHandler={onAddWordHanlder} />
         </label>
         {wordsInput}
       </div>
       <div>
-        <label htmlFor="pronunciation">
+        <label className={classes.label} htmlFor="pronunciation">
           発音
           <AddInputIcon
             onClickAddInputIconHandler={onAddPronunciationHandler}

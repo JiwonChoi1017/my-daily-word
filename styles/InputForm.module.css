@@ -1,4 +1,4 @@
-.inputform {
+.inputformWrap {
   width: 50%;
   background-color: white;
   margin: 20px auto;
@@ -6,18 +6,24 @@
 }
 
 @media screen and (max-width: 480px) {
-  .inputform {
+  .inputformWrap {
     width: 100%;
     padding: 0;
   }
+}
 
-  .inputform form {
+@media screen and (max-width: 480px) {
+  .inputform {
     padding: 30px;
   }
 }
 
-.inputfields {
+.inputform div[class="inputField"] {
   margin-bottom: 20px;
+}
+
+.inputform ul {
+  margin: 0;
 }
 
 .inputform label {
@@ -26,20 +32,26 @@
 }
 
 .inputform input {
-  width: 100%;
+  width: 98%;
   height: 30px;
   margin: 20px 0 30px 0;
   border: none;
   border-bottom: 1.2px solid #322a27;
+  border-radius: 0;
   font-family: inherit;
+  font-size: 15px;
 }
 
 .inputform input:focus {
   outline: none;
 }
 
+.inputform input:-internal-autofill-selected {
+  background-color: white !important;
+}
+
 .inputform .selectbox {
-  width: 100%;
+  width: 99%;
   display: inline-flex;
   align-items: center;
   position: relative;
@@ -58,7 +70,7 @@
 
 .inputform .selectbox select {
   appearance: none;
-  width: 100%;
+  width: 99%;
   height: 2.8em;
   margin: 20px 0 30px 0;
   padding: 0.4em calc(0.8em + 30px) 0.4em 0.8em;
@@ -66,7 +78,7 @@
   border-bottom: 1.2px solid #322a27;
   background-color: #fff;
   color: #322a27;
-  font-size: 1em;
+  font-size: 15px;
   font-family: inherit;
   cursor: pointer;
 }
@@ -76,12 +88,14 @@
 }
 
 .inputform textarea {
-  width: 100%;
+  width: 98%;
   margin-top: 20px;
   margin-bottom: 10px;
   border: 1.2px solid #322a27;
+  border-radius: 0;
   resize: vertical;
   font-family: inherit;
+  font-size: 15px;
 }
 
 .inputform textarea:focus {

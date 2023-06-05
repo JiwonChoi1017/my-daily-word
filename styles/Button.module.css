@@ -137,9 +137,9 @@
 }
 
 .duplicateCheckButton {
-  width: 25%;
+  width: 30%;
   font: inherit;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
   background-color: white;
   color: #322a27;
@@ -157,8 +157,8 @@
 
 @media screen and (max-width: 480px) {
   .duplicateCheckButton {
-    width: 32%;
-    font-size: 12px;
+    width: 35%;
+    font-size: 15px;
     padding: 7px 5px;
   }
 }
