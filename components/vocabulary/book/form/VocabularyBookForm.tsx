@@ -4,7 +4,8 @@ import React, { useRef, useState } from "react";
 import { Book } from "@/types/Vocabulary";
 import { DateHelper } from "@/helpers/date-helper";
 import InputForm from "@/components/ui/InputForm";
-import classes from "../../../../styles/InputForm.module.css";
+import { LANGUAGES } from "@/constants/constants";
+import classes from "@/styles/InputForm.module.css";
 import { useEffect } from "react";
 
 /** Props. */
@@ -117,6 +118,14 @@ const VocabularyBookForm = ({
     setIsDisabled(!title || !description || !entry || !body);
   }, [bookInfo]);
 
+  // オプション要素
+  const optionElement = Object.values(LANGUAGES).map((language) => {
+    return (
+      <option key={language.value} value={language.value}>
+        {language.label}
+      </option>
+    );
+  });
   // ボタン要素
   const buttonElement = showCancelButton ? (
     <DoubleButton
@@ -145,61 +154,55 @@ const VocabularyBookForm = ({
 
   return (
     <InputForm>
-      <div className={classes.inputform__inner}>
-        <div>
-          <label htmlFor="title">タイトル</label>
-          <input
-            ref={titleRef}
-            type="text"
-            id="title"
-            maxLength={100}
-            defaultValue={bookInfo.title}
-            onChange={onChangeInputHandler}
-          />
-        </div>
-        <div>
-          <label htmlFor="entry">見出し語</label>
-          <div className={classes.selectbox}>
-            <select
-              ref={entryRef}
-              id="entry"
-              value={selectedEntry}
-              onChange={onChangeInputHandler}
-            >
-              <option value="">選択してください</option>
-              <option value="japanese">日本語</option>
-              <option value="korean">韓国語</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label htmlFor="body">本文</label>
-          <div className={classes.selectbox}>
-            <select
-              ref={bodyRef}
-              id="body"
-              value={selectedBody}
-              onChange={onChangeInputHandler}
-            >
-              <option value="">選択してください</option>
-              <option value="japanese">日本語</option>
-              <option value="korean">韓国語</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label htmlFor="description">説明文</label>
-          <textarea
-            ref={descriptionRef}
-            id="description"
-            rows={10}
-            maxLength={1000}
-            defaultValue={bookInfo.description}
-            onChange={onChangeInputHandler}
-          />
-        </div>
-        {buttonElement}
+      <div>
+        <label htmlFor="title">タイトル</label>
+        <input
+          ref={titleRef}
+          type="text"
+          id="title"
+          maxLength={100}
+          defaultValue={bookInfo.title}
+          onChange={onChangeInputHandler}
+        />
       </div>
+      <div>
+        <label htmlFor="entry">見出し語</label>
+        <div className={classes.selectbox}>
+          <select
+            ref={entryRef}
+            id="entry"
+            value={selectedEntry}
+            onChange={onChangeInputHandler}
+          >
+            {optionElement}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label htmlFor="body">本文</label>
+        <div className={classes.selectbox}>
+          <select
+            ref={bodyRef}
+            id="body"
+            value={selectedBody}
+            onChange={onChangeInputHandler}
+          >
+            {optionElement}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label htmlFor="description">説明文</label>
+        <textarea
+          ref={descriptionRef}
+          id="description"
+          rows={10}
+          maxLength={1000}
+          defaultValue={bookInfo.description}
+          onChange={onChangeInputHandler}
+        />
+      </div>
+      {buttonElement}
     </InputForm>
   );
 };

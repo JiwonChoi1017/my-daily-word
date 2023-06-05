@@ -19,13 +19,13 @@
   width: 100%;
 }
 
-.userformWrap label {
+.userform label {
   display: block;
   margin-top: 20px;
   font-weight: 600;
 }
 
-.userformWrap input {
+.userform input {
   width: 98.5%;
   height: 30px;
   margin-top: 20px;
@@ -36,24 +36,28 @@
 }
 
 @media screen and (max-width: 480px) {
-  .userformWrap input {
+  .userform input {
     font-size: 15px;
   }
 }
 
-.userformWrap input[class="error"] {
+.userform input[class="error"] {
   border-color: red;
 }
 
-.userformWrap input:focus {
+.userform input:focus {
   outline: none;
 }
 
-.userformWrap div[class="buttonWrap"] {
+.userform input:-internal-autofill-selected {
+  background-color: white !important;
+}
+
+.userform div[class="buttonWrap"] {
   margin-top: 20px;
 }
 
-.userformWrap button[class="first"] {
+.userform button[class="first"] {
   width: 100%;
   font: inherit;
   padding: 0.5rem 1.5rem;
@@ -65,7 +69,7 @@
   margin-top: 15px;
 }
 
-.userformWrap button[class="second"] {
+.userform button[class="second"] {
   width: 100%;
   font: inherit;
   padding: 0.5rem 1.5rem;
