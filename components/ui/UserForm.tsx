@@ -3,7 +3,7 @@ import classes from "@/styles/UserForm.module.css";
 
 /** Props. */
 interface Props {
-  /** (任意)子要素. */
+  /** 子要素. */
   children: React.ReactNode;
 }
 

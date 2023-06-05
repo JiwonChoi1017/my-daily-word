@@ -17,6 +17,8 @@
   height: 1.5rem;
   background: none;
   border: none;
+  font-family: inherit;
+  font-size: 15px;
 }
 
 .searchBox:focus {
