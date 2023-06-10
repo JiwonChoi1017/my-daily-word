@@ -21,7 +21,7 @@ interface Props {
 /**
  * モーダル.
  *
- * @param {Props} Props.
+ * @param {Props} props
  * @returns {JSX.Element} モーダル.
  */
 const Modal = ({

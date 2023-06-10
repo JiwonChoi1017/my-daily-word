@@ -10,7 +10,7 @@ interface Props {
 /**
  * ユーザフォーム.
  *
- * @param {Props} Props.
+ * @param {Props} props
  * @returns {JSX.Element} ユーザフォーム.
  */
 const UserForm = ({ children }: Props) => {

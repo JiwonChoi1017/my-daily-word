@@ -10,7 +10,7 @@ interface Props {
 /**
  * 例文.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} 例文.
  */
 const Examples = ({ examples }: Props) => {

@@ -12,7 +12,7 @@ interface Props {
 /**
  * タイトル.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} タイトル.
  */
 const Title = ({ title, subtitle }: Props) => {

@@ -1,7 +1,7 @@
-import React from "react";
 import Card from "../ui/Card";
-import classes from "../../styles/DefaultError.module.css";
 import { ErrorPageButton } from "../ui/Button";
+import React from "react";
+import classes from "../../styles/DefaultError.module.css";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -15,7 +15,7 @@ interface Props {
 /**
  * デフォルトエラー.
  *
- * @param {Props} Props.
+ * @param {Props} props
  * @returns {JSX.Element} デフォルトエラー.
  */
 const DefaultError = ({ errorCode, errorText }: Props) => {
