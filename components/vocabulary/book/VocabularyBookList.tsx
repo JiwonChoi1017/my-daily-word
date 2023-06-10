@@ -28,7 +28,7 @@ interface Props {
 /**
  * 単語帳リスト.
  *
- * @param {Props} Props.
+ * @param {Props} props.
  * @returns {JSX.Element} 単語帳リスト.
  */
 const VocabularyBookList = ({
