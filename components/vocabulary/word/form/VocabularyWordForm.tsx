@@ -93,10 +93,10 @@ const VocabularyWordForm = ({
       return [...acc, meaning];
     }, []);
     setMeanings(newMeaningList);
-    meaningsRef.current = meaningsRef.current.slice(0, meanings.length);
+    meaningsRef.current = meaningsRef.current.slice(0, newMeaningList.length);
 
     const examples: string[] = [];
-    meanings.map((meaning) => {
+    newMeaningList.map((meaning) => {
       meaning.examples.map((example) => {
         examples.push(example);
       });
@@ -104,7 +104,9 @@ const VocabularyWordForm = ({
     examplesRef.current = examplesRef.current.slice(0, examples.length);
 
     // 活性/非活性状態を更新
-    setIsDisabled(!words.length || !pronunciations.length || !meanings.length);
+    setIsDisabled(
+      !words.length || !pronunciations.length || !newMeaningList.length
+    );
   }, [wordInfo]);
 
   // 重複チェッククリックイベントハンドラ
