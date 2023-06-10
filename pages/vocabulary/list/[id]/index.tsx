@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ref, remove, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
+import { GetServerSideProps } from "next";
 import MainLayout from "@/components/layout/MainLayout";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList";
@@ -10,18 +11,25 @@ import { WordHelper } from "@/helpers/word-helper";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 
+/** Props. */
+interface Props {
+  /** 単語帳id. */
+  bookId: string;
+}
+
 /** 単語関連ヘルパー. */
 const wordHelper = new WordHelper();
 
 /**
  * 単語リスト画面.
  *
+ * @param {Props} props.
  * @returns {JSX.Element} 単語リスト画面.
  */
-const VocabularyWordListPage = () => {
+const VocabularyWordListPage = ({ bookId }: Props) => {
   // ルーター
   const router = useRouter();
-  const { id, page } = router.query;
+  const { page } = router.query;
   // 現在のページ
   const [currentPage, setCurrentPage] = useState<number>(1);
   // キーワードに一致する単語が見つかったか
@@ -35,7 +43,6 @@ const VocabularyWordListPage = () => {
   });
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [bookId, setBookId] = useState<string>("");
   const [wordList, setWordList] = useState<Word[]>([]);
   // 現在のユーザーid
   const { currentUserId } = useContext(AuthContext);
@@ -152,7 +159,9 @@ const VocabularyWordListPage = () => {
             query: { page },
           },
           undefined,
-          { scroll: false }
+          // 浅いルーティング
+          // https://nextjs-ja-translation-docs.vercel.app/docs/routing/shallow-routing
+          { scroll: false, shallow: true }
         );
       });
   };
@@ -180,14 +189,6 @@ const VocabularyWordListPage = () => {
       return;
     }
 
-    // 文字列の場合はそのままセット
-    if (typeof id === "string") {
-      setBookId(id);
-      // 配列の場合、０番目の値をセット
-    } else if (Array.isArray(id)) {
-      setBookId(id[0]);
-    }
-
     fetchWordist(page ? +page : 1);
   }, [currentUserId, bookId, page]);
 
@@ -208,6 +209,18 @@ const VocabularyWordListPage = () => {
       />
     </MainLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  const id = params?.id;
+
+  // 単語帳idが存在しない場合、notFoundをtrueにしてリターン
+  if (!id) {
+    return { notFound: true };
+  }
+
+  return { props: { bookId: id } };
 };
 
 export default VocabularyWordListPage;

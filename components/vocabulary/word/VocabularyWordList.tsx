@@ -143,7 +143,13 @@ const VocabularyWordList = ({
   return (
     <>
       {wordTopModule}
-      {isLoading ? <Loader /> : createWordList()}
+      {isLoading ? (
+        <div className="marginTop30">
+          <Loader />
+        </div>
+      ) : (
+        createWordList()
+      )}
     </>
   );
 };
