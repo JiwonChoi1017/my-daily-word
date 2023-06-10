@@ -25,7 +25,7 @@ interface Props {
 /**
  * 単語詳細.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} 単語詳細.
  */
 const VocabularyWordDetail = ({

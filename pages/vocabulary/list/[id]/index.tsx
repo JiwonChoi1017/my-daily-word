@@ -23,7 +23,7 @@ const wordHelper = new WordHelper();
 /**
  * 単語リスト画面.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} 単語リスト画面.
  */
 const VocabularyWordListPage = ({ bookId }: Props) => {

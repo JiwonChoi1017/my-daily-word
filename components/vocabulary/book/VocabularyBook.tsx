@@ -17,7 +17,7 @@ interface Props {
 /**
  * 単語帳.
  *
- * @param {Props} props.
+ * @param {Props} props
  * @returns {JSX.Element} 単語帳.
  */
 const VocabularyBook = ({ bookInfo, toggleFavoriteState }: Props) => {

@@ -6,7 +6,6 @@ import Loader from "@/components/layout/Loader";
 import NotFoundWord from "@/components/error/NotFoundWord";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import SearchBox from "@/components/ui/SearchBox";
-import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import VocabularyWord from "./VocabularyWord";
 import { Word } from "@/types/Vocabulary";
 import { useRouter } from "next/router";
