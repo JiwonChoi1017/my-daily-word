@@ -114,11 +114,23 @@
 }
 
 .correctAnswerIcon {
-  margin-left: 10px;
+  font-size: 24px;
   color: #28d97eeb;
 }
 
+@media screen and (min-width: 481px) {
+  .correctAnswerIcon {
+    margin-left: 10px;
+  }
+}
+
 .wrongAnswerIcon {
-  margin-left: 10px;
+  font-size: 24px;
   color: #ea142ddc;
+}
+
+@media screen and (min-width: 481px) {
+  .wrongAnswerIcon {
+    margin-left: 10px;
+  }
 }

@@ -1,0 +1,10 @@
+.question {
+  font-size: 18px;
+  text-align: center;
+}
+
+@media screen and (min-width: 481px) {
+  .question {
+    padding-bottom: 20px;
+  }
+}
