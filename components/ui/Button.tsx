@@ -7,6 +7,8 @@ interface Props {
   text: string;
   /** クラス名. */
   className: string;
+  /** 注釈. */
+  note?: string;
   /** (任意)非活性状態か. */
   isDisabled?: boolean;
   /** （任意）クリックイベントハンドラ. */
@@ -75,6 +77,43 @@ export const DoubleButton: React.FC<{
         isDisabled={second.isDisabled}
         clickHandler={second.clickHandler}
       />
+    </div>
+  );
+};
+
+/**
+ * クイズ用ダブルボタン.
+ *
+ * @param {Props} first - 1つ目.
+ * @param {Props} second - 2つ目.
+ * @returns {JSX.Element} クイズ用ダブルボタン.
+ */
+export const DoubleButtonForQuiz: React.FC<{
+  button: {
+    first: Props;
+    second: Props;
+  };
+}> = ({ button }) => {
+  const { first, second } = button;
+
+  return (
+    <div className={classes.button__wrap}>
+      <div>
+        <Button
+          className={first.className}
+          text={first.text}
+          isDisabled={first.isDisabled}
+          clickHandler={first.clickHandler}
+        />
+        {first.note && <p className={classes.note}>{first.note}</p>}
+        <Button
+          className={second.className}
+          text={second.text}
+          isDisabled={second.isDisabled}
+          clickHandler={second.clickHandler}
+        />
+        {second.note && <p className={classes.note}>{second.note}</p>}
+      </div>
     </div>
   );
 };

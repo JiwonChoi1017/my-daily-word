@@ -51,8 +51,8 @@ ul {
   }
 }
 
-.description li {
-  margin-bottom: 5px;
+.description li:not(:last-child) {
+  margin-bottom: 20px;
 }
 
 .wordTopModule {
@@ -83,6 +83,10 @@ ul {
 
 .marginBottom20 {
   margin-bottom: 20px !important;
+}
+
+.marginRight15 {
+  margin-right: 15px !important;
 }
 
 .displayInlineBlock {

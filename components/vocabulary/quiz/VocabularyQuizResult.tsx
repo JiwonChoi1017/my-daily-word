@@ -1,45 +1,53 @@
 import { Answer } from "@/types/Quiz";
-import { Button } from "../../ui/Button";
 import Card from "@/components/ui/Card";
+import { DoubleButton } from "../../ui/Button";
 import React from "react";
 import WordList from "@/components/vocabulary/quiz/WordList";
-import classes from "../../../styles/Button.module.css";
+
+/** Props. */
+interface Props {
+  /** 表示するか. */
+  show: boolean;
+  /** 正解リスト. */
+  correctAnswerList: Answer[];
+  /** 単語リストへ移動. */
+  moveToWordListPage: () => void;
+  /** クイズセレクトを表示. */
+  showQuizSelect: () => void;
+}
 
 /**
  * 単語クイズ結果.
  *
- * @param {boolean} show - 表示するか.
- * @param {Answer[]} correctAnswerList - 正解リスト.
- * @param {function} moveToWordListPage - 単語リストへ移動.
- * @param {function} showQuizSelect - クイズセレクトを表示.
+ * @param {Props} props
  * @returns {JSX.Element} 単語クイズ結果.
  */
-const VocabularyQuizResult: React.FC<{
-  show: boolean;
-  correctAnswerList: Answer[];
-  moveToWordListPage: () => void;
-  showQuizSelect: () => void;
-}> = ({ show, correctAnswerList, moveToWordListPage, showQuizSelect }) => {
-  // ボタン要素
-  const buttonElement = (
-    <div className={classes.button__wrap}>
-      <Button
-        className="button"
-        text={"単語リストへ"}
-        clickHandler={moveToWordListPage}
-      />
-      <Button
-        className="button"
-        text={"次に進む"}
-        clickHandler={showQuizSelect}
-      />
-    </div>
-  );
+const VocabularyQuizResult = ({
+  show,
+  correctAnswerList,
+  moveToWordListPage,
+  showQuizSelect,
+}: Props) => {
   // 結果要素
   const resultElement = show ? (
     <Card>
-      <WordList wordList={correctAnswerList} />
-      {buttonElement}
+      <div className="marginRight15">
+        <WordList wordList={correctAnswerList} />
+        <DoubleButton
+          button={{
+            first: {
+              className: "button",
+              text: "単語リストへ",
+              clickHandler: moveToWordListPage,
+            },
+            second: {
+              className: "button",
+              text: "次に進む",
+              clickHandler: showQuizSelect,
+            },
+          }}
+        />
+      </div>
     </Card>
   ) : (
     <></>

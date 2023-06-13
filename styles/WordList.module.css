@@ -5,13 +5,18 @@
 .wordListWrap .titleWrap {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .wordListWrap .titleWrap .title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  margin-top: 20px;
+}
+
+@media screen and (max-width: 480px) {
+  .wordListWrap .titleWrap .title {
+    font-size: 20px;
+  }
 }
 
 .wordListWrap .wordList:not(:first-child) {
@@ -21,4 +26,10 @@
 .wordListWrap .meaning {
   margin-bottom: 15px;
   font-size: 18px;
+}
+
+@media screen and (max-width: 480px) {
+  .wordListWrap .meaning {
+    font-size: 16px;
+  }
 }
