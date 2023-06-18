@@ -35,7 +35,7 @@
 .duplicateWord {
   padding: 10px;
   font-size: 15px;
-  border: 1px solid #322a27;
+  border: 0.75px solid #322a27;
 }
 
 .duplicateWord:not(:last-child) {
