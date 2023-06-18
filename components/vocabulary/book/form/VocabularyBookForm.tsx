@@ -106,7 +106,14 @@ const VocabularyBookForm = ({
     setSelectedEntry(entry);
     setSelectedBody(body);
     // 活性/非活性状態を更新
-    setIsDisabled(!title || !description || !entry || !body);
+    setIsDisabled(
+      !title ||
+        /^\s*$/.test(title) ||
+        !description ||
+        /^\s*$/.test(description) ||
+        !entry ||
+        !body
+    );
   };
 
   useEffect(() => {
@@ -115,7 +122,14 @@ const VocabularyBookForm = ({
     setSelectedEntry(entry);
     setSelectedBody(body);
     // 活性/非活性状態を更新
-    setIsDisabled(!title || !description || !entry || !body);
+    setIsDisabled(
+      !title ||
+        /^\s*$/.test(title) ||
+        !description ||
+        /^\s*$/.test(description) ||
+        !entry ||
+        !body
+    );
   }, [bookInfo]);
 
   // オプション要素

@@ -173,14 +173,14 @@ const VocabularyWordForm = ({
       return;
     }
     const words = wordsRef.current.reduce((acc: string[], word) => {
-      if (!word.value) {
+      if (!word.value || /^\s*$/.test(word.value)) {
         return acc;
       }
       return [...acc, word.value];
     }, []);
     const pronunciations = pronunciationsRef.current.reduce(
       (acc: string[], pronunciation) => {
-        if (!pronunciation.value) {
+        if (!pronunciation.value || /^\s*$/.test(pronunciation.value)) {
           return acc;
         }
         return [...acc, pronunciation.value];
@@ -188,7 +188,7 @@ const VocabularyWordForm = ({
       []
     );
     const meanings = meaningsRef.current.reduce((acc: string[], meaning) => {
-      if (!meaning.value) {
+      if (!meaning.value || /^\s*$/.test(meaning.value)) {
         return acc;
       }
       return [...acc, meaning.value];
@@ -227,7 +227,7 @@ const VocabularyWordForm = ({
             {idx === words.length - 1 && (
               <>
                 <DuplicateCheckButton
-                  isDisabled={!keyword}
+                  isDisabled={!keyword || /^\s*$/.test(keyword)}
                   clickHandler={onClickDuplicateCheckButtonHandler}
                 />
                 {showDuplicateWordList && duplicateWordList.length > 0 && (
@@ -380,24 +380,26 @@ const VocabularyWordForm = ({
     }
 
     const words = wordsRef.current.reduce((acc: string[], word) => {
-      if (!word.value) {
+      if (!word.value || /^\s*$/.test(word.value)) {
         return acc;
       }
       return [...acc, word.value];
     }, []);
     const pronunciations = pronunciationsRef.current.reduce(
       (acc: string[], pronunciation) => {
-        if (!pronunciation.value) {
+        if (!pronunciation.value || /^\s*$/.test(pronunciation.value)) {
           return acc;
         }
         return [...acc, pronunciation.value];
       },
       []
     );
-    const meanings: Meaning[] = [];
-    meaningsRef.current.map((meaning) => {
-      meanings.push({ meaning: meaning.value, examples: [] });
-    });
+    let meanings = meaningsRef.current.reduce((acc: Meaning[], meaning) => {
+      if (!meaning.value) {
+        return acc;
+      }
+      return [...acc, { meaning: meaning.value, examples: [] }];
+    }, []);
 
     examplesRef.current.map((example) => {
       const index = example.dataset["meaningIndex"];
@@ -406,9 +408,14 @@ const VocabularyWordForm = ({
       const newIndex = +index;
       if (isNaN(newIndex)) return;
       // 例文が空だったら早期リターン
-      if (!example.value) return;
+      if (!example.value || /^\s*$/.test(example.value)) return;
 
       meanings[newIndex].examples.push(example.value);
+    });
+
+    // 空白文字を意味の配列から排除する
+    meanings = meanings.filter((meaning) => {
+      return !/^\s*$/.test(meaning.meaning);
     });
 
     const date = new Date();
