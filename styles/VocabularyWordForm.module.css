@@ -14,6 +14,39 @@
   }
 }
 
+.duplicateWordResult {
+  margin: 0;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.notExist {
+  color: #28d97eeb;
+}
+
+.exist {
+  color: #ea142ddc;
+}
+
+.duplicateWordList {
+  margin-bottom: 20px !important;
+}
+
+.duplicateWord {
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #322a27;
+}
+
+.duplicateWord:not(:last-child) {
+  border-bottom: 0;
+}
+
+.duplicateWord .link {
+  float: right;
+  text-decoration: none;
+}
+
 .number {
   font-size: 14px;
   margin: 0;
