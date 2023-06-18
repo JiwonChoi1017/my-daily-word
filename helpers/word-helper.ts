@@ -83,4 +83,16 @@ export class WordHelper {
     const filteredList = items.filter((item) => item.startsWith(keyword));
     return !!filteredList.length;
   }
+
+  /**
+   * キーワードが一致するか.
+   *
+   * @param {string} items - 単語リスト
+   * @param {string} keyword - キーワード
+   * @returns {boolean} キーワードが一致するか.
+   */
+  isEqualKeyword(items: string[], keyword: string): boolean {
+    const filteredList = items.filter((item) => item === keyword);
+    return !!filteredList.length;
+  }
 }

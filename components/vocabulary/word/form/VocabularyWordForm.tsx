@@ -9,10 +9,13 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { DateHelper } from "@/helpers/date-helper";
 import InputForm from "@/components/ui/InputForm";
+import Link from "next/link";
 import classes from "@/styles/VocabularyWordForm.module.css";
 
 /** Props. */
 interface Props {
+  /** 単語帳id. */
+  bookId: string;
   /** 修正フォームか. */
   isModifyForm: boolean;
   /** 単語情報. */
@@ -41,6 +44,7 @@ const dateHelper = new DateHelper();
  * @returns {JSX.Element} 単語フォーム.
  */
 const VocabularyWordForm = ({
+  bookId,
   isModifyForm,
   wordInfo,
   duplicateWordList,
@@ -232,22 +236,26 @@ const VocabularyWordForm = ({
                 />
                 {showDuplicateWordList && duplicateWordList.length > 0 && (
                   <>
-                    <p>
+                    <p
+                      className={`${classes.duplicateWordResult} ${classes.exist}`}
+                    >
                       既に{duplicateWordList.length}件の単語が登録済みです。
                       <br />
                       登録された単語を確認してください。
                     </p>
-                    <ul>
+                    <ul className={classes.duplicateWordList}>
                       {duplicateWordList.map((word) => {
-                        const { id, words, pronunciations, meanings } = word;
+                        const { id, words, pronunciations } = word;
                         return (
-                          <li key={id}>
+                          <li key={id} className={classes.duplicateWord}>
                             {words.join(" / ")}【{pronunciations.join(" / ")}】
-                            <ul>
-                              {meanings.map((meaning) => (
-                                <li key={id}>{meaning.meaning}</li>
-                              ))}
-                            </ul>
+                            <Link
+                              href={`/vocabulary/detail/${bookId}/${id}`}
+                              className={classes.link}
+                              target="_blank"
+                            >
+                              詳細を見る
+                            </Link>
                           </li>
                         );
                       })}
@@ -255,7 +263,13 @@ const VocabularyWordForm = ({
                   </>
                 )}
                 {showDuplicateWordList && !duplicateWordList.length && (
-                  <p>登録済みの単語が存在しません。</p>
+                  <p
+                    className={`${classes.duplicateWordResult} ${classes.notExist}`}
+                  >
+                    登録済みの単語が存在しません。
+                    <br />
+                    単語を追加してみましょう！
+                  </p>
                 )}
               </>
             )}

@@ -130,8 +130,8 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
           };
           if (
             !keyword ||
-            wordHelper.containsKeyword(word.words, keyword) ||
-            wordHelper.containsKeyword(word.pronunciations, keyword)
+            wordHelper.isEqualKeyword(word.words, keyword) ||
+            wordHelper.isEqualKeyword(word.pronunciations, keyword)
           ) {
             wordList.push(word);
           }
@@ -183,6 +183,7 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   return (
     <MainLayout showQuiz={true} showWordList={true} bookId={bookId as string}>
       <VocabularyWordForm
+        bookId={bookId}
         isModifyForm={!!wordId}
         wordInfo={word}
         duplicateWordList={duplicateWordList}
