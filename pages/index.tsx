@@ -26,7 +26,7 @@ import { useRouter } from "next/router";
  *
  * @returns {JSX.Element} ホーム画面.
  */
-export default function Home() {
+const HomePage = () => {
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [bookId, setBookId] = useState<string>("");
@@ -199,4 +199,6 @@ export default function Home() {
       )}
     </MainLayout>
   );
-}
+};
+
+export default HomePage;
