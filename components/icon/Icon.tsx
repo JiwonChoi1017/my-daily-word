@@ -222,20 +222,27 @@ export const OptionalIcon = () => {
  * @param {function} onClickAddInputIconHandler - 入力欄追加アイコンクリックイベントハンドラ.
  * @returns {JSX.Element} 入力欄追加アイコン.
  */
-export const AddInputIcon: React.FC<{
-  index?: number;
-  onClickAddInputIconHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
-}> = ({ index, onClickAddInputIconHandler }) => {
-  return (
-    <div
-      className={`${classes.addInputIconWrap} alignItemsCenter`}
-      onClick={onClickAddInputIconHandler}
-      data-meaning-index={`${index}`}
-    >
-      <FaPlus className={classes.addInputIcon} />
-    </div>
-  );
-};
+export const AddInputIcon = React.memo(
+  ({
+    index,
+    onClickAddInputIconHandler,
+  }: {
+    index?: number;
+    onClickAddInputIconHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  }) => {
+    return (
+      <div
+        className={`${classes.addInputIconWrap} alignItemsCenter`}
+        onClick={onClickAddInputIconHandler}
+        data-meaning-index={`${index}`}
+      >
+        <FaPlus className={classes.addInputIcon} />
+      </div>
+    );
+  }
+);
+
+AddInputIcon.displayName = "AddInputIcon";
 
 /**
  * 前のページへ戻るアイコン.

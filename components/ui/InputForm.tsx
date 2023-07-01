@@ -13,12 +13,14 @@ interface Props {
  * @param {Props} props
  * @returns {JSX.Element} 入力フォーム.
  */
-const InputForm = ({ children }: Props) => {
+const InputForm = React.memo(({ children }: Props) => {
   return (
     <div className={classes.inputformWrap}>
       <div className={classes.inputform}>{children}</div>
     </div>
   );
-};
+});
+
+InputForm.displayName = "InputForm";
 
 export default InputForm;

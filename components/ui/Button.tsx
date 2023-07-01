@@ -7,7 +7,7 @@ interface Props {
   text: string;
   /** クラス名. */
   className: string;
-  /** 注釈. */
+  /** (任意)注釈. */
   note?: string;
   /** (任意)非活性状態か. */
   isDisabled?: boolean;
@@ -18,35 +18,31 @@ interface Props {
 /**
  * ボタン.
  *
- * @param {string} className - クラス名.
- * @param {string} text - テキスト.
- * @param {boolean} isDisabled - (任意)非活性状態か.
- * @param {string} clickHandler - (任意)クリックイベントハンドラ.
+ * @param {Props} props.
  * @returns {JSX.Element} ボタン.
  */
-export const Button: React.FC<{
-  className: string;
-  text: string;
-  isDisabled?: boolean;
-  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({ className, text, isDisabled = false, clickHandler }) => {
-  // ボタン
-  const button = (
-    <button
-      type="button"
-      className={classes[className]}
-      disabled={isDisabled}
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-        if (!clickHandler) return;
-        clickHandler(e);
-      }}
-    >
-      {text}
-    </button>
-  );
+export const Button = React.memo(
+  ({ className, text, isDisabled = false, clickHandler }: Props) => {
+    // ボタン
+    const button = (
+      <button
+        type="button"
+        className={classes[className]}
+        disabled={isDisabled}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          if (!clickHandler) return;
+          clickHandler(e);
+        }}
+      >
+        {text}
+      </button>
+    );
 
-  return button;
-};
+    return button;
+  }
+);
+
+Button.displayName = "Button";
 
 /**
  * ダブルボタン.
@@ -55,31 +51,37 @@ export const Button: React.FC<{
  * @param {Props} second - 2つ目.
  * @returns {JSX.Element} ダブルボタン.
  */
-export const DoubleButton: React.FC<{
-  button: {
-    first: Props;
-    second: Props;
-  };
-}> = ({ button }) => {
-  const { first, second } = button;
+export const DoubleButton = React.memo(
+  ({
+    button,
+  }: {
+    button: {
+      first: Props;
+      second: Props;
+    };
+  }) => {
+    const { first, second } = button;
 
-  return (
-    <div className={classes.button__wrap}>
-      <Button
-        className={first.className}
-        text={first.text}
-        isDisabled={first.isDisabled}
-        clickHandler={first.clickHandler}
-      />
-      <Button
-        className={second.className}
-        text={second.text}
-        isDisabled={second.isDisabled}
-        clickHandler={second.clickHandler}
-      />
-    </div>
-  );
-};
+    return (
+      <div className={classes.button__wrap}>
+        <Button
+          className={first.className}
+          text={first.text}
+          isDisabled={first.isDisabled}
+          clickHandler={first.clickHandler}
+        />
+        <Button
+          className={second.className}
+          text={second.text}
+          isDisabled={second.isDisabled}
+          clickHandler={second.clickHandler}
+        />
+      </div>
+    );
+  }
+);
+
+DoubleButton.displayName = "DoubleButton";
 
 /**
  * クイズ用ダブルボタン.
@@ -125,19 +127,26 @@ export const DoubleButtonForQuiz: React.FC<{
  * @param {function} clickHandler - クリックイベントハンドラ.
  * @returns {JSX.Element} 重複チェックボタン.
  */
-export const DuplicateCheckButton: React.FC<{
-  isDisabled: boolean;
-  clickHandler: () => void;
-}> = ({ isDisabled, clickHandler }) => {
-  return (
-    <Button
-      className="duplicateCheckButton"
-      text="重複チェック"
-      isDisabled={isDisabled}
-      clickHandler={clickHandler}
-    />
-  );
-};
+export const DuplicateCheckButton = React.memo(
+  ({
+    isDisabled,
+    clickHandler,
+  }: {
+    isDisabled: boolean;
+    clickHandler: () => void;
+  }) => {
+    return (
+      <Button
+        className="duplicateCheckButton"
+        text="重複チェック"
+        isDisabled={isDisabled}
+        clickHandler={clickHandler}
+      />
+    );
+  }
+);
+
+DuplicateCheckButton.displayName = "DuplicateCheckButton";
 
 /**
  * エラーページのボタン.

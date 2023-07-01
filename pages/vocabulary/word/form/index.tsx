@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { get, push, ref, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
@@ -8,6 +8,7 @@ import { ParsedUrlQuery } from "querystring";
 import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
 import { Word } from "@/types/Vocabulary";
 import { WordHelper } from "@/helpers/word-helper";
+import WordList from "@/components/vocabulary/quiz/WordList";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 
@@ -103,42 +104,45 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   }, [currentUserId]);
 
   // 重複する単語を取得
-  const findDuplicateWords = async (keyword: string) => {
-    // idが存在しない場合、早期リターン
-    if (!currentUserId) {
-      return;
-    }
+  const findDuplicateWords = useCallback(
+    async (keyword: string) => {
+      // idが存在しない場合、早期リターン
+      if (!currentUserId) {
+        return;
+      }
 
-    await wordHelper
-      .filterWordList(currentUserId, bookId)
-      .then((response) => {
-        return response.val();
-      })
-      .then((value) => {
-        // 検索でヒットしなかった場合、空配列をセットして早期リターン
-        if (!value) {
-          setDuplicateWordList([]);
-          return;
-        }
-
-        const wordList = [];
-
-        for (const key of Object.keys(value).reverse()) {
-          const word: Word = {
-            id: key,
-            ...value[key],
-          };
-          if (
-            !keyword ||
-            wordHelper.isEqualKeyword(word.words, keyword) ||
-            wordHelper.isEqualKeyword(word.pronunciations, keyword)
-          ) {
-            wordList.push(word);
+      await wordHelper
+        .filterWordList(currentUserId, bookId)
+        .then((response) => {
+          return response.val();
+        })
+        .then((value) => {
+          // 検索でヒットしなかった場合、空配列をセットして早期リターン
+          if (!value) {
+            setDuplicateWordList([]);
+            return;
           }
-        }
-        setDuplicateWordList(wordList);
-      });
-  };
+
+          const wordList = [];
+
+          for (const key of Object.keys(value).reverse()) {
+            const word: Word = {
+              id: key,
+              ...value[key],
+            };
+            if (
+              !keyword ||
+              wordHelper.isEqualKeyword(word.words, keyword) ||
+              wordHelper.isEqualKeyword(word.pronunciations, keyword)
+            ) {
+              wordList.push(word);
+            }
+          }
+          setDuplicateWordList(wordList);
+        });
+    },
+    [WordList]
+  );
 
   // 単語追加イベント
   const addWord = async (wordInfo: Omit<Word, "id" | "updatedAt">) => {
