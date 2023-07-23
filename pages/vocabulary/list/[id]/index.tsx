@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ref, remove, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
@@ -47,46 +47,59 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
   // 現在のユーザーid
   const { currentUserId } = useContext(AuthContext);
   // 単語を絞り込む
-  const filterWordList = async (keyword: string) => {
-    setIsLoading(true);
-    // idが存在しない場合、早期リターン
-    if (!currentUserId) {
-      return;
-    }
+  const filterWordList = useCallback(
+    async (keyword: string) => {
+      setIsLoading(true);
+      setHasMore(false);
 
-    await wordHelper
-      .filterWordList(currentUserId, bookId)
-      .then((response) => {
-        return response.val();
-      })
-      .then((value) => {
-        const wordList = [];
-        // 検索でヒットしなかった場合、空配列をセットして早期リターン
-        if (!value) {
-          setWordList([]);
-          setisFoundFilteredWord(false);
-          setIsLoading(false);
-          return;
-        }
+      // idが存在しない場合、早期リターン
+      if (!currentUserId) {
+        return;
+      }
 
-        for (const key of Object.keys(value).reverse()) {
-          const word: Word = {
-            id: key,
-            ...value[key],
-          };
-          if (
-            !keyword ||
-            wordHelper.containsKeyword(word.words, keyword) ||
-            wordHelper.containsKeyword(word.pronunciations, keyword)
-          ) {
-            wordList.push(word);
+      const filteredWordList: Word[] = [];
+
+      // キーワードが空の場合、fetchWordListから単語リストを取得し、早期リターン
+      if (!keyword) {
+        await fetchWordList(1);
+        return;
+      }
+
+      await wordHelper
+        .filterWordList(currentUserId, bookId)
+        .then((response) => {
+          return response.val();
+        })
+        .then((value) => {
+          // 検索でヒットしなかった場合、空配列をセットして早期リターン
+          if (!value) {
+            setWordList(filteredWordList);
+            setisFoundFilteredWord(false);
+            setIsLoading(false);
+            return;
           }
-        }
-        setWordList(wordList);
-        setisFoundFilteredWord(!!wordList.length);
-        setIsLoading(false);
-      });
-  };
+
+          for (const key of Object.keys(value).reverse()) {
+            const word: Word = {
+              id: key,
+              ...value[key],
+            };
+
+            if (
+              wordHelper.containsKeyword(word.words, keyword) ||
+              wordHelper.containsKeyword(word.pronunciations, keyword)
+            ) {
+              filteredWordList.push(word);
+            }
+          }
+          setWordList(filteredWordList);
+          setisFoundFilteredWord(!!filteredWordList.length);
+          setHasMore(filteredWordList.length >= VOCABULARY_LIST_RESULTS);
+          setIsLoading(false);
+        });
+    },
+    [wordList]
+  );
 
   // 暗記状態を更新
   const toggleMemorizedState = async (wordInfo: Word) => {
@@ -110,7 +123,7 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
   };
 
   // 単語リストを取得
-  const fetchWordist = async (page: number) => {
+  const fetchWordList = async (page: number) => {
     // idが存在しない場合、早期リターン
     if (!currentUserId) {
       return;
@@ -121,14 +134,22 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
 
     if (!bookId) {
       setWordList([]);
-      setHasMore(false);
       setCurrentPage(0);
       setIsLoading(false);
       return;
     }
 
     await wordHelper
-      .fetchWordList(currentUserId, bookId, endValue)
+      .fetchWordList(
+        currentUserId,
+        bookId,
+        page === 1
+          ? {
+              createdAt: "",
+              key: "",
+            }
+          : endValue
+      )
       .then((response) => {
         return response.val();
       })
@@ -147,7 +168,10 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
             result.push(word);
           }
           const { id, createdAt } = result[result.length - 1];
-          setWordList([...wordList, ...result]);
+          const newWordList =
+            page === 1 ? [...result] : [...wordList, ...result];
+          setWordList(newWordList);
+          setisFoundFilteredWord(!!newWordList.length);
           setHasMore(result.length >= VOCABULARY_LIST_RESULTS);
           setEndValue({ createdAt, key: id });
         }
@@ -189,7 +213,7 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
       return;
     }
 
-    fetchWordist(page ? +page : 1);
+    fetchWordList(page ? +page : 1);
   }, [currentUserId, bookId, page]);
 
   return (
@@ -203,7 +227,7 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
         wordList={wordList}
         filterWordList={filterWordList}
         isLoading={isLoading}
-        fetchWordList={fetchWordist}
+        fetchWordList={fetchWordList}
         toggleMemorizedState={toggleMemorizedState}
         deleteWordHandler={deleteWordHandler}
       />
