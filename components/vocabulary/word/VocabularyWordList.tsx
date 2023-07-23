@@ -40,117 +40,122 @@ interface Props {
  * @param {Props} props
  * @returns {JSX.Element} 単語リスト.
  */
-const VocabularyWordList = ({
-  currentPage,
-  isFoundFilteredWord,
-  hasMore,
-  bookId,
-  wordList,
-  filterWordList,
-  isLoading,
-  fetchWordList,
-  toggleMemorizedState,
-  deleteWordHandler,
-}: Props) => {
-  // ルーター
-  const router = useRouter();
-  // キーワードのref
-  const keywordRef = useRef<HTMLInputElement>(null);
-  // キーワード変更イベントハンドラ
-  const onChangeKeywordHandler = () => {
-    if (!keywordRef.current) return;
+const VocabularyWordList = React.memo(
+  ({
+    currentPage,
+    isFoundFilteredWord,
+    hasMore,
+    bookId,
+    wordList,
+    filterWordList,
+    isLoading,
+    fetchWordList,
+    toggleMemorizedState,
+    deleteWordHandler,
+  }: Props) => {
+    console.log(wordList, hasMore);
+    // ルーター
+    const router = useRouter();
+    // キーワードのref
+    const keywordRef = useRef<HTMLInputElement>(null);
+    // キーワード変更イベントハンドラ
+    const onChangeKeywordHandler = () => {
+      if (!keywordRef.current) return;
 
-    const keywordValue = keywordRef.current.value;
-    filterWordList(keywordValue);
-  };
-  // 単語フォームに遷移
-  const moveToVocabularyWordForm = () => {
-    router.push(`/vocabulary/word/form?bookId=${bookId}`);
-  };
-  // 単語追加アイコン
-  const addWordIcon = (
-    <AddIcon onClickAddIconHandler={moveToVocabularyWordForm} />
-  );
-  // 単語関連の上部モジュール
-  const wordTopModule = (
-    <div className="wordTopModule">
-      <SearchBox
-        keywordRef={keywordRef}
-        onChangeHandler={onChangeKeywordHandler}
-      />
-      {addWordIcon}
-    </div>
-  );
-  // 単語リストを生成
-  const createWordList = () => {
-    // キーワード検索結果が0件
-    if (!isFoundFilteredWord) {
-      return (
-        <NotFoundWord
-          message={`${keywordRef.current?.value}に一致する単語が見つかりませんでした。
+      const keywordValue = keywordRef.current.value;
+      filterWordList(keywordValue);
+    };
+    // 単語フォームに遷移
+    const moveToVocabularyWordForm = () => {
+      router.push(`/vocabulary/word/form?bookId=${bookId}`);
+    };
+    // 単語追加アイコン
+    const addWordIcon = (
+      <AddIcon onClickAddIconHandler={moveToVocabularyWordForm} />
+    );
+    // 単語関連の上部モジュール
+    const wordTopModule = (
+      <div className="wordTopModule">
+        <SearchBox
+          keywordRef={keywordRef}
+          onChangeHandler={onChangeKeywordHandler}
+        />
+        {addWordIcon}
+      </div>
+    );
+    // 単語リストを生成
+    const createWordList = () => {
+      // キーワード検索結果が0件
+      if (!isFoundFilteredWord) {
+        return (
+          <NotFoundWord
+            message={`${keywordRef.current?.value}に一致する単語が見つかりませんでした。
       <br />
       キーワードを変えて検索してみてください。`}
-        />
-      );
-    }
-    // 初期表示時の検索結果が0件
-    if (!wordList.length) {
-      return (
-        <NotFoundWord
-          message="単語が見つかりませんでした。
+          />
+        );
+      }
+      // 初期表示時の検索結果が0件
+      if (!wordList.length) {
+        return (
+          <NotFoundWord
+            message="単語が見つかりませんでした。
       <br />
       新しい単語を追加してください。"
-        />
+          />
+        );
+      }
+
+      return (
+        <InfiniteScroll
+          className="marginTop30"
+          pageStart={currentPage}
+          loadMore={() => {
+            fetchWordList(currentPage + 1);
+          }}
+          loader={<Loader key={currentPage} />}
+          hasMore={hasMore}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          scrollabletarget="scrollableDiv"
+        >
+          {wordList.map((word, index) => {
+            return (
+              <div key={word.id}>
+                <VocabularyWord
+                  key={word.id}
+                  showDropDownIcon={true}
+                  bookId={bookId}
+                  wordInfo={word}
+                  toggleMemorizedState={toggleMemorizedState}
+                  deleteWordHandler={deleteWordHandler}
+                />
+                {hasMore && index === wordList.length - 1 && (
+                  <div id="scrollableDiv" />
+                )}
+              </div>
+            );
+          })}
+          <ScrollToTopButton />
+        </InfiniteScroll>
       );
-    }
+    };
 
     return (
-      <InfiniteScroll
-        className="marginTop30"
-        pageStart={currentPage}
-        loadMore={() => {
-          fetchWordList(currentPage + 1);
-        }}
-        loader={<Loader key={currentPage} />}
-        hasMore={hasMore}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        scrollabletarget="scrollableDiv"
-      >
-        {wordList.map((word, index) => {
-          return (
-            <div key={word.id}>
-              <VocabularyWord
-                key={word.id}
-                showDropDownIcon={true}
-                bookId={bookId}
-                wordInfo={word}
-                toggleMemorizedState={toggleMemorizedState}
-                deleteWordHandler={deleteWordHandler}
-              />
-              {hasMore && index === wordList.length - 1 && (
-                <div id="scrollableDiv" />
-              )}
-            </div>
-          );
-        })}
-        <ScrollToTopButton />
-      </InfiniteScroll>
+      <>
+        {wordTopModule}
+        {isLoading ? (
+          <div className="marginTop30">
+            <Loader />
+          </div>
+        ) : (
+          createWordList()
+        )}
+      </>
     );
-  };
+  }
+);
 
-  return (
-    <>
-      {wordTopModule}
-      {isLoading ? (
-        <div className="marginTop30">
-          <Loader />
-        </div>
-      ) : (
-        createWordList()
-      )}
-    </>
-  );
-};
+VocabularyWordList.displayName = "VocabularyWordList";
 
 export default VocabularyWordList;
