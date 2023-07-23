@@ -53,7 +53,6 @@ const VocabularyWordList = React.memo(
     toggleMemorizedState,
     deleteWordHandler,
   }: Props) => {
-    console.log(wordList, hasMore);
     // ルーター
     const router = useRouter();
     // キーワードのref
