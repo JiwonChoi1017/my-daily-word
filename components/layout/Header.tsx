@@ -92,16 +92,31 @@ const Header = ({ showNavigation, showWordList, showQuiz, bookId }: Props) => {
     <nav className={classes.navigation}>
       <ul>
         <li>
-          <Link href="/vocabulary/list?page=1">単語帳リスト</Link>
+          <Link
+            href="/vocabulary/list?page=1"
+            className="__vocabularyBookListPageLink__"
+          >
+            単語帳リスト
+          </Link>
         </li>
         {showWordList && bookId && (
           <li>
-            <Link href={`/vocabulary/list/${bookId}?page=1`}>単語リスト</Link>
+            <Link
+              href={`/vocabulary/list/${bookId}?page=1`}
+              className="__vocabularyWordListPageLink__"
+            >
+              単語リスト
+            </Link>
           </li>
         )}
         {showQuiz && bookId && (
           <li>
-            <Link href={`/vocabulary/list/${bookId}/quiz`}>クイズ</Link>
+            <Link
+              href={`/vocabulary/list/${bookId}/quiz`}
+              className="__quizPageLink__"
+            >
+              クイズ
+            </Link>
           </li>
         )}
       </ul>

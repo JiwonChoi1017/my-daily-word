@@ -23,6 +23,8 @@ interface Props {
   fetchBookList: (currentPage: number) => void;
   /** お気に入り状態更新イベント. */
   toggleFavoriteState: (bookInfo: Book) => void;
+  /** 単語帳削除イベントハンドラ. */
+  deleteBookHandler: (bookId: string) => void;
 }
 
 /**
@@ -38,6 +40,7 @@ const VocabularyBookList = ({
   isLoading,
   fetchBookList,
   toggleFavoriteState,
+  deleteBookHandler,
 }: Props) => {
   // ルーター
   const router = useRouter();
@@ -76,6 +79,7 @@ const VocabularyBookList = ({
                   key={book.id}
                   bookInfo={book}
                   toggleFavoriteState={toggleFavoriteState}
+                  deleteBookHandler={deleteBookHandler}
                 />
                 {hasMore && index === bookList.length - 1 && (
                   <div id="scrollableDiv" />

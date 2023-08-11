@@ -203,7 +203,6 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
       // 画面をリロード
       router.reload();
     });
-    // TODO: 例外処理追加
   };
 
   // TODO: 並び順も実装

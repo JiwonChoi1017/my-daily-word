@@ -6,6 +6,7 @@ import {
   orderByChild,
   query,
   ref,
+  remove,
   update,
 } from "firebase/database";
 
@@ -123,6 +124,22 @@ const VocabularyBookListPage = () => {
       });
   };
 
+  // 単語帳削除イベントハンドラ
+  const deleteBookHandler = async (bookId: string) => {
+    // idが存在しない場合、早期リターン
+    if (!currentUserId) {
+      return;
+    }
+
+    const path = `uses/${currentUserId}/${bookId}`;
+    const bookRef = ref(db, path);
+
+    await remove(bookRef).then(() => {
+      // 画面をリロード
+      router.reload();
+    });
+  };
+
   // TODO: 並び順も実装
   useEffect(() => {
     // idが存在しない場合、早期リターン
@@ -143,6 +160,7 @@ const VocabularyBookListPage = () => {
         isLoading={isLoading}
         fetchBookList={fetchBookList}
         toggleFavoriteState={toggleFavoriteState}
+        deleteBookHandler={deleteBookHandler}
       />
     </MainLayout>
   );
