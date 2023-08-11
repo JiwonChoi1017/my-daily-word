@@ -12,6 +12,8 @@ interface Props {
   bookInfo: Book;
   /** お気に入り状態更新イベント. */
   toggleFavoriteState: (bookInfo: Book) => void;
+  /** 単語帳削除イベントハンドラ. */
+  deleteBookHandler: (bookId: string) => void;
 }
 
 /**
@@ -20,7 +22,11 @@ interface Props {
  * @param {Props} props
  * @returns {JSX.Element} 単語帳.
  */
-const VocabularyBook = ({ bookInfo, toggleFavoriteState }: Props) => {
+const VocabularyBook = ({
+  bookInfo,
+  toggleFavoriteState,
+  deleteBookHandler,
+}: Props) => {
   const { id, title, entry, body, description, isFavorite } = bookInfo;
   // ルーター
   const router = useRouter();
@@ -42,6 +48,11 @@ const VocabularyBook = ({ bookInfo, toggleFavoriteState }: Props) => {
       query: { bookId: id },
     });
   };
+  // 削除リンククリックイベントハンドラ
+  const onClickDeleteLinkHandler = () => {
+    deleteBookHandler(bookInfo.id);
+  };
+
   // 見出し語の言語
   const entryLanguage =
     Object.values(LANGUAGES).find((language) => {
@@ -69,10 +80,7 @@ const VocabularyBook = ({ bookInfo, toggleFavoriteState }: Props) => {
           isFavorite={isFavorite}
           onClickFavoriteIconHandler={onClickFavoriteIconHandler}
           onClickModifyLinkHandler={moveToBookModifyForm}
-          // TODO: 削除機能も実装
-          onClickDeleteLinkHandler={() => {
-            return;
-          }}
+          onClickDeleteLinkHandler={onClickDeleteLinkHandler}
         />
         <p className="description">{description}</p>
       </div>
