@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Titleのテスト Title: スナップショットテスト 1`] = `
+<div>
+  <div
+    class="title__wrap"
+  >
+    <span
+      class="title"
+    >
+      Title1
+    </span>
+    <span
+      class="title"
+    >
+      SubTitle1
+    </span>
+  </div>
+</div>
+`;

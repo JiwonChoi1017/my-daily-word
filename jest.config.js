@@ -11,6 +11,10 @@ const customJestConfig = {
   // 各テストの実行前に渡すオプションを追加
   // TypeScript の設定で baseUrl をルートディレクトリに設定している場合、alias を動作させるためには以下のようにする必要があります
   moduleDirectories: ["node_modules", "<rootDir>/"],
+  // @をルートにしてパスエイリアスを使えるようにする
+  moduleNameMapper: {
+    "@/(.*)$": "<rootDir>/$1",
+  },
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
 };

@@ -3,17 +3,31 @@ import {
   DoubleButton,
   DuplicateCheckButton,
   ErrorPageButton,
-} from "../../../components/ui/Button";
+} from "@/components/ui/Button";
 import { render, screen } from "@testing-library/react";
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
 
-describe("Buttonコンポーネント", () => {
+describe("Buttonのテスト", () => {
   const mockOnClick = jest.fn();
   const mockOnClickForSecondButton = jest.fn();
 
-  test("ボタン：文言が想定通りか", () => {
+  // スナップショットテスト:
+  // https://jestjs.io/ja/docs/snapshot-testing
+  test("Button: スナップショットテスト", () => {
+    // Buttonコンポーネントをレンダリング
+    const { container } = render(
+      <Button
+        className="ButtonClass1"
+        text={"Button1"}
+        clickHandler={mockOnClick}
+      />
+    );
+    expect(container).toMatchSnapshot();
+  });
+
+  test("Button: 文言が想定通りか", () => {
     // Buttonコンポーネントをレンダリング
     render(
       <Button
@@ -28,7 +42,7 @@ describe("Buttonコンポーネント", () => {
     expect(screen.getByText("Button1")).toBeInTheDocument();
   });
 
-  test("ボタン：cssクラスが想定通りか", async () => {
+  test("Button: cssクラスが想定通りか", async () => {
     // Buttonコンポーネントをレンダリング
     const { container } = render(
       <Button
@@ -41,7 +55,7 @@ describe("Buttonコンポーネント", () => {
     expect(container.firstChild).toHaveClass("ButtonClass1");
   });
 
-  test("ボタン：onClickに渡した関数が呼ばれるか", async () => {
+  test("Button: onClickに渡した関数が呼ばれるか", async () => {
     // Buttonコンポーネントをレンダリング
     render(
       <Button className="button" text={"Button1"} clickHandler={mockOnClick} />
@@ -53,7 +67,29 @@ describe("Buttonコンポーネント", () => {
     expect(mockOnClick).toHaveBeenCalled();
   });
 
-  test("ダブルボタン：文言が想定通りか", () => {
+  test("DoubleButton: スナップショットテスト", () => {
+    // DoubleButtonコンポーネントをレンダリング
+    const { container } = render(
+      <DoubleButton
+        button={{
+          first: {
+            text: "DoubleButton1",
+            className: "DoubleButtonClass1",
+            clickHandler: mockOnClick,
+          },
+          second: {
+            text: "DoubleButton2",
+            className: "DoubleButtonClass2",
+            clickHandler: mockOnClickForSecondButton,
+          },
+        }}
+      />
+    );
+
+    expect(container).toMatchSnapshot();
+  });
+
+  test("DoubleButton: 文言が想定通りか", () => {
     // DoubleButtonコンポーネントをレンダリング
     render(
       <DoubleButton
@@ -78,7 +114,7 @@ describe("Buttonコンポーネント", () => {
     expect(doubleButton[1].textContent).toEqual("DoubleButton2");
   });
 
-  test("ダブルボタン：cssクラスが想定通りか", () => {
+  test("DoubleButton: cssクラスが想定通りか", () => {
     // DoubleButtonコンポーネントをレンダリング
     render(
       <DoubleButton
@@ -103,19 +139,43 @@ describe("Buttonコンポーネント", () => {
     expect(doubleButton[1].classList.contains("DoubleButtonClass2")).toBe(true);
   });
 
-  test("ボタン：onClickに渡した関数が呼ばれるか", async () => {
-    // Buttonコンポーネントをレンダリング
+  test("DoubleButton: onClickに渡した関数が呼ばれるか", async () => {
+    // DoubleButtonコンポーネントをレンダリング
     render(
-      <Button className="button" text={"Button1"} clickHandler={mockOnClick} />
+      <DoubleButton
+        button={{
+          first: {
+            text: "DoubleButton1",
+            className: "DoubleButtonClass1",
+            clickHandler: mockOnClick,
+          },
+          second: {
+            text: "DoubleButton2",
+            className: "DoubleButtonClass2",
+            clickHandler: mockOnClickForSecondButton,
+          },
+        }}
+      />
     );
 
-    const button = screen.getByRole("button");
-    await userEvent.click(button);
+    const doubleButton = screen.getAllByRole("button") as HTMLButtonElement[];
+    await userEvent.click(doubleButton[0]);
+    await userEvent.click(doubleButton[1]);
 
     expect(mockOnClick).toHaveBeenCalled();
+    expect(mockOnClickForSecondButton).toHaveBeenCalled();
   });
 
-  test("重複チェックボタン：文言が想定通りか", () => {
+  test("DuplicateCheckButton: スナップショットテスト", () => {
+    // DuplicateCheckButtonコンポーネントをレンダリング
+    const { container } = render(
+      <DuplicateCheckButton isDisabled={false} clickHandler={mockOnClick} />
+    );
+
+    expect(container).toMatchSnapshot();
+  });
+
+  test("DuplicateCheckButton: 文言が想定通りか", () => {
     // DuplicateCheckButtonコンポーネントをレンダリング
     render(
       <DuplicateCheckButton isDisabled={false} clickHandler={mockOnClick} />
@@ -124,7 +184,7 @@ describe("Buttonコンポーネント", () => {
     expect(screen.getByText("重複チェック")).toBeInTheDocument();
   });
 
-  test("重複チェックボタン：cssクラスが想定通りか", async () => {
+  test("DuplicateCheckButton: cssクラスが想定通りか", async () => {
     // DuplicateCheckButtonコンポーネントをレンダリング
     const { container } = render(
       <DuplicateCheckButton isDisabled={false} clickHandler={mockOnClick} />
@@ -133,7 +193,16 @@ describe("Buttonコンポーネント", () => {
     expect(container.firstChild).toHaveClass("duplicateCheckButton");
   });
 
-  test("エラーページのボタン：文言が想定通りか", () => {
+  test("ErrorPageButton: スナップショットテスト", () => {
+    // ErrorPageButtonコンポーネントをレンダリング
+    const { container } = render(
+      <ErrorPageButton text={"ErrorPageButton1"} clickHandler={mockOnClick} />
+    );
+
+    expect(container).toMatchSnapshot();
+  });
+
+  test("ErrorPageButton: 文言が想定通りか", () => {
     // ErrorPageButtonコンポーネントをレンダリング
     render(
       <ErrorPageButton text={"ErrorPageButton1"} clickHandler={mockOnClick} />
@@ -142,7 +211,7 @@ describe("Buttonコンポーネント", () => {
     expect(screen.getByText("ErrorPageButton1")).toBeInTheDocument();
   });
 
-  test("エラーページのボタン：cssクラスが想定通りか", async () => {
+  test("ErrorPageButton: cssクラスが想定通りか", async () => {
     // ErrorPageButtonコンポーネントをレンダリング
     const { container } = render(
       <ErrorPageButton text={"ErrorPageButton1"} clickHandler={mockOnClick} />
