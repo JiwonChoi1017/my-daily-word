@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Buttonのテスト Button: スナップショットテスト 1`] = `
+<div>
+  <button
+    class="ButtonClass1"
+    type="button"
+  >
+    Button1
+  </button>
+</div>
+`;
+
+exports[`Buttonのテスト DoubleButton: スナップショットテスト 1`] = `
+<div>
+  <div
+    class="button__wrap"
+  >
+    <button
+      class="DoubleButtonClass1"
+      type="button"
+    >
+      DoubleButton1
+    </button>
+    <button
+      class="DoubleButtonClass2"
+      type="button"
+    >
+      DoubleButton2
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Buttonのテスト DuplicateCheckButton: スナップショットテスト 1`] = `
+<div>
+  <button
+    class="duplicateCheckButton"
+    type="button"
+  >
+    重複チェック
+  </button>
+</div>
+`;
+
+exports[`Buttonのテスト ErrorPageButton: スナップショットテスト 1`] = `
+<div>
+  <div
+    class="button__wrap marginTop20"
+  >
+    <button
+      class="button"
+      type="button"
+    >
+      ErrorPageButton1
+    </button>
+  </div>
+</div>
+`;

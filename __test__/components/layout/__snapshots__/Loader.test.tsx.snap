@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loaderのテスト Loader: スナップショットテスト 1`] = `
+<div>
+  <div
+    class="loader__wrap"
+  >
+    <span
+      class="loader"
+    />
+  </div>
+</div>
+`;
