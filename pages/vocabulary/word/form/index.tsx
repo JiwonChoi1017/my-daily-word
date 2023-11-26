@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { get, push, ref, update } from "firebase/database";
 
 import { AuthContext } from "@/context/auth/AuthContext";
@@ -8,7 +8,6 @@ import { ParsedUrlQuery } from "querystring";
 import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWordForm";
 import { Word } from "@/types/Vocabulary";
 import { WordHelper } from "@/helpers/word-helper";
-import WordList from "@/components/vocabulary/quiz/WordList";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 

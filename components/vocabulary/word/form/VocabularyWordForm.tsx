@@ -4,6 +4,11 @@ import {
   DoubleButton,
   DuplicateCheckButton,
 } from "@/components/ui/Button";
+import {
+  KANA_CHECK_REGEX,
+  KATAKANA_CHECK_REGEX,
+  SPACE_CHECK_REGEX,
+} from "@/constants/regexConstants";
 import { Meaning, Word } from "@/types/Vocabulary";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -36,6 +41,11 @@ interface Props {
 
 /** 日付関連ヘルパー. */
 const dateHelper = new DateHelper();
+
+/** かなか. */
+const isKana = (value: string) => {
+  return KANA_CHECK_REGEX.test(value);
+};
 
 /**
  * 単語フォーム.
@@ -168,6 +178,26 @@ const VocabularyWordForm = React.memo(
         return prevState + 1;
       });
     };
+    // 単語変更イベントハンドラ
+    const onChangeWordHandler = () => {
+      if (!wordsRef.current || wordsRef.current.length > 1) {
+        return;
+      }
+      const firstValue = wordsRef.current[0].value;
+
+      // かなだったら、発音の入力欄にひらがなを自動入力する
+      if (isKana(firstValue)) {
+        const pronunciation = firstValue.replace(
+          KATAKANA_CHECK_REGEX,
+          (match: string) => {
+            return String.fromCharCode(match.charCodeAt(0) - 0x60);
+          }
+        );
+        pronunciationsRef.current[0].value = pronunciation;
+      } else {
+        pronunciationsRef.current[0].value = "";
+      }
+    };
     // 入力変更イベントハンドラ
     const onChangeInputHandler = useCallback(() => {
       if (
@@ -178,14 +208,17 @@ const VocabularyWordForm = React.memo(
         return;
       }
       const words = wordsRef.current.reduce((acc: string[], word) => {
-        if (!word.value || /^\s*$/.test(word.value)) {
+        if (!word.value || SPACE_CHECK_REGEX.test(word.value)) {
           return acc;
         }
         return [...acc, word.value];
       }, []);
       const pronunciations = pronunciationsRef.current.reduce(
         (acc: string[], pronunciation) => {
-          if (!pronunciation.value || /^\s*$/.test(pronunciation.value)) {
+          if (
+            !pronunciation.value ||
+            SPACE_CHECK_REGEX.test(pronunciation.value)
+          ) {
             return acc;
           }
           return [...acc, pronunciation.value];
@@ -193,7 +226,7 @@ const VocabularyWordForm = React.memo(
         []
       );
       const meanings = meaningsRef.current.reduce((acc: string[], meaning) => {
-        if (!meaning.value || /^\s*$/.test(meaning.value)) {
+        if (!meaning.value || SPACE_CHECK_REGEX.test(meaning.value)) {
           return acc;
         }
         return [...acc, meaning.value];
@@ -232,6 +265,7 @@ const VocabularyWordForm = React.memo(
                 maxLength={50}
                 defaultValue={item}
                 onChange={() => {
+                  onChangeWordHandler();
                   onChangeInputHandler();
                   setShowDuplicatedWordList(false);
                 }}
@@ -239,7 +273,7 @@ const VocabularyWordForm = React.memo(
               {idx === words.length - 1 && (
                 <>
                   <DuplicateCheckButton
-                    isDisabled={!keyword || /^\s*$/.test(keyword)}
+                    isDisabled={!keyword || SPACE_CHECK_REGEX.test(keyword)}
                     clickHandler={onClickDuplicateCheckButtonHandler}
                   />
                   {showDuplicateWordList && duplicateWordList.length > 0 && (
@@ -403,14 +437,17 @@ const VocabularyWordForm = React.memo(
       }
 
       const words = wordsRef.current.reduce((acc: string[], word) => {
-        if (!word.value || /^\s*$/.test(word.value)) {
+        if (!word.value || SPACE_CHECK_REGEX.test(word.value)) {
           return acc;
         }
         return [...acc, word.value];
       }, []);
       const pronunciations = pronunciationsRef.current.reduce(
         (acc: string[], pronunciation) => {
-          if (!pronunciation.value || /^\s*$/.test(pronunciation.value)) {
+          if (
+            !pronunciation.value ||
+            SPACE_CHECK_REGEX.test(pronunciation.value)
+          ) {
             return acc;
           }
           return [...acc, pronunciation.value];
@@ -431,14 +468,14 @@ const VocabularyWordForm = React.memo(
         const newIndex = +index;
         if (isNaN(newIndex)) return;
         // 例文が空だったら早期リターン
-        if (!example.value || /^\s*$/.test(example.value)) return;
+        if (!example.value || SPACE_CHECK_REGEX.test(example.value)) return;
 
         meanings[newIndex].examples.push(example.value);
       });
 
       // 空白文字を意味の配列から排除する
       meanings = meanings.filter((meaning) => {
-        return !/^\s*$/.test(meaning.meaning);
+        return !SPACE_CHECK_REGEX.test(meaning.meaning);
       });
 
       const date = new Date();
@@ -466,14 +503,14 @@ const VocabularyWordForm = React.memo(
     const inputFieldsElement = (
       <div className="inputField">
         <div>
-          <label className={classes.label} htmlFor="word">
+          <label className={classes.label}>
             単語
             <AddInputIcon onClickAddInputIconHandler={onAddWordHanlder} />
           </label>
           {wordsInput}
         </div>
         <div>
-          <label className={classes.label} htmlFor="pronunciation">
+          <label className={classes.label}>
             発音
             <AddInputIcon
               onClickAddInputIconHandler={onAddPronunciationHandler}
