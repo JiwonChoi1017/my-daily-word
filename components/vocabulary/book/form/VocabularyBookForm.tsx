@@ -5,6 +5,7 @@ import { Book } from "@/types/Vocabulary";
 import { DateHelper } from "@/helpers/date-helper";
 import InputForm from "@/components/ui/InputForm";
 import { LANGUAGES } from "@/constants/constants";
+import { SPACE_CHECK_REGEX } from "@/constants/regexConstants";
 import classes from "@/styles/InputForm.module.css";
 import { useEffect } from "react";
 
@@ -108,9 +109,9 @@ const VocabularyBookForm = ({
     // 活性/非活性状態を更新
     setIsDisabled(
       !title ||
-        /^\s*$/.test(title) ||
+        SPACE_CHECK_REGEX.test(title) ||
         !description ||
-        /^\s*$/.test(description) ||
+        SPACE_CHECK_REGEX.test(description) ||
         !entry ||
         !body
     );
@@ -124,9 +125,9 @@ const VocabularyBookForm = ({
     // 活性/非活性状態を更新
     setIsDisabled(
       !title ||
-        /^\s*$/.test(title) ||
+        SPACE_CHECK_REGEX.test(title) ||
         !description ||
-        /^\s*$/.test(description) ||
+        SPACE_CHECK_REGEX.test(description) ||
         !entry ||
         !body
     );
