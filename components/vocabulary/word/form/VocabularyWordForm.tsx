@@ -87,6 +87,8 @@ const VocabularyWordForm = React.memo(
     // 重複する単語リストを表示するか
     const [showDuplicateWordList, setShowDuplicatedWordList] =
       useState<boolean>(false);
+    // 送信済みのフラグ
+    const [alreadySent, setAlreadySent] = useState<boolean>(false);
 
     useEffect(() => {
       const { words, pronunciations, meanings } = wordInfo;
@@ -435,6 +437,13 @@ const VocabularyWordForm = React.memo(
       ) {
         return;
       }
+      // すでに送信済みなら、そのままリターン
+      if (alreadySent) {
+        return;
+      }
+
+      // 送信済みフラグをtrueに更新
+      setAlreadySent(true);
 
       const words = wordsRef.current.reduce((acc: string[], word) => {
         if (!word.value || SPACE_CHECK_REGEX.test(word.value)) {

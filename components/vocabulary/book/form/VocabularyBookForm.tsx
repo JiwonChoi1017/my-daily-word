@@ -41,7 +41,7 @@ const VocabularyBookForm = ({
   updateBook,
   showCancelButton,
   onClickCancelButton,
-}: Props) => {
+}: Props): JSX.Element => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -53,6 +53,8 @@ const VocabularyBookForm = ({
   const [selectedBody, setSelectedBody] = useState<string>("");
   // 活性/非活性状態
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  // 送信済みのフラグ
+  const [alreadySent, setAlreadySent] = useState<boolean>(false);
   // 送信イベントハンドラ
   const onSubmitHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -65,6 +67,13 @@ const VocabularyBookForm = ({
     ) {
       return;
     }
+    // すでに送信済みなら、そのままリターン
+    if (alreadySent) {
+      return;
+    }
+
+    // 送信済みフラグをtrueに更新
+    setAlreadySent(true);
 
     const date = new Date();
     const dateTimeString = dateHelper.createDateTimeString(date);

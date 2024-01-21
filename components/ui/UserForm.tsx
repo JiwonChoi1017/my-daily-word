@@ -13,7 +13,7 @@ interface Props {
  * @param {Props} props
  * @returns {JSX.Element} ユーザフォーム.
  */
-const UserForm = ({ children }: Props) => {
+const UserForm = ({ children }: Props): JSX.Element => {
   return (
     <div className={classes.userformWrap}>
       <div className={classes.userform}>{children}</div>

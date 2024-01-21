@@ -30,7 +30,7 @@ const VocabularyQuizResult = ({
 }: Props) => {
   // 結果要素
   const resultElement = show ? (
-    <Card>
+    <Card needToChangeCursorToDefault={true}>
       <div className="marginRight15">
         <WordList wordList={correctAnswerList} />
         <DoubleButton

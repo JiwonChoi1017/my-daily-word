@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
  *
  * @returns {JSX.Element} ログインフォーム.
  */
-const SignInForm = () => {
+const SignInForm = (): JSX.Element => {
   // 各入力項目のref
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -18,6 +18,8 @@ const SignInForm = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   // エラー情報
   const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
+  // 送信済みのフラグ
+  const [alreadySent, setAlreadySent] = useState<boolean>(false);
   // ルーター
   const router = useRouter();
   // ログインイベントハンドラ
@@ -33,6 +35,13 @@ const SignInForm = () => {
     if (!emailRef.current || !passwordRef.current) {
       return;
     }
+    // すでに送信済みなら、そのままリターン
+    if (alreadySent) {
+      return;
+    }
+
+    // 送信済みフラグをtrueに更新
+    setAlreadySent(true);
     // ログインイベントを発火させ、エラー情報を取得
     const errorInfo = await signInHandler({
       email: emailRef.current.value,
