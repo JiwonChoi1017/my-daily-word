@@ -19,6 +19,8 @@ const SignUpForm = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   // エラー情報
   const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
+  // 送信済みのフラグ
+  const [alreadySent, setAlreadySent] = useState<boolean>(false);
   // ルーター
   const router = useRouter();
   // ユーザー登録ハンドラ
@@ -29,6 +31,13 @@ const SignUpForm = () => {
     if (!emailRef.current || !passwordRef.current) {
       return;
     }
+    // すでに送信済みなら、そのままリターン
+    if (alreadySent) {
+      return;
+    }
+
+    // 送信済みフラグをtrueに更新
+    setAlreadySent(true);
     // ユーザー登録イベント発火させ、エラー情報を取得
     const errorInfo = await signUpHandler({
       email: emailRef.current.value,
