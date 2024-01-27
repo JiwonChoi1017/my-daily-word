@@ -1,9 +1,12 @@
 import { Answer } from "@/types/Quiz";
 import React from "react";
-import classes from "@/styles/WordList.module.css";
+import WordItem from "./WordItem";
+import classes from "@/styles/vocabulary/quiz/WordList.module.css";
 
 /** Props. */
 interface Props {
+  /** 単語帳id. */
+  bookId: string;
   /** 単語リスト. */
   wordList: Answer[];
 }
@@ -14,24 +17,12 @@ interface Props {
  * @param {Props} props
  * @returns {JSX.Element} 単語リスト.
  */
-const WordList = ({ wordList }: Props) => {
+const WordList = ({ bookId, wordList }: Props): JSX.Element => {
   return (
     <ul className={classes.wordListWrap}>
-      {wordList.map((item, index) => {
-        const { id, word, pronunciation, meaning } = item;
-        return (
-          <li key={id} className={classes.wordList}>
-            <div className={classes.titleWrap}>
-              <span className={classes.title}>
-                {index + 1}. {word} 【{pronunciation}】
-              </span>
-            </div>
-            <div className={classes.meaning}>
-              <span>{meaning}</span>
-            </div>
-          </li>
-        );
-      })}
+      {wordList.map((item, index) => (
+        <WordItem key={index} bookId={bookId} item={item} index={index} />
+      ))}
     </ul>
   );
 };

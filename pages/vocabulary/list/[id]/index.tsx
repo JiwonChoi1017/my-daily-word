@@ -237,7 +237,6 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { params } = context;
   const id = params?.id;
-
   // 単語帳idが存在しない場合、notFoundをtrueにしてリターン
   if (!id) {
     return { notFound: true };

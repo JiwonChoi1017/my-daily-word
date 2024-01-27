@@ -68,7 +68,7 @@ const VocabularyWordDetail = ({
         isLoading={isLoading}
         url={`/vocabulary/list/${bookId}?page=1`}
       />
-      <Card>
+      <Card needToChangeCursorToDefault={true}>
         {isLoading ? (
           <Loader />
         ) : (

@@ -25,7 +25,7 @@ const VocabularyQuizSelect = ({
   fetchQuizMeaning,
 }: Props) => {
   return show ? (
-    <Card>
+    <Card needToChangeCursorToDefault={true}>
       <div className="marginRight15">
         <div className={classes.question}>
           <span>クイズの形式を選択してください。</span>
