@@ -8,6 +8,8 @@ import WordList from "@/components/vocabulary/quiz/WordList";
 interface Props {
   /** 表示するか. */
   show: boolean;
+  /** 単語帳id. */
+  bookId: string;
   /** 正解リスト. */
   correctAnswerList: Answer[];
   /** 単語リストへ移動. */
@@ -24,15 +26,16 @@ interface Props {
  */
 const VocabularyQuizResult = ({
   show,
+  bookId,
   correctAnswerList,
   moveToWordListPage,
   showQuizSelect,
-}: Props) => {
+}: Props): JSX.Element => {
   // 結果要素
   const resultElement = show ? (
     <Card needToChangeCursorToDefault={true}>
       <div className="marginRight15">
-        <WordList wordList={correctAnswerList} />
+        <WordList bookId={bookId} wordList={correctAnswerList} />
         <DoubleButton
           button={{
             first: {

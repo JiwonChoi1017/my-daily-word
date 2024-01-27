@@ -65,7 +65,7 @@ const VocabularyQuizItem = ({
   const answerList = answersList[currentQuizIndex];
 
   return (
-    <Card>
+    <Card needToChangeCursorToDefault={true}>
       <span className={classes.question}>
         {currentQuizIndex + 1}. {question}
       </span>

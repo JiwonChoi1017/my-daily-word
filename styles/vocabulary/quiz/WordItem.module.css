@@ -1,0 +1,56 @@
+@media screen and (min-width: 481px) {
+  .wordContainer {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .wordContainer {
+    margin-bottom: 20px;
+  }
+}
+
+.wordContainer:not(:first-child) {
+  border-top: 0.5px solid #9b9390;
+}
+
+@media screen and (min-width: 481px) {
+  .wordWrap {
+    width: 80%;
+  }
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.titleWrap .title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 480px) {
+  .titleWrap .title {
+    font-size: 20px;
+  }
+}
+
+.meaning {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 480px) {
+  .meaning {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .buttonContainer {
+    width: 20%;
+  }
+}

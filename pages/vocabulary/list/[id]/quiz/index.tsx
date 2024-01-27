@@ -6,6 +6,7 @@ import { get, ref, update } from "firebase/database";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { ERROR_STATUS } from "@/constants/constants";
 import { ErrorInfo } from "@/types/Error";
+import { GetServerSideProps } from "next";
 import MainLayout from "@/components/layout/MainLayout";
 import NotEnoughWord from "@/components/error/NotEnoughWord";
 import VocabularyQuizItem from "@/components/vocabulary/quiz/VocabularyQuizItem";
@@ -15,16 +16,21 @@ import { Word } from "@/types/Vocabulary";
 import { db } from "@/firebase-config";
 import { useRouter } from "next/router";
 
+/** Props. */
+interface Props {
+  /** 単語帳id. */
+  bookId: string;
+}
+
 /**
  * クイズ画面.
  *
+ * @param {Props} props
  * @returns {JSX.Element} クイズ画面.
  */
-const VocabularyQuizPage = () => {
+const VocabularyQuizPage = ({ bookId }: Props): JSX.Element => {
   // ルーター
   const router = useRouter();
-  // 単語帳id
-  const { id } = router.query;
   // エラー情報
   const [errorInfo, setErrorInfo] = useState<ErrorInfo>({
     status: ERROR_STATUS.SUCCESS,
@@ -43,7 +49,7 @@ const VocabularyQuizPage = () => {
   const { currentUserId } = useContext(AuthContext);
   // 単語リストページへ遷移
   const moveToWordListPage = () => {
-    router.push(`/vocabulary/list/${id}/?page=1`);
+    router.push(`/vocabulary/list/${bookId}/?page=1`);
   };
   // クイズセレクトを表示
   const showQuizSelect = () => {
@@ -203,7 +209,7 @@ const VocabularyQuizPage = () => {
       return;
     }
 
-    const path = `users/${currentUserId}/${id}/words`;
+    const path = `users/${currentUserId}/${bookId}/words`;
     const wordsRef = ref(db, path);
     const wordList: Word[] = [];
 
@@ -245,7 +251,7 @@ const VocabularyQuizPage = () => {
       return;
     }
 
-    const path = `users/${currentUserId}/${id}/words/${correctAnswer.id}`;
+    const path = `users/${currentUserId}/${bookId}/words/${correctAnswer.id}`;
     const wordRef = ref(db, path);
     const isCorrect =
       quizKind === QUIZ_KIND.word ? answer === word : answer === meaning;
@@ -264,9 +270,9 @@ const VocabularyQuizPage = () => {
   };
 
   return (
-    <MainLayout showQuiz={true} showWordList={true} bookId={id as string}>
+    <MainLayout showQuiz={true} showWordList={true} bookId={bookId}>
       {errorInfo.code === ERROR_STATUS.NOT_ENOUGH_WORD ? (
-        <NotEnoughWord errorInfo={errorInfo} bookId={id as string} />
+        <NotEnoughWord errorInfo={errorInfo} bookId={bookId} />
       ) : (
         <>
           <VocabularyQuizSelect
@@ -284,6 +290,7 @@ const VocabularyQuizPage = () => {
           />
           <VocabularyQuizResult
             show={showResult}
+            bookId={bookId}
             correctAnswerList={correctAnswerList}
             moveToWordListPage={moveToWordListPage}
             showQuizSelect={showQuizSelect}
@@ -295,3 +302,14 @@ const VocabularyQuizPage = () => {
 };
 
 export default VocabularyQuizPage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  const id = params?.id;
+  // 単語帳idが存在しない、または単語帳idが文字列じゃない場合、notFoundをtrueにしてリターン
+  if (!id || typeof id !== "string") {
+    return { notFound: true };
+  }
+
+  return { props: { bookId: id } };
+};
