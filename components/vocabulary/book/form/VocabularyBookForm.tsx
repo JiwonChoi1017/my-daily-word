@@ -32,7 +32,6 @@ const dateHelper = new DateHelper();
  * 単語帳フォーム.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語帳フォーム.
  */
 const VocabularyBookForm = ({
   isModifyForm,
@@ -41,7 +40,7 @@ const VocabularyBookForm = ({
   updateBook,
   showCancelButton,
   onClickCancelButton,
-}: Props): JSX.Element => {
+}: Props) => {
   // 各入力項目のref
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);

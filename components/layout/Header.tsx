@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import { DateHelper } from "@/helpers/date-helper";
@@ -27,7 +27,6 @@ const dateHelper = new DateHelper();
  * ヘッダー.
  *
  * @param {Props} props
- * @returns {JSX.Element} ヘッダー.
  */
 const Header = ({ showNavigation, showWordList, showQuiz, bookId }: Props) => {
   const [currentDate, setCurrentDate] = useState<string>("");

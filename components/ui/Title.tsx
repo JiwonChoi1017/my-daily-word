@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "@/styles/Title.module.css";
 
 /** Props. */
@@ -13,7 +12,6 @@ interface Props {
  * タイトル.
  *
  * @param {Props} props
- * @returns {JSX.Element} タイトル.
  */
 const Title = ({ title, subtitle }: Props) => {
   return (

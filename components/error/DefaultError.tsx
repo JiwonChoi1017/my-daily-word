@@ -16,7 +16,6 @@ interface Props {
  * デフォルトエラー.
  *
  * @param {Props} props
- * @returns {JSX.Element} デフォルトエラー.
  */
 const DefaultError = ({ errorCode, errorText }: Props) => {
   // ルーター

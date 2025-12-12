@@ -7,10 +7,8 @@ import { useRouter } from "next/router";
 
 /**
  * ログインフォーム.
- *
- * @returns {JSX.Element} ログインフォーム.
  */
-const SignInForm = (): JSX.Element => {
+const SignInForm = () => {
   // 各入力項目のref
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);

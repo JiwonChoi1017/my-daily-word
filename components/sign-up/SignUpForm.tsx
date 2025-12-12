@@ -8,8 +8,6 @@ import { useRouter } from "next/router";
 
 /**
  * ユーザー登録フォーム.
- *
- * @returns {JSX.Element} ユーザー登録フォーム.
  */
 const SignUpForm = () => {
   // 各入力項目のref
@@ -63,7 +61,7 @@ const SignUpForm = () => {
     setIsDisabled(!email || !password || password.length < 10);
   };
   // エラー状態か
-  const isError = errorInfo?.status === "error" ?? false;
+  const isError = errorInfo?.status === "error";
   // メールアドレス入力エラーか
   const isEmailError =
     isError &&

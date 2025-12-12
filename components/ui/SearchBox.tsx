@@ -5,7 +5,7 @@ import classes from "../../styles/SearchBox.module.css";
 /** Props. */
 interface Props {
   /** キーワードのref. */
-  keywordRef: React.RefObject<HTMLInputElement>;
+  keywordRef: React.RefObject<HTMLInputElement | null>;
   /** 変更イベントハンドラ. */
   onChangeHandler: () => void;
 }
@@ -14,7 +14,6 @@ interface Props {
  * 検索窓.
  *
  * @param {Props} props
- * @returns {JSX.Element} 検索窓.
  */
 const SearchBox = ({ keywordRef, onChangeHandler }: Props) => {
   return (

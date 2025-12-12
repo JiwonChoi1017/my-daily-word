@@ -1,4 +1,3 @@
-import React, { useContext, useEffect, useState } from "react";
 import {
   endBefore,
   get,
@@ -9,6 +8,7 @@ import {
   remove,
   update,
 } from "firebase/database";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Book } from "@/types/Vocabulary";
@@ -20,15 +20,11 @@ import { useRouter } from "next/router";
 
 /**
  * 単語帳リスト画面.
- *
- * @returns {JSX.Element} 単語帳リスト画面.
  */
 const VocabularyBookListPage = () => {
   // ルーター
   const router = useRouter();
   const { page } = router.query;
-  // 現在のページ
-  const [currentPage, setCurrentPage] = useState<number>(1);
   // 次に読み込むデータが存在するか
   const [hasMore, setHasMore] = useState<boolean>(false);
   // 最後のデータ
@@ -70,7 +66,6 @@ const VocabularyBookListPage = () => {
     }
 
     setHasMore(false);
-    setCurrentPage(page);
 
     const path = `users/${currentUserId}`;
     const booksRef = ref(db, path);
@@ -154,7 +149,6 @@ const VocabularyBookListPage = () => {
     <MainLayout showNavigation={false}>
       {/* 単語帳リスト */}
       <VocabularyBookList
-        currentPage={currentPage}
         hasMore={hasMore}
         bookList={bookList}
         isLoading={isLoading}

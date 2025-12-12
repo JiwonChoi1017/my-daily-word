@@ -11,7 +11,6 @@ interface Props {
  * 入力フォーム.
  *
  * @param {Props} props
- * @returns {JSX.Element} 入力フォーム.
  */
 const InputForm = React.memo(({ children }: Props) => {
   return (

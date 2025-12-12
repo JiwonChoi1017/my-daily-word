@@ -1,5 +1,4 @@
 import { Book, Word } from "@/types/Vocabulary";
-import React, { useContext, useEffect, useState } from "react";
 import {
   get,
   limitToFirst,
@@ -9,6 +8,7 @@ import {
   ref,
   update,
 } from "firebase/database";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Button } from "@/components/ui/Button";
@@ -23,8 +23,6 @@ import { useRouter } from "next/router";
 
 /**
  * ホーム画面.
- *
- * @returns {JSX.Element} ホーム画面.
  */
 const HomePage = () => {
   // ローディング中か

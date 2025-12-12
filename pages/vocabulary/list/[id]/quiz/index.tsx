@@ -1,7 +1,7 @@
 import { Answer, QuizKind } from "@/types/Quiz";
 import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstants";
-import React, { useContext, useState } from "react";
 import { get, ref, update } from "firebase/database";
+import { useContext, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import { ERROR_STATUS } from "@/constants/constants";
@@ -26,9 +26,8 @@ interface Props {
  * クイズ画面.
  *
  * @param {Props} props
- * @returns {JSX.Element} クイズ画面.
  */
-const VocabularyQuizPage = ({ bookId }: Props): JSX.Element => {
+const VocabularyQuizPage = ({ bookId }: Props) => {
   // ルーター
   const router = useRouter();
   // エラー情報

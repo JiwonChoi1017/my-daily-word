@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { AddIcon } from "@/components/icon/Icon";
-import InfiniteScroll from "react-infinite-scroller";
 import Loader from "@/components/layout/Loader";
 import NotFoundWord from "@/components/error/NotFoundWord";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import SearchBox from "@/components/ui/SearchBox";
 import VocabularyWord from "./VocabularyWord";
 import { Word } from "@/types/Vocabulary";
+import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -38,7 +38,6 @@ interface Props {
  * 単語リスト.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語リスト.
  */
 const VocabularyWordList = React.memo(
   ({
@@ -55,8 +54,19 @@ const VocabularyWordList = React.memo(
   }: Props) => {
     // ルーター
     const router = useRouter();
+    const { ref, inView } = useInView({
+      threshold: 0,
+      triggerOnce: false,
+    });
     // キーワードのref
-    const keywordRef = useRef<HTMLInputElement>(null);
+    const keywordRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+      if (inView && hasMore && !isLoading) {
+        fetchWordList(currentPage + 1);
+      }
+    }, [inView, hasMore, isLoading]);
+
     // キーワード変更イベントハンドラ
     const onChangeKeywordHandler = () => {
       if (!keywordRef.current) return;
@@ -106,21 +116,11 @@ const VocabularyWordList = React.memo(
       }
 
       return (
-        <InfiniteScroll
-          className="marginTop30"
-          pageStart={currentPage}
-          loadMore={() => {
-            fetchWordList(currentPage + 1);
-          }}
-          loader={<Loader key={currentPage} />}
-          hasMore={hasMore}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          scrollabletarget="scrollableDiv"
-        >
+        <div className="marginTop30">
           {wordList.map((word, index) => {
+            const isLastItem = hasMore && index === wordList.length - 1;
             return (
-              <div key={word.id}>
+              <div key={word.id} ref={isLastItem ? ref : null}>
                 <VocabularyWord
                   key={word.id}
                   showDropDownIcon={true}
@@ -129,14 +129,11 @@ const VocabularyWordList = React.memo(
                   toggleMemorizedState={toggleMemorizedState}
                   deleteWordHandler={deleteWordHandler}
                 />
-                {hasMore && index === wordList.length - 1 && (
-                  <div id="scrollableDiv" />
-                )}
               </div>
             );
           })}
           <ScrollToTopButton />
-        </InfiniteScroll>
+        </div>
       );
     };
 

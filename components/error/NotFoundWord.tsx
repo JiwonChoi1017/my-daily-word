@@ -1,5 +1,4 @@
 import Card from "../ui/Card";
-import React from "react";
 
 /** Props. */
 interface Props {
@@ -11,7 +10,6 @@ interface Props {
  * 単語が存在しない.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語が存在しない.
  */
 const NotFoundWord = ({ message }: Props) => {
   return (

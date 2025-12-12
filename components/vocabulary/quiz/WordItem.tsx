@@ -1,7 +1,6 @@
 import { Answer } from "@/types/Quiz";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import React from "react";
 import classes from "@/styles/vocabulary/quiz/WordItem.module.css";
 
 /** Props. */
@@ -18,9 +17,8 @@ interface Props {
  * 単語.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語.
  */
-const WordItem = ({ bookId, item, index }: Props): JSX.Element => {
+const WordItem = ({ bookId, item, index }: Props) => {
   const { id, word, pronunciation, meaning } = item;
 
   return (

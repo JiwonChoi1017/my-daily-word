@@ -10,7 +10,6 @@ import classes from "../../styles/MainLayout.module.css";
  * @param {boolean} showWordList - (任意)単語リストを表示するか.
  * @param {boolean} showQuiz - (任意)クイズを表示するか.
  * @param {string} bookId - (任意)単語帳id.
- * @returns {JSX.Element} メインレイアウト.
  */
 const MainLayout: React.FC<{
   // MEMO: React.FC で定義される children はオプショナルであり、型はReact.ReactNodeである。

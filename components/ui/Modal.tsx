@@ -1,5 +1,4 @@
 import { DoubleButton } from "./Button";
-import React from "react";
 import classes from "@/styles/Modal.module.css";
 
 /** Props. */
@@ -22,7 +21,6 @@ interface Props {
  * モーダル.
  *
  * @param {Props} props
- * @returns {JSX.Element} モーダル.
  */
 const Modal = ({
   show,
