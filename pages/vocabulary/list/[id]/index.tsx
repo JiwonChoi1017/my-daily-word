@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ref, remove, update } from "firebase/database";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import { GetServerSideProps } from "next";
@@ -24,7 +24,6 @@ const wordHelper = new WordHelper();
  * 単語リスト画面.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語リスト画面.
  */
 const VocabularyWordListPage = ({ bookId }: Props) => {
   // ルーター

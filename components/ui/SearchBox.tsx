@@ -14,7 +14,6 @@ interface Props {
  * 検索窓.
  *
  * @param {Props} props
- * @returns {JSX.Element} 検索窓.
  */
 const SearchBox = ({ keywordRef, onChangeHandler }: Props) => {
   return (

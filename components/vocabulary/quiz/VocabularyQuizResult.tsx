@@ -1,7 +1,6 @@
 import { Answer } from "@/types/Quiz";
 import Card from "@/components/ui/Card";
 import { DoubleButton } from "../../ui/Button";
-import React from "react";
 import WordList from "@/components/vocabulary/quiz/WordList";
 
 /** Props. */
@@ -22,7 +21,6 @@ interface Props {
  * 単語クイズ結果.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語クイズ結果.
  */
 const VocabularyQuizResult = ({
   show,
@@ -30,7 +28,7 @@ const VocabularyQuizResult = ({
   correctAnswerList,
   moveToWordListPage,
   showQuizSelect,
-}: Props): JSX.Element => {
+}: Props) => {
   // 結果要素
   const resultElement = show ? (
     <Card needToChangeCursorToDefault={true}>

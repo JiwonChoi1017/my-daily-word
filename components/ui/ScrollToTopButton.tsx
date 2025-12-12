@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import classes from "../../styles/ScrollToTopButton.module.css";
+import { useEffect, useState } from "react";
+
 import { FaAngleUp } from "react-icons/fa";
+import classes from "../../styles/ScrollToTopButton.module.css";
 
 /**
  * トップへボタン.
- *
- * @returns {JSX.Element} トップへボタン.
  */
 const ScrollToTopButton = () => {
   // 表示するか

@@ -1,11 +1,8 @@
-import React from "react";
-import MainLayout from "@/components/layout/MainLayout";
 import DefaultError from "@/components/error/DefaultError";
+import MainLayout from "@/components/layout/MainLayout";
 
 /**
  * 404エラー画面.
- *
- * @returns {JSX.Element} 404エラー画面.
  */
 const NotFoundErrorPage = () => {
   return (

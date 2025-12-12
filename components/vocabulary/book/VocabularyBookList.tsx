@@ -11,8 +11,6 @@ import { useRouter } from "next/router";
 
 /** Props. */
 interface Props {
-  /** 現在のページ. */
-  currentPage: number;
   /** 次に読み込むデータが存在するか. */
   hasMore: boolean;
   /** 単語帳リスト. */
@@ -31,10 +29,8 @@ interface Props {
  * 単語帳リスト.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語帳リスト.
  */
 const VocabularyBookList = ({
-  currentPage,
   hasMore,
   bookList,
   isLoading,

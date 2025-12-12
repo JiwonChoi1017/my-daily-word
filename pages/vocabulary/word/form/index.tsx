@@ -27,7 +27,6 @@ const wordHelper = new WordHelper();
  *
  * @param referer - (任意)遷移元.
  * @param query - (任意)クエリ.
- * @returns {JSX.Element} 単語フォーム画面.
  */
 const VocabularyWordFormPage = ({ referer, query }: Props) => {
   // 単語帳id

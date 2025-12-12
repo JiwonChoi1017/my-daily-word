@@ -1,10 +1,10 @@
 import { Answer, QuizKind } from "@/types/Quiz";
-import React, { useState } from "react";
 
 import Card from "@/components/ui/Card";
 import { CheckAnswerIcon } from "@/components/icon/Icon";
 import { QUIZ_KIND } from "@/constants/quizConstants";
 import classes from "@/styles/VocabularyQuizItem.module.css";
+import { useState } from "react";
 
 /** Props. */
 interface Props {
@@ -26,7 +26,6 @@ interface Props {
  * 単語クイズアイテム.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語クイズアイテム.
  */
 const VocabularyQuizItem = ({
   show,

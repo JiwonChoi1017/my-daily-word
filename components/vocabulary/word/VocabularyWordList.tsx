@@ -38,7 +38,6 @@ interface Props {
  * 単語リスト.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語リスト.
  */
 const VocabularyWordList = React.memo(
   ({

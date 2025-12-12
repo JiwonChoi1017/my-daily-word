@@ -1,10 +1,7 @@
-import React from "react";
 import Card from "../ui/Card";
 
 /**
  * 単語帳リストのゼロマッチ.
- *
- * @returns {JSX.Element} 単語帳リストのゼロマッチ.
  */
 const NotFoundList = () => {
   return (

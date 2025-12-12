@@ -27,7 +27,6 @@ interface Props {
  * 単語.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語.
  */
 const VocabularyWord = ({
   isLoading,

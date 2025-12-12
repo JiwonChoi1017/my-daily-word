@@ -23,7 +23,6 @@ interface Props {
  *
  * @param referer - (任意)遷移元.
  * @param query - (任意)クエリ.
- * @returns {JSX.Element} 単語帳フォーム画面.
  */
 const VocabularyBookFormPage = ({ referer, query }: Props) => {
   // 単語帳id

@@ -51,7 +51,6 @@ const isKana = (value: string) => {
  * 単語フォーム.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語フォーム.
  */
 const VocabularyWordForm = React.memo(
   ({

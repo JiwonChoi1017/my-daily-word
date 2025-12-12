@@ -17,14 +17,13 @@ type Props = {
  * カード.
  *
  * @param {Props} props
- * @returns {JSX.Element} カード
  */
 const Card = ({
   children,
   isError = false,
   needToChangeCursorToDefault = false,
   clickHandler,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <div
       className={`${isError ? classes.card__error : classes.card}${

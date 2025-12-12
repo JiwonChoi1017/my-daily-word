@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
 import { get, ref, remove, update } from "firebase/database";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "@/context/auth/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
@@ -10,8 +10,6 @@ import { useRouter } from "next/router";
 
 /**
  * 単語詳細画面.
- *
- * @returns {JSX.Element} 単語詳細画面.
  */
 const VocabularyWordDetailPage = () => {
   const router = useRouter();

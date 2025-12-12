@@ -20,7 +20,6 @@ import classes from "../../styles/Icon.module.css";
  *
  * @param {boolean} isFavorite - お気に入りか.
  * @param {function} onClickFavoriteIconHandler - お気に入りアイコンクリックイベントハンドラ.
- * @returns {JSX.Element} お気に入りアイコン.
  */
 export const FavoriteIcon: React.FC<{
   isFavorite: boolean;
@@ -41,8 +40,6 @@ export const FavoriteIcon: React.FC<{
 
 /**
  * 検索アイコン.
- *
- * @returns {JSX.Element} 検索アイコン.
  */
 export const SearchIcon = () => {
   return <FaSearch className={classes.searchIcon} />;
@@ -53,7 +50,6 @@ export const SearchIcon = () => {
  *
  * @param {boolean} isMemorized - 暗記済みか.
  * @param {function} onClickBookmarkIconHandler - 暗記フラグクリックイベントハンドラ.
- * @returns {JSX.Element} 暗記フラグ.
  */
 export const BookmarkIcon: React.FC<{
   isMemorized: boolean;
@@ -77,7 +73,6 @@ export const BookmarkIcon: React.FC<{
  *
  * @param {function} onClickModifyLinkHandler - 修正リンククリックイベントハンドラ.
  * @param {function} onClickDeleteLinkHandler - 削除リンククリックイベントハンドラ.
- * @returns {JSX.Element} ドロップダウンアイコン.
  */
 export const DropDownIcon: React.FC<{
   onClickModifyLinkHandler: () => void;
@@ -124,7 +119,6 @@ export const DropDownIcon: React.FC<{
  * 追加アイコン.
  *
  * @param {function} onClickAddIconHandler - 追加アイコンクリックイベントハンドラ.
- * @returns {JSX.Element} 追加アイコン.
  */
 export const AddIcon: React.FC<{ onClickAddIconHandler: () => void }> = ({
   onClickAddIconHandler,
@@ -143,7 +137,6 @@ export const AddIcon: React.FC<{ onClickAddIconHandler: () => void }> = ({
  * @param {function} onClickFavoriteIconHandler - お気に入りアイコンクリックイベントハンドラ.
  * @param {function} onClickModifyLinkHandler - 修正リンククリックイベントハンドラ.
  * @param {function} onClickDeleteLinkHandler - 削除リンククリックイベントハンドラ.
- * @returns {JSX.Element} 単語帳連のアイコン.
  */
 export const BookIcon: React.FC<{
   isFavorite: boolean;
@@ -179,7 +172,6 @@ export const BookIcon: React.FC<{
  * @param {function} onClickBookmarkIconHandler - 暗記フラグクリックイベントハンドラ.
  * @param {function} onClickModifyLinkHandler - 修正リンククリックイベントハンドラ.
  * @param {function} onClickDeleteLinkHandler - 削除リンククリックイベントハンドラ.
- * @returns {JSX.Element} 単語関連のアイコン.
  */
 export const WordIcon: React.FC<{
   isMemorized: boolean;
@@ -208,8 +200,6 @@ export const WordIcon: React.FC<{
 
 /**
  * 任意アイコン.
- *
- * @returns {JSX.Element} 任意アイコン.
  */
 export const OptionalIcon = () => {
   return <span className={classes.optionalIcon}>任意</span>;
@@ -220,7 +210,6 @@ export const OptionalIcon = () => {
  *
  * @param {number} index - （任意）インデックス.
  * @param {function} onClickAddInputIconHandler - 入力欄追加アイコンクリックイベントハンドラ.
- * @returns {JSX.Element} 入力欄追加アイコン.
  */
 export const AddInputIcon = React.memo(
   ({
@@ -246,8 +235,6 @@ AddInputIcon.displayName = "AddInputIcon";
 
 /**
  * 前のページへ戻るアイコン.
- *
- * @returns {JSX.Element} 前のページへ戻るアイコン.
  */
 export const GoBackIcon = () => {
   return <FaAngleLeft className={classes.goBackIcon} />;
@@ -258,7 +245,6 @@ export const GoBackIcon = () => {
  *
  * @param {string} checkedAnswer - チェックをつけた回答.
  * @param {string} correctAnswer - 正解.
- * @returns {JSX.Element} 回答チェックアイコン.
  */
 export const CheckAnswerIcon: React.FC<{
   checkedAnswer: string;

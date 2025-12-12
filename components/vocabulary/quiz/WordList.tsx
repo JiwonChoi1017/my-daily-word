@@ -1,5 +1,4 @@
 import { Answer } from "@/types/Quiz";
-import React from "react";
 import WordItem from "./WordItem";
 import classes from "@/styles/vocabulary/quiz/WordList.module.css";
 
@@ -15,9 +14,8 @@ interface Props {
  * 単語リスト.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語リスト.
  */
-const WordList = ({ bookId, wordList }: Props): JSX.Element => {
+const WordList = ({ bookId, wordList }: Props) => {
   return (
     <ul className={classes.wordListWrap}>
       {wordList.map((item, index) => (

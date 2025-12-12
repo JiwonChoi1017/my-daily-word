@@ -19,7 +19,6 @@ interface Props {
  * ボタン.
  *
  * @param {Props} props.
- * @returns {JSX.Element} ボタン.
  */
 export const Button = React.memo(
   ({ className, text, isDisabled = false, clickHandler }: Props) => {
@@ -49,7 +48,6 @@ Button.displayName = "Button";
  *
  * @param {Props} first - 1つ目.
  * @param {Props} second - 2つ目.
- * @returns {JSX.Element} ダブルボタン.
  */
 export const DoubleButton = React.memo(
   ({
@@ -88,7 +86,6 @@ DoubleButton.displayName = "DoubleButton";
  *
  * @param {Props} first - 1つ目.
  * @param {Props} second - 2つ目.
- * @returns {JSX.Element} クイズ用ダブルボタン.
  */
 export const DoubleButtonForQuiz: React.FC<{
   button: {
@@ -125,7 +122,6 @@ export const DoubleButtonForQuiz: React.FC<{
  *
  * @param {boolean} isDisabled - 非活性状態か.
  * @param {function} clickHandler - クリックイベントハンドラ.
- * @returns {JSX.Element} 重複チェックボタン.
  */
 export const DuplicateCheckButton = React.memo(
   ({
@@ -153,7 +149,6 @@ DuplicateCheckButton.displayName = "DuplicateCheckButton";
  *
  * @param {string} text - テキスト.
  * @param {function} clickHandler - クリックイベントハンドラ.
- * @returns {JSX.Element} エラーページのボタン.
  */
 export const ErrorPageButton: React.FC<{
   text: string;

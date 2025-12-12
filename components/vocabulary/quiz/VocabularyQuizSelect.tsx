@@ -1,6 +1,5 @@
 import Card from "@/components/ui/Card";
 import { DoubleButtonForQuiz } from "../../ui/Button";
-import React from "react";
 import classes from "@/styles/VocabularyQuizSelect.module.css";
 
 /** Props. */
@@ -17,7 +16,6 @@ interface Props {
  * クイズ選択.
  *
  * @param {Props} props
- * @returns {JSX.Element} クイズ選択.
  */
 const VocabularyQuizSelect = ({
   show,

@@ -2,7 +2,6 @@ import Card from "@/components/ui/Card";
 import Examples from "./Examples";
 import GoBackLink from "./GoBackLink";
 import Loader from "@/components/layout/Loader";
-import React from "react";
 import Title from "@/components/ui/Title";
 import { Word } from "@/types/Vocabulary";
 import { WordIcon } from "@/components/icon/Icon";
@@ -26,7 +25,6 @@ interface Props {
  * 単語詳細.
  *
  * @param {Props} props
- * @returns {JSX.Element} 単語詳細.
  */
 const VocabularyWordDetail = ({
   isLoading,
