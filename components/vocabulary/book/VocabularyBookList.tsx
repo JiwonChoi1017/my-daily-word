@@ -1,12 +1,12 @@
 import { AddIcon } from "@/components/icon/Icon";
 import { Book } from "@/types/Vocabulary";
-import InfiniteScroll from "react-infinite-scroller";
 import Loader from "@/components/layout/Loader";
 import NotFoundList from "@/components/error/NotFoundList";
-import React from "react";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import VocabularyBook from "./VocabularyBook";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -44,6 +44,17 @@ const VocabularyBookList = ({
 }: Props) => {
   // ルーター
   const router = useRouter();
+  const { ref, inView } = useInView({
+    threshold: 0,
+    triggerOnce: false,
+  });
+
+  useEffect(() => {
+    if (inView && hasMore && !isLoading) {
+      fetchBookList(Math.floor(bookList.length / VOCABULARY_LIST_RESULTS) + 1);
+    }
+  }, [inView, hasMore, isLoading]);
+
   // 単語帳フォームに遷移
   const moveToVocabularyBookForm = () => {
     router.push("/vocabulary/book/form");
@@ -59,36 +70,22 @@ const VocabularyBookList = ({
       ) : !bookList.length ? (
         <NotFoundList />
       ) : (
-        <InfiniteScroll
-          pageStart={currentPage}
-          loadMore={() => {
-            fetchBookList(
-              Math.floor(bookList.length / VOCABULARY_LIST_RESULTS) + 1
-            );
-          }}
-          loader={<Loader key={currentPage} />}
-          hasMore={hasMore}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          scrollabletarget="scrollableDiv"
-        >
+        <>
           {bookList.map((book, index) => {
+            const hasMoreItem = hasMore && index === bookList.length - 1;
             return (
-              <div key={book.id}>
+              <div key={book.id} ref={hasMoreItem ? ref : null}>
                 <VocabularyBook
                   key={book.id}
                   bookInfo={book}
                   toggleFavoriteState={toggleFavoriteState}
                   deleteBookHandler={deleteBookHandler}
                 />
-                {hasMore && index === bookList.length - 1 && (
-                  <div id="scrollableDiv" />
-                )}
               </div>
             );
           })}
           <ScrollToTopButton />
-        </InfiniteScroll>
+        </>
       )}
     </>
   );
