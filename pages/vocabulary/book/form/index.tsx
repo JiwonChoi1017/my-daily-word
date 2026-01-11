@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { get, push, ref, update } from "firebase/database";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { Book } from "@/types/Vocabulary";
 import { GetServerSideProps } from "next";
 import MainLayout from "@/components/layout/MainLayout";
 import { ParsedUrlQuery } from "querystring";
 import VocabularyBookForm from "@/components/vocabulary/book/form/VocabularyBookForm";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -41,7 +41,7 @@ const VocabularyBookFormPage = ({ referer, query }: Props) => {
   // キャンセルボタンの表示状態
   const [showCancelButton, setShowCancelButton] = useState<boolean>(false);
   // 現在のユーザーid
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // ルーター
   const router = useRouter();
 

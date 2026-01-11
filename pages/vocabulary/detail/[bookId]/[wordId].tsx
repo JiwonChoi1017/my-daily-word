@@ -1,11 +1,11 @@
 import { get, ref, remove, update } from "firebase/database";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import VocabularyWordDetail from "@/components/vocabulary/word/detail/VocabularyWordDetail";
 import { Word } from "@/types/Vocabulary";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /**
@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 const VocabularyWordDetailPage = () => {
   const router = useRouter();
   const { bookId, wordId } = router.query;
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // ローディング中か
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 単語状態

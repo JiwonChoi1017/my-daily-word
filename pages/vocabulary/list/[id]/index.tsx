@@ -1,7 +1,6 @@
 import { ref, remove, update } from "firebase/database";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { GetServerSideProps } from "next";
 import MainLayout from "@/components/layout/MainLayout";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
@@ -9,6 +8,7 @@ import VocabularyWordList from "@/components/vocabulary/word/VocabularyWordList"
 import { Word } from "@/types/Vocabulary";
 import { WordHelper } from "@/helpers/word-helper";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -44,7 +44,7 @@ const VocabularyWordListPage = ({ bookId }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [wordList, setWordList] = useState<Word[]>([]);
   // 現在のユーザーid
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // 単語を絞り込む
   const filterWordList = useCallback(
     async (keyword: string) => {

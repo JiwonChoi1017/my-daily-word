@@ -6,12 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "jest --watch",
     "test:ci": "jest --ci"
   },
   "dependencies": {
-    "firebase": "^9.16.0",
+    "firebase": "^12.7.0",
     "next": "^16.0.10",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

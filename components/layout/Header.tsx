@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { DateHelper } from "@/helpers/date-helper";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import Modal from "../ui/Modal";
 import classes from "../../styles/Header.module.css";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -34,7 +34,7 @@ const Header = ({ showNavigation, showWordList, showQuiz, bookId }: Props) => {
   // ログアウトモーダルを表示するか
   const [showSignOutModal, setShowSignOutModal] = useState<boolean>(false);
 
-  const { signOutHandler, currentUser } = useContext(AuthContext);
+  const { signOutHandler, currentUser } = useAuthContext();
   // ルーター
   const router = useRouter();
 

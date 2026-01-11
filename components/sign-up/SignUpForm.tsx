@@ -1,9 +1,9 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { AuthErrorCodes } from "firebase/auth";
 import { Button } from "../ui/Button";
 import { ErrorInfo } from "@/types/Error";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /**
@@ -22,7 +22,7 @@ const SignUpForm = () => {
   // ルーター
   const router = useRouter();
   // ユーザー登録ハンドラ
-  const { signUpHandler } = useContext(AuthContext);
+  const { signUpHandler } = useAuthContext();
   // 送信イベント
   const onSubmitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
