@@ -1,8 +1,8 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { Button } from "../ui/Button";
 import { ErrorInfo } from "@/types/Error";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /**
@@ -21,7 +21,7 @@ const SignInForm = () => {
   // ルーター
   const router = useRouter();
   // ログインイベントハンドラ
-  const { signInHandler } = useContext(AuthContext);
+  const { signInHandler } = useAuthContext();
   // 送信イベント
   const onSubmitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     // e.preventDefault(): submitイベントの発生元であるフォームが持つデフォルトの動作をキャンセルするメソッド.

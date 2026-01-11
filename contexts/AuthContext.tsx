@@ -5,9 +5,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { ErrorInfo } from "../../types/Error";
+import { ErrorInfo } from "@/types/Error";
 import { authService } from "firebase-config";
 import { v4 as uuidv4 } from "uuid";
 
@@ -182,3 +182,5 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
     </AuthContext.Provider>
   );
 };
+
+export const useAuthContext = () => useContext(AuthContext);

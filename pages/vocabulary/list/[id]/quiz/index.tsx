@@ -1,9 +1,7 @@
 import { Answer, QuizKind } from "@/types/Quiz";
 import { QUIZ_KIND, VOCABULARY_QUIZ_COUNT } from "@/constants/quizConstants";
 import { get, ref, update } from "firebase/database";
-import { useContext, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { ERROR_STATUS } from "@/constants/constants";
 import { ErrorInfo } from "@/types/Error";
 import { GetServerSideProps } from "next";
@@ -14,7 +12,9 @@ import VocabularyQuizResult from "@/components/vocabulary/quiz/VocabularyQuizRes
 import VocabularyQuizSelect from "@/components/vocabulary/quiz/VocabularyQuizSelect";
 import { Word } from "@/types/Vocabulary";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 /** Props. */
 interface Props {
@@ -45,7 +45,7 @@ const VocabularyQuizPage = ({ bookId }: Props) => {
   // 正解リストの状態
   const [correctAnswerList, setCorrectAnswerList] = useState<Answer[]>([]);
   // 現在のユーザーid
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // 単語リストページへ遷移
   const moveToWordListPage = () => {
     router.push(`/vocabulary/list/${bookId}/?page=1`);

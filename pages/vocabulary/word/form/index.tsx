@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { get, push, ref, update } from "firebase/database";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { GetServerSideProps } from "next";
 import MainLayout from "@/components/layout/MainLayout";
 import { ParsedUrlQuery } from "querystring";
@@ -9,6 +8,7 @@ import VocabularyWordForm from "@/components/vocabulary/word/form/VocabularyWord
 import { Word } from "@/types/Vocabulary";
 import { WordHelper } from "@/helpers/word-helper";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /** Props. */
@@ -48,7 +48,7 @@ const VocabularyWordFormPage = ({ referer, query }: Props) => {
   // 重複する単語リスト
   const [duplicateWordList, setDuplicateWordList] = useState<Word[]>([]);
   // 現在のユーザーid
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // ルーター
   const router = useRouter();
 

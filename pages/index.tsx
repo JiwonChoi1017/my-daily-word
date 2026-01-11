@@ -8,9 +8,8 @@ import {
   ref,
   update,
 } from "firebase/database";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { ERROR_STATUS } from "@/constants/constants";
 import { ErrorInfo } from "@/types/Error";
@@ -19,6 +18,7 @@ import NotFound from "@/components/error/NotFound";
 import VocabularyWord from "@/components/vocabulary/word/VocabularyWord";
 import classes from "@/styles/Button.module.css";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /**
@@ -44,7 +44,7 @@ const HomePage = () => {
     message: "",
   });
 
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
 
   useEffect(() => {
     // idが存在しない場合、早期リターン

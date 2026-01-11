@@ -8,14 +8,14 @@ import {
   remove,
   update,
 } from "firebase/database";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { AuthContext } from "@/context/auth/AuthContext";
 import { Book } from "@/types/Vocabulary";
 import MainLayout from "@/components/layout/MainLayout";
 import { VOCABULARY_LIST_RESULTS } from "@/constants/constants";
 import VocabularyBookList from "@/components/vocabulary/book/VocabularyBookList";
 import { db } from "@/firebase-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 
 /**
@@ -36,7 +36,7 @@ const VocabularyBookListPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [bookList, setBookList] = useState<Book[]>([]);
   // 現在のユーザーid
-  const { currentUserId } = useContext(AuthContext);
+  const { currentUserId } = useAuthContext();
   // お気に入り状態更新イベント
   const toggleFavoriteState = async (bookInfo: Book) => {
     // idが存在しない場合、早期リターン
