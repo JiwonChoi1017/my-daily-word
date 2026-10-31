@@ -8,7 +8,7 @@ import {
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { ErrorInfo } from "@/types/Error";
-import { authService } from "firebase-config";
+import { authService } from "../firebase-config";
 import { v4 as uuidv4 } from "uuid";
 
 // ユーザー情報
@@ -26,7 +26,7 @@ type UserInfoContext = {
 };
 
 export const AuthContext = createContext<UserInfoContext>(
-  {} as UserInfoContext
+  {} as UserInfoContext,
 );
 
 export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   // 現在のユーザーid
   const [currentUserId, setCurrentUserId] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   // ログインイベントハンドラ
   const signInHandler = async (userInfo: UserInfo) => {
@@ -152,7 +152,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    authService.onAuthStateChanged((user) => {
+    authService.onAuthStateChanged((user: User | null) => {
       // ユーザー情報が存在する場合
       if (user) {
         setCurrentUser(user);

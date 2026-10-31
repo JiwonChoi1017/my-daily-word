@@ -97,7 +97,7 @@ const VocabularyWordForm = React.memo(
 
       pronunciationsRef.current = pronunciationsRef.current.slice(
         0,
-        pronunciations.length
+        pronunciations.length,
       );
       setPronunciations(pronunciations.length ? pronunciations : [""]);
 
@@ -121,7 +121,7 @@ const VocabularyWordForm = React.memo(
 
       // 活性/非活性状態を更新
       setIsDisabled(
-        !words.length || !pronunciations.length || !newMeaningList.length
+        !words.length || !pronunciations.length || !newMeaningList.length,
       );
     }, [wordInfo]);
 
@@ -192,7 +192,7 @@ const VocabularyWordForm = React.memo(
           KATAKANA_CHECK_REGEX,
           (match: string) => {
             return String.fromCharCode(match.charCodeAt(0) - 0x60);
-          }
+          },
         );
         pronunciationsRef.current[0].value = pronunciation;
       } else {
@@ -224,7 +224,7 @@ const VocabularyWordForm = React.memo(
           }
           return [...acc, pronunciation.value];
         },
-        []
+        [],
       );
       const meanings = meaningsRef.current.reduce((acc: string[], meaning) => {
         if (!meaning.value || SPACE_CHECK_REGEX.test(meaning.value)) {
@@ -234,7 +234,7 @@ const VocabularyWordForm = React.memo(
       }, []);
       // 活性/非活性状態を更新
       setIsDisabled(
-        !words.length || !pronunciations.length || !meanings.length
+        !words.length || !pronunciations.length || !meanings.length,
       );
 
       // キーワードを更新
@@ -460,7 +460,7 @@ const VocabularyWordForm = React.memo(
           }
           return [...acc, pronunciation.value];
         },
-        []
+        [],
       );
       let meanings = meaningsRef.current.reduce((acc: Meaning[], meaning) => {
         if (!meaning.value) {
@@ -561,7 +561,7 @@ const VocabularyWordForm = React.memo(
         <div className={classes.buttonWrap}>{buttonElement}</div>
       </InputForm>
     );
-  }
+  },
 );
 
 VocabularyWordForm.displayName = "VocabularyWordForm";
